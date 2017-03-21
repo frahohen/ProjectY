@@ -23,6 +23,7 @@ public class ProjectY extends ApplicationAdapter {
 		batch.begin();
 		batch.draw(img, 0, 0);
 		batch.end();
+		System.out.println("olla");
 	}
 	
 	@Override
