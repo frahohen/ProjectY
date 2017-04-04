@@ -26,6 +26,7 @@ public class ProjectY extends Game {
 
 	@Override
 	public void dispose() {
+        super.dispose();
 	}
 
 	@Override
