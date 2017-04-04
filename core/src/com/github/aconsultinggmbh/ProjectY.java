@@ -1,12 +1,6 @@
 package com.github.aconsultinggmbh;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class ProjectY extends Game {
 
@@ -16,7 +10,7 @@ public class ProjectY extends Game {
 	@Override
 	public void create() {
 
-		this.setScreen(new LevelScreen(this));
+		this.setScreen(new MainMenuScreen(this));
 	}
 
 	@Override
