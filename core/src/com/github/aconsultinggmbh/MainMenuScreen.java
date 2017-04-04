@@ -20,28 +20,6 @@ public class MainMenuScreen implements Screen {
     @Override
     public void render(float delta) {
 
-        //Example with batch and font
-        gm.getBatch().begin();
-        gm.getFont().draw(gm.getBatch(), "Hello",100,150);
-        gm.getBatch().end();
-
-        /*
-        if(Gdx.input.isTouched()){
-
-        }
-        */
-
-        boolean somethingHappened = true;
-        if(somethingHappened) {
-            gm.setScreen(new CreateGameScreen(gm));
-            dispose();
-            /*
-            gm.setScreen(new JoinGameScreen(gm));
-            dispose();
-            gm.setScreen(new SettingsScreen(gm));
-            dispose();
-            */
-        }
     }
 
     @Override

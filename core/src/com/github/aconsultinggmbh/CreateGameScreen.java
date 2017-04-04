@@ -19,11 +19,7 @@ public class CreateGameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        boolean somethingHappened = true;
-        if(somethingHappened) {
-            gm.setScreen(new LevelScreen(gm));
-            dispose();
-        }
+
     }
 
     @Override
