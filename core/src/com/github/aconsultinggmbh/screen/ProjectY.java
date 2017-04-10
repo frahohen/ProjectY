@@ -1,12 +1,7 @@
-package com.github.aconsultinggmbh;
+package com.github.aconsultinggmbh.screen;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
+import com.github.aconsultinggmbh.screen.GameScreen;
 
 public class ProjectY extends Game {
 

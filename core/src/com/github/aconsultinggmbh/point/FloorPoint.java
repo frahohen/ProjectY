@@ -1,12 +1,12 @@
 package com.github.aconsultinggmbh.point;
 
 
-public class SpawnPoint {
+public class FloorPoint {
 
     private float x;
     private float y;
 
-    public SpawnPoint(float x, float y) {
+    public FloorPoint(float x, float y) {
         this.x = x;
         this.y = y;
     }

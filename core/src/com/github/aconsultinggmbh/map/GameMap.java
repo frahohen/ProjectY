@@ -24,6 +24,7 @@ public class GameMap {
     private float tileHeight;
 
     private CollisionMap collisionMap;
+    private FloorMap floorMap;
     private SpawnMap spawnMap;
 
     public GameMap(String pathToMap, float scale){
@@ -34,6 +35,14 @@ public class GameMap {
     public void render(OrthographicCamera camera) {
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();
+    }
+
+    public FloorMap getFloorMap() {
+        return floorMap;
+    }
+
+    public void setFloorMap(FloorMap floorMap) {
+        this.floorMap = floorMap;
     }
 
     public SpawnMap getSpawnMap() {
@@ -87,6 +96,7 @@ public class GameMap {
         layer = (TiledMapTileLayer) tiledMap.getLayers().get("map");
 
         collisionMap = new CollisionMap();
+        floorMap = new FloorMap();
         spawnMap = new SpawnMap();
 
         for(int x = 0; x < layer.getWidth();x++) {
@@ -111,7 +121,9 @@ public class GameMap {
                 }
 
                 if(!isCollision && !isSpawn) {
-
+                    floorMap.add(
+                            (x * tileWidth * scale)+ (tileWidth * scale)/2,
+                            (y * tileHeight * scale) + (tileHeight * scale)/2);
                 }
             }
         }
