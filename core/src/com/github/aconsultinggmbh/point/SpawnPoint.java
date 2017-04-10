@@ -1,4 +1,4 @@
-package com.github.aconsultinggmbh.map;
+package com.github.aconsultinggmbh.point;
 
 
 public class SpawnPoint {

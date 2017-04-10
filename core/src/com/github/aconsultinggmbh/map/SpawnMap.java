@@ -15,6 +15,10 @@ public class SpawnMap {
         map.add(new SpawnPoint(x,y));
     }
 
+    public int getSize(){
+        return map.size();
+    }
+
     public SpawnPoint getSpawnPoint(int index){
         return map.get(index);
     }

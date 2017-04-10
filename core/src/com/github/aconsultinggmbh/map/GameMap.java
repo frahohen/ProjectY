@@ -1,7 +1,6 @@
 package com.github.aconsultinggmbh.map;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
@@ -15,8 +14,6 @@ public class GameMap {
     private TiledMap tiledMap;
     private TiledMapRenderer tiledMapRenderer;
     private TiledMapTileLayer layer;
-
-    private ShapeRenderer shapeRenderer;
 
     private float width;
     private float height;
@@ -84,8 +81,6 @@ public class GameMap {
 
         this.width = tileCountX * tileWidth * scale;
         this.height = tileCountY * tileHeight * scale;
-
-        shapeRenderer = new ShapeRenderer();
     }
 
     private void load(float scale){
@@ -114,18 +109,10 @@ public class GameMap {
                             tileWidth * scale,
                             tileHeight * scale));
                 }
-            }
-        }
-    }
 
-    public void showBounds(boolean isBounds, OrthographicCamera camera) {
-        if(isBounds){
-            shapeRenderer.setProjectionMatrix(camera.combined);
-            for(int i = 0; i < collisionMap.getMap().size(); i++) {
-                shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-                shapeRenderer.setColor(1, 0, 0, 1);
-                shapeRenderer.rect(collisionMap.getMap().get(i).getX(), collisionMap.getMap().get(i).getY(), collisionMap.getMap().get(i).getWidth(), collisionMap.getMap().get(i).getHeight());
-                shapeRenderer.end();
+                if(!isCollision && !isSpawn) {
+
+                }
             }
         }
     }
