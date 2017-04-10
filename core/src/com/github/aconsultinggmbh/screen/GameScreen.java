@@ -1,4 +1,4 @@
-package com.github.aconsultinggmbh;
+package com.github.aconsultinggmbh.screen;
 
 
 import com.badlogic.gdx.Gdx;
@@ -11,6 +11,7 @@ import com.github.aconsultinggmbh.gameobject.GameObject;
 import com.github.aconsultinggmbh.map.GameMap;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class GameScreen implements Screen {
 
@@ -22,11 +23,13 @@ public class GameScreen implements Screen {
     private GameMap map;
 
     private ArrayList<Bullet> bullets;
+    private ArrayList<GameObject> items;
     private ArrayList<GameObject> enemies;
 
     private float scale = 6.0f;
 
     private String collidedEnemyName;
+    private String collidedItemName;
 
     public GameScreen(ProjectY screenManager) {
         this.screenManager = screenManager;
@@ -41,6 +44,7 @@ public class GameScreen implements Screen {
         camera.update();
 
         collidedEnemyName = "";
+        collidedItemName = "";
 
         //** GAME ** -START
         map = new GameMap("map.tmx",scale);
@@ -55,6 +59,17 @@ public class GameScreen implements Screen {
                             "Enemy"+i
                     )
             );
+        }
+
+        items = new ArrayList<GameObject>();
+        for(int i = 0; i < 10; i++){
+            int position = new Random().nextInt(map.getFloorMap().getSize());
+            items.add(new GameObject(
+                    "data/item.png",
+                    map.getFloorMap().getFloorPoint(position).getX()-64,
+                    map.getFloorMap().getFloorPoint(position).getY()-64,
+                    "Item"+i
+            ));
         }
 
         bullets = new ArrayList<Bullet>();
@@ -76,6 +91,17 @@ public class GameScreen implements Screen {
 
         map.render(camera);
 
+        // Items
+        //collidedItemName = player.collideWithObject(items);
+        for(int i = 0; i < items.size(); i++){
+            if(collidedItemName.equals(items.get(i).getName())) {
+                //Gdx.app.log("DEBUG",items.get(i).getName() + " touched");
+                items.remove(i);
+            }else{
+                items.get(i).render(batch, camera);
+                items.get(i).setRender(true);
+            }
+        }
         // Enemies
         for(int i = 0; i < enemies.size(); i++){
             if(collidedEnemyName.equals(enemies.get(i).getName())){

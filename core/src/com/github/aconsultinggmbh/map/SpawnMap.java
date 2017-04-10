@@ -1,6 +1,8 @@
 package com.github.aconsultinggmbh.map;
 
 
+import com.github.aconsultinggmbh.point.SpawnPoint;
+
 import java.util.ArrayList;
 
 public class SpawnMap {
