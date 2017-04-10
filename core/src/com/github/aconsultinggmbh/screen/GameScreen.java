@@ -18,7 +18,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.github.aconsultinggmbh.gameobject.Bullet;
 import com.github.aconsultinggmbh.gameobject.GameObject;
+import com.github.aconsultinggmbh.gameobject.Player;
 import com.github.aconsultinggmbh.map.GameMap;
+import com.github.aconsultinggmbh.utils.GameTouchpad;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -31,12 +33,15 @@ public class GameScreen implements Screen {
     private SpriteBatch batch;
     private Stage stage;
 
-    private GameMap map;
+    private GameTouchpad touchpad;
 
-    private ArrayList<Bullet> bullets;
+    private GameMap map;
+    private Player player;
     private ArrayList<GameObject> items;
+    private ArrayList<Bullet> bullets;
     private ArrayList<GameObject> enemies;
 
+    private float playerSpeed = 5.0f;
     private float scale = 6.0f;
 
     private TextureAtlas atlas;
@@ -49,8 +54,8 @@ public class GameScreen implements Screen {
     private int score;
     private int round;
 
-    private String collidedEnemyName;
     private String collidedItemName;
+    private String collidedEnemyName;
 
     public GameScreen(ProjectY screenManager) {
         this.screenManager = screenManager;
@@ -69,6 +74,14 @@ public class GameScreen implements Screen {
 
         //** GAME ** -START
         map = new GameMap("map.tmx",scale);
+
+        player = new Player(
+                "data/playerExample.png",
+                map.getSpawnMap().getSpawnPoint(0).getX()-64,
+                map.getSpawnMap().getSpawnPoint(0).getY()-64,
+                "Player0"
+        );
+        player.setRender(true);
 
         enemies = new ArrayList<GameObject>();
         for(int i = 1; i < map.getSpawnMap().getSize(); i++){
@@ -94,6 +107,17 @@ public class GameScreen implements Screen {
         }
 
         bullets = new ArrayList<Bullet>();
+
+        // Camera set to player position
+        camera.position.x = player.getX();
+        camera.position.y = player.getY();
+        //** GAME ** -END
+
+        //** GUI ** - START
+        touchpad = new GameTouchpad("data/touchBackground.png","data/touchKnob.png");
+        touchpad.setRadius(10);
+        touchpad.setBounds(15,15,200,200);
+        touchpad.setPosition(Gdx.graphics.getWidth()- touchpad.getTouchpad().getWidth() -20, 20);
 
         stage = new Stage(new ScreenViewport(), batch);
 
@@ -133,13 +157,13 @@ public class GameScreen implements Screen {
 
                 bullets.add(
                         new Bullet(
-                                "data/bullet.png",
-                                0,
-                                0,
-                                "Bullet")
+                            "data/bullet.png",
+                            player.getX()+64-16,
+                            player.getY()+64-16,
+                            "Bullet")
                 );
-                bullets.get(bullets.size()-1).setDirectionX(1);
-                bullets.get(bullets.size()-1).setDirectionY(0);
+                bullets.get(bullets.size()-1).setDirectionX(touchpad.getWasPrecentX());
+                bullets.get(bullets.size()-1).setDirectionY(touchpad.getWasPrecentY());
 
                 return super.touchDown(event, x, y, pointer, button);
             }
@@ -148,6 +172,7 @@ public class GameScreen implements Screen {
         stage.addActor(labelRound);
         stage.addActor(labelScore);
         stage.addActor(buttonFire);
+        stage.addActor(touchpad.getTouchpad());
         Gdx.input.setInputProcessor(stage);
         //** GUI ** - END
     }
@@ -162,13 +187,18 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         camera.update();
 
-        camera.position.x = 0;
-        camera.position.y = 0;
+        touchpad.calcFuture();
+
+        player.move(touchpad.getTouchpad().getKnobPercentX() * playerSpeed, touchpad.getTouchpad().getKnobPercentY() * playerSpeed);
+        player.collideWithMap(map.getCollisionMap());
+
+        camera.position.x = player.getX();
+        camera.position.y = player.getY();
 
         map.render(camera);
 
         // Items
-        //collidedItemName = player.collideWithObject(items);
+        collidedItemName = player.collideWithObject(items);
         for(int i = 0; i < items.size(); i++){
             if(collidedItemName.equals(items.get(i).getName())) {
                 //Gdx.app.log("DEBUG",items.get(i).getName() + " touched");
@@ -178,6 +208,7 @@ public class GameScreen implements Screen {
                 items.get(i).setRender(true);
             }
         }
+
         // Enemies
         for(int i = 0; i < enemies.size(); i++){
             if(collidedEnemyName.equals(enemies.get(i).getName())){
@@ -203,6 +234,7 @@ public class GameScreen implements Screen {
             bullets.get(i).setEnemyName(collidedEnemyName);
 
             if(!bullets.get(i).getEnemyName().equals("")){
+                score+=10;
                 bullets.remove(i);
             } else if(bullets.get(i).isCollision()){
                 bullets.remove(i);
@@ -218,6 +250,11 @@ public class GameScreen implements Screen {
         labelScore.setText("Score: "+score);
         labelRound.setText("Round: "+round);
 
+        if(player != null) {
+            player.render(batch, camera);
+            player.showBounds(true, camera);
+        }
+
         // Draw stage for touchpad
         stage.act(delta);
         stage.draw();
@@ -225,7 +262,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
+        stage.getViewport().update(width, height, true);
     }
 
     @Override
@@ -260,5 +297,13 @@ public class GameScreen implements Screen {
                     )
             );
         }
+
+        player = new Player(
+                "data/playerExample.png",
+                map.getSpawnMap().getSpawnPoint(0).getX()-64,
+                map.getSpawnMap().getSpawnPoint(0).getY()-64,
+                "Player0"
+        );
+        player.setRender(true);
     }
 }
