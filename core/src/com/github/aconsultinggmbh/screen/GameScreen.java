@@ -3,9 +3,19 @@ package com.github.aconsultinggmbh.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.github.aconsultinggmbh.gameobject.Bullet;
 import com.github.aconsultinggmbh.gameobject.GameObject;
 import com.github.aconsultinggmbh.map.GameMap;
@@ -19,6 +29,7 @@ public class GameScreen implements Screen {
 
     private OrthographicCamera camera;
     private SpriteBatch batch;
+    private Stage stage;
 
     private GameMap map;
 
@@ -27,6 +38,16 @@ public class GameScreen implements Screen {
     private ArrayList<GameObject> enemies;
 
     private float scale = 6.0f;
+
+    private TextureAtlas atlas;
+    private Skin skin;
+    private TextButton buttonFire;
+    private BitmapFont font;
+
+    private Label labelScore;
+    private Label labelRound;
+    private int score;
+    private int round;
 
     private String collidedEnemyName;
     private String collidedItemName;
@@ -74,6 +95,61 @@ public class GameScreen implements Screen {
 
         bullets = new ArrayList<Bullet>();
 
+        stage = new Stage(new ScreenViewport(), batch);
+
+        // Button for shooting and Score
+        atlas = new TextureAtlas("button/button.pack");
+        skin = new Skin(atlas);
+
+        font = new BitmapFont();
+        font.getData().setScale(5.0f);
+
+        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
+        textButtonStyle.up = skin.getDrawable("buttonOff");
+        textButtonStyle.down = skin.getDrawable("buttonOn");
+        textButtonStyle.font = font;
+        textButtonStyle.fontColor = Color.WHITE;
+
+        score = 0;
+        Label.LabelStyle labelStyle = new Label.LabelStyle( font, Color.WHITE);
+        labelScore = new Label("Score: "+score, labelStyle);
+        labelScore.setWidth(400);
+        labelScore.setPosition(Gdx.graphics.getWidth()- labelScore.getWidth()-40, Gdx.graphics.getHeight() - labelScore.getHeight()-20);
+
+        round = 0;
+        labelRound = new Label("Round: "+round, labelStyle);
+        labelRound.setWidth(400);
+        labelRound.setPosition(40, Gdx.graphics.getHeight() - labelScore.getHeight()-20);
+
+        buttonFire = new TextButton("Fire", textButtonStyle);
+        buttonFire.setWidth(300);
+        buttonFire.setHeight(120);
+        buttonFire.setPosition(20, 20);
+        buttonFire.pad(20);
+        buttonFire.addListener(new InputListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                Gdx.app.log("DEBUG", "Fire");
+
+                bullets.add(
+                        new Bullet(
+                                "data/bullet.png",
+                                0,
+                                0,
+                                "Bullet")
+                );
+                bullets.get(bullets.size()-1).setDirectionX(1);
+                bullets.get(bullets.size()-1).setDirectionY(0);
+
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
+
+        stage.addActor(labelRound);
+        stage.addActor(labelScore);
+        stage.addActor(buttonFire);
+        Gdx.input.setInputProcessor(stage);
+        //** GUI ** - END
     }
 
     @Override
@@ -113,7 +189,9 @@ public class GameScreen implements Screen {
         }
 
         if(enemies.size() == 0){
+            respawn();
             collidedEnemyName = "";
+            collidedItemName = "";
         }
 
         // Bullets
@@ -135,6 +213,14 @@ public class GameScreen implements Screen {
                 bullets.get(i).setRender(true);
             }
         }
+
+        // Labels
+        labelScore.setText("Score: "+score);
+        labelRound.setText("Round: "+round);
+
+        // Draw stage for touchpad
+        stage.act(delta);
+        stage.draw();
     }
 
     @Override
@@ -160,5 +246,19 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
 
+    }
+
+    private void respawn(){
+        round++;
+        for(int i = 1; i < map.getSpawnMap().getSize(); i++){
+            enemies.add(
+                    new GameObject(
+                            "data/playerExample.png",
+                            map.getSpawnMap().getSpawnPoint(i).getX()-64,
+                            map.getSpawnMap().getSpawnPoint(i).getY()-64,
+                            "Enemy"+i
+                    )
+            );
+        }
     }
 }
