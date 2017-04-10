@@ -16,7 +16,7 @@ public class ProjectY extends Game {
 	@Override
 	public void create() {
 
-		this.setScreen(new LevelScreen(this));
+		this.setScreen(new GameScreen(this));
 	}
 
 	@Override
@@ -26,6 +26,7 @@ public class ProjectY extends Game {
 
 	@Override
 	public void dispose() {
+        super.dispose();
 	}
 
 	@Override
