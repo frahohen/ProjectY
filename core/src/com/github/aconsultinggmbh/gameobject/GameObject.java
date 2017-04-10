@@ -12,6 +12,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.github.aconsultinggmbh.map.CollisionMap;
 
+import java.util.ArrayList;
+
 public class GameObject {
 
     private Sprite gameObject;
@@ -150,6 +152,20 @@ public class GameObject {
             shapeRenderer.rect(collisionObject.getBounds().getX(), collisionObject.getBounds().getY(), collisionObject.getBounds().getWidth(), collisionObject.getBounds().getHeight());
             shapeRenderer.end();
         }
+    }
+
+    public String collideWithObject(ArrayList<GameObject> gameObjects){
+        String name = "";
+
+        searchLoop:
+        for(int i = 0; i < gameObjects.size(); i++) {
+            if (gameObjects.get(i).getBounds().overlaps(this.getBounds())) {
+                name = gameObjects.get(i).getName();
+                break searchLoop;
+            }
+        }
+
+        return name;
     }
 
     public void collideWithMap(CollisionMap collisionMap){
