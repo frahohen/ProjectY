@@ -31,8 +31,6 @@ public class MainMenuScreen implements Screen {
         create();
     }
 
-
-
     private void create(){
 
         Gdx.app.setLogLevel(Application.LOG_DEBUG);

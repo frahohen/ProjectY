@@ -168,6 +168,20 @@ public class GameObject {
         return name;
     }
 
+    public String collideWithItem(ArrayList<Item> items){
+        String name = "";
+
+        searchLoop:
+        for(int i = 0; i < items.size(); i++) {
+            if (items.get(i).getBounds().overlaps(this.getBounds())) {
+                name = items.get(i).getName();
+                break searchLoop;
+            }
+        }
+
+        return name;
+    }
+
     public void collideWithMap(CollisionMap collisionMap){
 
         searchLoop:
