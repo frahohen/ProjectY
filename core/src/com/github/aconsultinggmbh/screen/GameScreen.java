@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -18,6 +19,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.github.aconsultinggmbh.gameobject.Bullet;
 import com.github.aconsultinggmbh.gameobject.GameObject;
+import com.github.aconsultinggmbh.gameobject.Item;
+import com.github.aconsultinggmbh.gameobject.ItemInvulnerability;
 import com.github.aconsultinggmbh.gameobject.Player;
 import com.github.aconsultinggmbh.map.GameMap;
 import com.github.aconsultinggmbh.utils.GameTouchpad;
@@ -37,7 +40,7 @@ public class GameScreen implements Screen {
 
     private GameMap map;
     private Player player;
-    private ArrayList<GameObject> items;
+    private ArrayList<Item> items;
     private ArrayList<Bullet> bullets;
     private ArrayList<GameObject> enemies;
 
@@ -95,10 +98,10 @@ public class GameScreen implements Screen {
             );
         }
 
-        items = new ArrayList<GameObject>();
+        items = new ArrayList<Item>();
         for(int i = 0; i < 10; i++){
             int position = new Random().nextInt(map.getFloorMap().getSize());
-            items.add(new GameObject(
+            items.add(new ItemInvulnerability(
                     "data/item.png",
                     map.getFloorMap().getFloorPoint(position).getX()-64,
                     map.getFloorMap().getFloorPoint(position).getY()-64,
@@ -198,7 +201,7 @@ public class GameScreen implements Screen {
         map.render(camera);
 
         // Items
-        collidedItemName = player.collideWithObject(items);
+        collidedItemName = player.collideWithItem(items);
         for(int i = 0; i < items.size(); i++){
             if(collidedItemName.equals(items.get(i).getName())) {
                 //Gdx.app.log("DEBUG",items.get(i).getName() + " touched");
@@ -252,7 +255,7 @@ public class GameScreen implements Screen {
 
         if(player != null) {
             player.render(batch, camera);
-            player.showBounds(true, camera);
+            player.showBounds(false, camera);
         }
 
         // Draw stage for touchpad
