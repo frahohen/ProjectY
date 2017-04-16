@@ -40,7 +40,7 @@ public class GameScreen implements Screen {
 
     private GameMap map;
     private Player player;
-    private ArrayList<Item> items;
+    private ArrayList<GameObject> items;
     private ArrayList<Bullet> bullets;
     private ArrayList<GameObject> enemies;
 
@@ -98,7 +98,7 @@ public class GameScreen implements Screen {
             );
         }
 
-        items = new ArrayList<Item>();
+        items = new ArrayList<GameObject>();
         for(int i = 0; i < 10; i++){
             int position = new Random().nextInt(map.getFloorMap().getSize());
             items.add(new ItemInvulnerability(
@@ -201,7 +201,7 @@ public class GameScreen implements Screen {
         map.render(camera);
 
         // Items
-        collidedItemName = player.collideWithItem(items);
+        collidedItemName = player.collideWithObject(items);
         for(int i = 0; i < items.size(); i++){
             if(collidedItemName.equals(items.get(i).getName())) {
                 //Gdx.app.log("DEBUG",items.get(i).getName() + " touched");
