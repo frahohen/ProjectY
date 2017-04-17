@@ -1,4 +1,4 @@
-import org.junit.Ignore;
+/*import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
@@ -16,3 +16,4 @@ public class UnitTestTemplate {
     {
     }
 }
+*/
