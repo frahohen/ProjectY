@@ -6,5 +6,5 @@ eclipse.project {
     name = appName + "-core"
 }
 dependencies {
-    compile files('build/libs/junit-4.12.jar')
+    compile files('src/com/github/aconsultinggmbh/libs/junit-4.12.jar')
 }

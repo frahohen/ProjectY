@@ -1,12 +1,19 @@
 package com.github.aconsultinggmbh.gameobject;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Timer;
+
+import java.util.ArrayList;
 
 public class Player extends GameObject {
 
     private float x;
     private float y;
+
+    private float health;
+    private boolean godMode;
 
     public Player(String avatar, float x, float y, String name){
         super(avatar,x,y,name);
@@ -21,6 +28,26 @@ public class Player extends GameObject {
     @Override
     public void showBounds(boolean isBounds, OrthographicCamera camera) {
         super.showBounds(isBounds, camera);
+    }
+
+    public void giveItemBehaviour(ArrayList<GameObject> items, GameObject item){
+        for(int i = 0; i < items.size(); i++) {
+            if (item.equals(items.get(i))){
+                if (items.get(i) instanceof ItemInvulnerability) {
+                    godMode = true;
+                    Gdx.app.log("DEBUG", "Godmode: " + godMode);
+                    Timer.schedule(new Timer.Task() {
+
+                        @Override
+                        public void run() {
+                            godMode = false;
+                            Gdx.app.log("DEBUG", "Godmode: " + godMode);
+                        }
+
+                    }, 10);
+                }
+            }
+        }
     }
 
     public void move(float knobPercentX, float knobPercentY){
@@ -66,6 +93,7 @@ public class Player extends GameObject {
 
     private void init(float x, float y){
 
+        this.godMode = false;
         this.x = x;
         this.y = y;
     }
