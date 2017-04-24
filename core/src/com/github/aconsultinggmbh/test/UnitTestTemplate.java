@@ -1,10 +1,5 @@
-import org.junit.Ignore;
-import org.junit.Test;
-
-import static org.junit.Assert.assertTrue;
-
 public class UnitTestTemplate {
-    @Test
+    /*@Test
     public void thisAlwaysPasses()
     {
         assertTrue(true);
@@ -14,5 +9,5 @@ public class UnitTestTemplate {
     @Ignore
     public void thisIsIgnored()
     {
-    }
+    }*/
 }

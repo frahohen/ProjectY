@@ -2,6 +2,8 @@ package com.github.aconsultinggmbh.screen;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -9,7 +11,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -19,7 +21,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.github.aconsultinggmbh.gameobject.Bullet;
 import com.github.aconsultinggmbh.gameobject.GameObject;
-import com.github.aconsultinggmbh.gameobject.Item;
 import com.github.aconsultinggmbh.gameobject.ItemInvulnerability;
 import com.github.aconsultinggmbh.gameobject.Player;
 import com.github.aconsultinggmbh.map.GameMap;
@@ -31,7 +32,8 @@ import java.util.Random;
 public class GameScreen implements Screen {
 
     private final ProjectY screenManager;
-
+    private Vector3 calib;
+    private boolean accelero;
     private OrthographicCamera camera;
     private SpriteBatch batch;
     private Stage stage;
@@ -65,7 +67,19 @@ public class GameScreen implements Screen {
         create();
     }
 
+    private void getPreferences(){
+        // Einlesen der Settings Parameter für diese Klasse mit Default Werten
+        Preferences settings = Gdx.app.getPreferences("ProjectY_settings");
+        float x=settings.getFloat("x",0f); // 0f ist für wenn ein Fehler irgendwo Auftritt
+        float y=settings.getFloat("y",0f);
+        float z=settings.getFloat("z",0f);
+        calib.set(x,y,z);
+        accelero=settings.getBoolean("accelero",false);
+    }
     private void create(){
+
+
+        calib=new Vector3();
         batch = new SpriteBatch();
 
         camera = new OrthographicCamera();
@@ -178,6 +192,7 @@ public class GameScreen implements Screen {
         stage.addActor(touchpad.getTouchpad());
         Gdx.input.setInputProcessor(stage);
         //** GUI ** - END
+        getPreferences();
     }
 
     @Override
@@ -189,10 +204,18 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0.100f, 0.314f, 0.314f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         camera.update();
-
         touchpad.calcFuture();
 
-        player.move(touchpad.getTouchpad().getKnobPercentX() * playerSpeed, touchpad.getTouchpad().getKnobPercentY() * playerSpeed);
+        // Ist Accelero aktiv und aktiviert
+        if(Gdx.input.isPeripheralAvailable(Input.Peripheral.Accelerometer)&&accelero) {
+            float accelZ = Gdx.input.getAccelerometerZ() - calib.z; // aktuelle Position - der Ruhelage
+            float accelY = Gdx.input.getAccelerometerY() - calib.y;
+            player.move(accelY, accelZ); // Bewegung des Spielers
+
+
+        }else {
+            player.move(touchpad.getTouchpad().getKnobPercentX() * playerSpeed, touchpad.getTouchpad().getKnobPercentY() * playerSpeed);
+        }
         player.collideWithMap(map.getCollisionMap());
 
         camera.position.x = player.getX();
@@ -309,4 +332,6 @@ public class GameScreen implements Screen {
         );
         player.setRender(true);
     }
+
+
 }
