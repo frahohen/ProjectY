@@ -238,7 +238,8 @@ public class GameScreen implements Screen {
             bullets.get(i).setEnemyName(collidedEnemyName);
 
             if(!bullets.get(i).getEnemyName().equals("")){
-                score+=10;
+                //score+=10;
+                bullets.get(i).checkScore(score);
                 bullets.remove(i);
             } else if(bullets.get(i).isCollision()){
                 bullets.remove(i);
