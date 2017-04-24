@@ -6,5 +6,7 @@ eclipse.project {
     name = appName + "-core"
 }
 dependencies {
+    compile files('src/com/github/aconsultinggmbh/libs/gdx-backend-headless-1.9.6.jar')
     compile files('src/com/github/aconsultinggmbh/libs/junit-4.12.jar')
+    compile files('src/com/github/aconsultinggmbh/libs/mockito-core-2.2.7.jar')
 }
