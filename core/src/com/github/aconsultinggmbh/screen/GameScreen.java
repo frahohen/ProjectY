@@ -205,6 +205,7 @@ public class GameScreen implements Screen {
         for(int i = 0; i < items.size(); i++){
             if(collidedItemName.equals(items.get(i).getName())) {
                 //Gdx.app.log("DEBUG",items.get(i).getName() + " touched");
+                player.giveItemBehaviour(items, items.get(i));
                 items.remove(i);
             }else{
                 items.get(i).render(batch, camera);
