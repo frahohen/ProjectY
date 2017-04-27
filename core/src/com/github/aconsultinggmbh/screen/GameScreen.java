@@ -21,6 +21,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.github.aconsultinggmbh.gameobject.Bullet;
 import com.github.aconsultinggmbh.gameobject.GameObject;
+import com.github.aconsultinggmbh.gameobject.Healthbar;
+import com.github.aconsultinggmbh.gameobject.Item;
 import com.github.aconsultinggmbh.gameobject.ItemInvulnerability;
 import com.github.aconsultinggmbh.gameobject.Player;
 import com.github.aconsultinggmbh.map.GameMap;
@@ -45,6 +47,8 @@ public class GameScreen implements Screen {
     private ArrayList<GameObject> items;
     private ArrayList<Bullet> bullets;
     private ArrayList<GameObject> enemies;
+
+    private Healthbar hp;
 
     private float playerSpeed = 5.0f;
     private float scale = 6.0f;
@@ -98,8 +102,9 @@ public class GameScreen implements Screen {
                 map.getSpawnMap().getSpawnPoint(0).getY()-64,
                 "Player0"
         );
-        player.setRender(true);
 
+        player.setRender(true);
+        hp= new Healthbar();
         enemies = new ArrayList<GameObject>();
         for(int i = 1; i < map.getSpawnMap().getSize(); i++){
             enemies.add(
@@ -190,6 +195,7 @@ public class GameScreen implements Screen {
         stage.addActor(labelScore);
         stage.addActor(buttonFire);
         stage.addActor(touchpad.getTouchpad());
+        stage.addActor(hp.getBar());
         Gdx.input.setInputProcessor(stage);
         //** GUI ** - END
         getPreferences();
@@ -198,9 +204,11 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
     }
-
+    int test=0;
     @Override
     public void render(float delta) {
+
+
         Gdx.gl.glClearColor(0.100f, 0.314f, 0.314f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         camera.update();
