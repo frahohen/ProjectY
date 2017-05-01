@@ -10,6 +10,7 @@ dependencies {
     compile files('src/com/github/aconsultinggmbh/libs/junit-4.12.jar')
     compile files('src/com/github/aconsultinggmbh/libs/mockito-core-2.2.7.jar')
 }
+/*
 task javadoc(type: Javadoc) {
     source = android.sourceSets.main.java.srcDirs
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
@@ -36,13 +37,14 @@ task jacocoTestReport(type: JacocoReport, dependsOn: "test") {
 
     classDirectories = fileTree(
             dir: '../app/build/intermediates/classes',
-            excludes: ['**/R.class',
-                       '**/R$*.class',
-                       '**/*$ViewInjector*.*',
-                       '**/BuildConfig.*',
-                       '**/Manifest*.*']
-    )
+            excludes: ['**///R.class',
+                       //'**/R$*.class',
+                       //'**/*$ViewInjector*.*',
+                       //'**/BuildConfig.*',
+                       //'**/Manifest*.*']
+    //)
 
+    /*
     additionalSourceDirs = files(coverageSourceDirs)
     sourceDirectories = files(coverageSourceDirs)
     executionData = files('../app/build/jacoco/jacoco.exec')
@@ -52,3 +54,4 @@ task jacocoTestReport(type: JacocoReport, dependsOn: "test") {
         html.enabled = true
     }
 }
+*/
