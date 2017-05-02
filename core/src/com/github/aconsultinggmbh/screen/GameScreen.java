@@ -19,10 +19,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.github.aconsultinggmbh.gameobject.Bullet;
 import com.github.aconsultinggmbh.gameobject.GameObject;
 import com.github.aconsultinggmbh.gameobject.Healthbar;
-import com.github.aconsultinggmbh.gameobject.Item;
 import com.github.aconsultinggmbh.gameobject.ItemInvulnerability;
 import com.github.aconsultinggmbh.gameobject.Player;
 import com.github.aconsultinggmbh.map.GameMap;
@@ -45,8 +43,6 @@ public class GameScreen implements Screen {
     private GameMap map;
     private Player player;
     private ArrayList<GameObject> items;
-    private ArrayList<Bullet> bullets;
-    private ArrayList<GameObject> enemies;
 
     private Healthbar hp;
 
@@ -64,7 +60,6 @@ public class GameScreen implements Screen {
     private int round;
 
     private String collidedItemName;
-    private String collidedEnemyName;
 
     public GameScreen(ProjectY screenManager) {
         this.screenManager = screenManager;
@@ -90,7 +85,6 @@ public class GameScreen implements Screen {
         camera.setToOrtho(false,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
         camera.update();
 
-        collidedEnemyName = "";
         collidedItemName = "";
 
         //** GAME ** -START
@@ -105,17 +99,6 @@ public class GameScreen implements Screen {
 
         player.setRender(true);
         hp= new Healthbar();
-        enemies = new ArrayList<GameObject>();
-        for(int i = 1; i < map.getSpawnMap().getSize(); i++){
-            enemies.add(
-                    new GameObject(
-                            "data/playerExample.png",
-                            map.getSpawnMap().getSpawnPoint(i).getX()-64,
-                            map.getSpawnMap().getSpawnPoint(i).getY()-64,
-                            "Enemy"+i
-                    )
-            );
-        }
 
         items = new ArrayList<GameObject>();
         for(int i = 0; i < 10; i++){
@@ -127,8 +110,6 @@ public class GameScreen implements Screen {
                     "Item"+i
             ));
         }
-
-        bullets = new ArrayList<Bullet>();
 
         // Camera set to player position
         camera.position.x = player.getX();
@@ -176,16 +157,6 @@ public class GameScreen implements Screen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 Gdx.app.log("DEBUG", "Fire");
-
-                bullets.add(
-                        new Bullet(
-                            "data/bullet.png",
-                            player.getX()+64-16,
-                            player.getY()+64-16,
-                            "Bullet")
-                );
-                bullets.get(bullets.size()-1).setDirectionX(touchpad.getWasPrecentX());
-                bullets.get(bullets.size()-1).setDirectionY(touchpad.getWasPrecentY());
 
                 return super.touchDown(event, x, y, pointer, button);
             }
@@ -244,44 +215,6 @@ public class GameScreen implements Screen {
             }
         }
 
-        // Enemies
-        for(int i = 0; i < enemies.size(); i++){
-            if(collidedEnemyName.equals(enemies.get(i).getName())){
-                enemies.remove(i);
-            }else {
-                enemies.get(i).render(batch, camera);
-                enemies.get(i).setRender(true);
-            }
-        }
-
-        if(enemies.size() == 0){
-            respawn();
-            collidedEnemyName = "";
-            collidedItemName = "";
-        }
-
-        // Bullets
-        for(int i = 0; i < bullets.size(); i++){
-            bullets.get(i).collideWithMap(map.getCollisionMap());
-
-            collidedEnemyName = bullets.get(i).collideWithObject(enemies);
-            //Gdx.app.log("DEBUG","Enemy: " + collidedEnemyName);
-            bullets.get(i).setEnemyName(collidedEnemyName);
-
-            if(!bullets.get(i).getEnemyName().equals("")){
-                //score+=10;
-                score = bullets.get(i).checkScore(score);
-                bullets.remove(i);
-            } else if(bullets.get(i).isCollision()){
-                bullets.remove(i);
-            } else {
-                bullets.get(i).setX(bullets.get(i).getX() + bullets.get(i).getDirectionX() * 20);
-                bullets.get(i).setY(bullets.get(i).getY() + bullets.get(i).getDirectionY() * 20);
-                bullets.get(i).render(batch, camera);
-                bullets.get(i).setRender(true);
-            }
-        }
-
         // Labels
         labelScore.setText("Score: "+score);
         labelRound.setText("Round: "+round);
@@ -324,14 +257,7 @@ public class GameScreen implements Screen {
     private void respawn(){
         round++;
         for(int i = 1; i < map.getSpawnMap().getSize(); i++){
-            enemies.add(
-                    new GameObject(
-                            "data/playerExample.png",
-                            map.getSpawnMap().getSpawnPoint(i).getX()-64,
-                            map.getSpawnMap().getSpawnPoint(i).getY()-64,
-                            "Enemy"+i
-                    )
-            );
+
         }
 
         player = new Player(
