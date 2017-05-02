@@ -1,11 +1,9 @@
-
+import com.github.aconsultinggmbh.gameobject.Bullet;
 import com.github.aconsultinggmbh.gameobject.GameObject;
 import com.github.aconsultinggmbh.gameobject.Player;
 
-
 import org.junit.Before;
 import org.junit.Test;
-
 
 import java.util.ArrayList;
 
