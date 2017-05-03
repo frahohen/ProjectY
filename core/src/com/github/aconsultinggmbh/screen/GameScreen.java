@@ -18,12 +18,15 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.github.aconsultinggmbh.gameobject.Bullet;
 import com.github.aconsultinggmbh.gameobject.GameObject;
 import com.github.aconsultinggmbh.gameobject.Healthbar;
 import com.github.aconsultinggmbh.gameobject.ItemInvulnerability;
 import com.github.aconsultinggmbh.gameobject.Player;
+import com.github.aconsultinggmbh.multiplayer.client.ClientProgram;
+import com.github.aconsultinggmbh.multiplayer.server.ServerProgram;
 import com.github.aconsultinggmbh.map.GameMap;
 import com.github.aconsultinggmbh.utils.GameTouchpad;
 
@@ -199,6 +202,16 @@ public class GameScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
         //** GUI ** - END
         getPreferences();
+
+        // Network - Start
+        new Thread(new ServerProgram());
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                new Thread(new ClientProgram());
+            }
+        }, 10);
+        // Network - End
     }
 
     @Override
