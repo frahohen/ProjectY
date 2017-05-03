@@ -11,9 +11,11 @@ import java.io.InputStreamReader;
 public class ServerThread implements Runnable{
     private Socket client;
     private String serverMessage;
+    private int id;
 
-    public ServerThread(Socket client) {
+    public ServerThread(Socket client, int id) {
         this.client = client;
+        this.id = id;
     }
 
     @Override
@@ -21,7 +23,7 @@ public class ServerThread implements Runnable{
         while (true) {
             try {
                 String clientMessage = new BufferedReader(new InputStreamReader(client.getInputStream())).readLine();
-                Gdx.app.log("SERVER", clientMessage);
+                Gdx.app.log("SERVER", "Client " + id + " says: " + clientMessage);
             } catch (IOException e) {
                 Gdx.app.log("SERVER", "An error occured", e);
             }

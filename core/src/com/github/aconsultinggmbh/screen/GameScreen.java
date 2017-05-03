@@ -239,9 +239,9 @@ public class GameScreen implements Screen {
         Timer.schedule(new Timer.Task() {
             @Override
             public void run() {
-                new Thread(new Client(1, server.getIp(), server.getPort())).start();
-                new Thread(new Client(2, server.getIp(), server.getPort())).start();
-                new Thread(new Client(3, server.getIp(), server.getPort())).start();
+                new Thread(new Client(server.getIp(), server.getPort())).start();
+                new Thread(new Client(server.getIp(), server.getPort())).start();
+                new Thread(new Client(server.getIp(), server.getPort())).start();
             }
         }, 2);
 

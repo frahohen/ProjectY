@@ -11,10 +11,12 @@ public class Server implements Runnable {
 
     private String ip;
     private int port;
+    private int id;
 
     public Server(String ip, int port) {
         this.ip = ip;
         this.port = port;
+        id = 0;
     }
 
     @Override
@@ -29,7 +31,7 @@ public class Server implements Runnable {
                 // read message and send it back
                 if(client.isConnected()) {
                     Gdx.app.log("SERVER", "Client connected");
-                    new Thread(new ServerThread(client)).start();
+                    new Thread(new ServerThread(client, id++)).start();
                 }
             }catch (Exception e){
                 Gdx.app.log("SERVER", "An error occured", e);

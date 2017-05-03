@@ -9,12 +9,10 @@ import com.badlogic.gdx.net.SocketHints;
 import java.io.IOException;
 
 public class Client implements Runnable {
-    private int id;
     private String ip;
     private int port;
 
-    public Client(int id, String ip, int port) {
-        this.id = id;
+    public Client(String ip, int port) {
         this.ip = ip;
         this.port = port;
     }
@@ -24,7 +22,7 @@ public class Client implements Runnable {
         SocketHints hints = new SocketHints();
         Socket client = Gdx.net.newClientSocket(Net.Protocol.TCP, ip, port, hints);
 
-        String clientMessage = "I am Client " + id + "\n";
+        String clientMessage = "I am connected\n";
         while (true) {
             try {
                 client.getOutputStream().write(clientMessage.getBytes());
