@@ -26,6 +26,7 @@ import com.github.aconsultinggmbh.gameobject.ItemInvulnerability;
 import com.github.aconsultinggmbh.gameobject.Player;
 import com.github.aconsultinggmbh.map.GameMap;
 import com.github.aconsultinggmbh.socket.Client;
+import com.github.aconsultinggmbh.socket.ClientThread;
 import com.github.aconsultinggmbh.socket.Server;
 import com.github.aconsultinggmbh.utils.GameTouchpad;
 
@@ -38,6 +39,8 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class GameScreen implements Screen {
 
@@ -212,16 +215,16 @@ public class GameScreen implements Screen {
             Gdx.app.log("DEBUG","Address: " + addresses.get(i));
         }
 
+        final ExecutorService executorService = Executors.newCachedThreadPool();
+
         Server server = new Server();
-        new Thread(server).start();
+        executorService.execute(new Thread(server));
 
         Timer.schedule(new Timer.Task() {
             @Override
             public void run() {
-                new Thread(new Client()).start();
-                new Thread(new Client()).start();
-                new Thread(new Client()).start();
-                new Thread(new Client()).start();
+                Client client = new Client();
+                executorService.execute(new Thread(client));
             }
         }, 10);
 

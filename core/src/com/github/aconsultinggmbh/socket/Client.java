@@ -26,7 +26,7 @@ public class Client implements Runnable{
         try {
             while (true) {
                 if(socket.isConnected()) {
-                    Gdx.app.log("DEBUG","CLIENT: Client send something " + id);
+                    //Gdx.app.log("DEBUG","CLIENT: Client send something " + id);
                     socket.getOutputStream().write("Hello".getBytes()); //if connected, send message
                 }
             }
