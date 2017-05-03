@@ -1,6 +1,7 @@
 package com.github.aconsultinggmbh.screen;
 
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -16,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.github.aconsultinggmbh.gameobject.Bullet;
 import com.github.aconsultinggmbh.gameobject.GameObject;
@@ -23,9 +25,18 @@ import com.github.aconsultinggmbh.gameobject.Item;
 import com.github.aconsultinggmbh.gameobject.ItemInvulnerability;
 import com.github.aconsultinggmbh.gameobject.Player;
 import com.github.aconsultinggmbh.map.GameMap;
+import com.github.aconsultinggmbh.socket.Client;
+import com.github.aconsultinggmbh.socket.Server;
 import com.github.aconsultinggmbh.utils.GameTouchpad;
 
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.List;
 import java.util.Random;
 
 public class GameScreen implements Screen {
@@ -66,6 +77,8 @@ public class GameScreen implements Screen {
     }
 
     private void create(){
+        Gdx.app.setLogLevel(Application.LOG_DEBUG);
+
         batch = new SpriteBatch();
 
         camera = new OrthographicCamera();
@@ -178,6 +191,41 @@ public class GameScreen implements Screen {
         stage.addActor(touchpad.getTouchpad());
         Gdx.input.setInputProcessor(stage);
         //** GUI ** - END
+
+        //** SERVER ** - START
+        List<String> addresses = new ArrayList<String>();
+
+        try {
+            Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+            for(NetworkInterface ni : Collections.list(interfaces)){
+                for(InetAddress address : Collections.list(ni.getInetAddresses())){
+                    if(address instanceof Inet4Address){
+                        addresses.add(address.getHostAddress());
+                    }
+                }
+            }
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
+
+        for(int i = 0; i < addresses.size(); i++){
+            Gdx.app.log("DEBUG","Address: " + addresses.get(i));
+        }
+
+        Server server = new Server();
+        new Thread(server).start();
+
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                new Thread(new Client()).start();
+                new Thread(new Client()).start();
+                new Thread(new Client()).start();
+                new Thread(new Client()).start();
+            }
+        }, 10);
+
+        //** SERVER ** - END
     }
 
     @Override
@@ -257,6 +305,8 @@ public class GameScreen implements Screen {
             player.render(batch, camera);
             player.showBounds(false, camera);
         }
+
+        map.showFloorMapBounds(false,camera,scale);
 
         // Draw stage for touchpad
         stage.act(delta);

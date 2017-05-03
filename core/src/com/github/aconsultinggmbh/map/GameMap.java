@@ -1,6 +1,7 @@
 package com.github.aconsultinggmbh.map;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
@@ -26,6 +27,8 @@ public class GameMap {
     private CollisionMap collisionMap;
     private FloorMap floorMap;
     private SpawnMap spawnMap;
+
+    private ShapeRenderer shapeRenderer;
 
     public GameMap(String pathToMap, float scale){
         init(pathToMap, scale);
@@ -90,6 +93,20 @@ public class GameMap {
 
         this.width = tileCountX * tileWidth * scale;
         this.height = tileCountY * tileHeight * scale;
+
+        shapeRenderer = new ShapeRenderer();
+    }
+
+    public void showFloorMapBounds(boolean isBounds, OrthographicCamera camera, float scale){
+        if(isBounds){
+            for(int i = 0; i < floorMap.getSize(); i++) {
+                shapeRenderer.setProjectionMatrix(camera.combined);
+                shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+                shapeRenderer.setColor(1, 0, 0, 1);
+                shapeRenderer.rect(floorMap.getFloorPoint(i).getX()-(tileWidth*scale)/2, floorMap.getFloorPoint(i).getY()-(tileHeight*scale)/2, tileWidth*scale, tileHeight*scale);
+                shapeRenderer.end();
+            }
+        }
     }
 
     private void load(float scale){
