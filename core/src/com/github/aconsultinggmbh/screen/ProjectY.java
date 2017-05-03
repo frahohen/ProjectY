@@ -1,7 +1,19 @@
 package com.github.aconsultinggmbh.screen;
 
 import com.badlogic.gdx.Game;
-import com.github.aconsultinggmbh.screen.GameScreen;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Net;
+import com.badlogic.gdx.net.ServerSocket;
+import com.badlogic.gdx.net.ServerSocketHints;
+import com.badlogic.gdx.net.Socket;
+import com.badlogic.gdx.net.SocketHints;
+import com.github.aconsultinggmbh.networking.Client;
+import com.github.aconsultinggmbh.networking.Server;
+import com.github.aconsultinggmbh.networking.ServerThread;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class ProjectY extends Game {
 
@@ -10,7 +22,6 @@ public class ProjectY extends Game {
 
 	@Override
 	public void create() {
-
 		this.setScreen(new MainMenuScreen(this));
 	}
 

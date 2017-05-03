@@ -27,9 +27,8 @@ import com.github.aconsultinggmbh.gameobject.Healthbar;
 import com.github.aconsultinggmbh.gameobject.ItemInvulnerability;
 import com.github.aconsultinggmbh.gameobject.Player;
 import com.github.aconsultinggmbh.map.GameMap;
-import com.github.aconsultinggmbh.socket.Client;
-import com.github.aconsultinggmbh.socket.ClientThread;
-import com.github.aconsultinggmbh.socket.Server;
+import com.github.aconsultinggmbh.networking.Client;
+import com.github.aconsultinggmbh.networking.Server;
 import com.github.aconsultinggmbh.utils.GameTouchpad;
 
 import java.net.Inet4Address;
@@ -234,19 +233,9 @@ public class GameScreen implements Screen {
             Gdx.app.log("DEBUG","Address: " + addresses.get(i));
         }
 
-        final ExecutorService executorService = Executors.newCachedThreadPool();
-
-        Server server = new Server();
-        executorService.execute(new Thread(server));
-
-        Timer.schedule(new Timer.Task() {
-            @Override
-            public void run() {
-                Client client = new Client();
-                executorService.execute(new Thread(client));
-            }
-        }, 10);
-
+        new Thread(new Server()).start();
+        new Thread(new Client(1)).start();
+        new Thread(new Client(2)).start();
         //** SERVER ** - END
         getPreferences();
     }
