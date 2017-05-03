@@ -33,6 +33,9 @@ public class GameObject {
 
     private Rectangle intersection;
 
+    private float intersectX;
+    private float intersectY;
+
     public GameObject(String objectTexture, float x, float y, String name) {
         init(objectTexture,x,y,name);
     }
@@ -128,6 +131,9 @@ public class GameObject {
         isLeft = false;
         isDown = false;
         isUp = false;
+
+        intersectX = 0;
+        intersectY = 0;
     }
 
     public void render(SpriteBatch batch, OrthographicCamera camera){
@@ -174,39 +180,57 @@ public class GameObject {
         for(int i = 0; i < collisionMap.getMap().size(); i++) {
             if (collisionMap.getMap().get(i).overlaps(this.getBounds())) {
 
+                isCollision = true;
                 intersection = new Rectangle();
                 Intersector.intersectRectangles(this.getBounds(), collisionMap.getMap().get(i), intersection);
 
                 if(intersection.x > this.getBounds().x) {
                     //Intersects with right side
-                    isCollision = true;
                     isRight = true;
+                    intersectX = gameObject.getWidth() - (intersection.x-this.getBounds().x);
                     //Gdx.app.log("DEBUG", "Right");
                 }
 
                 if(intersection.y > this.getBounds().y){
                     //Intersects with top side
-                    isCollision = true;
                     isUp = true;
+                    intersectY = gameObject.getHeight() - (intersection.y - this.getBounds().y);
                     //Gdx.app.log("DEBUG", "Top");
                 }
 
                 if(intersection.x + intersection.width < this.getBounds().x + this.getBounds().width){
                     //Intersects with left side
-                    isCollision = true;
                     isLeft = true;
+                    intersectX = gameObject.getWidth() - ((this.getBounds().x + this.getBounds().width)-(intersection.x + intersection.width));
                     //Gdx.app.log("DEBUG", "Left");
                 }
 
                 if(intersection.y + intersection.height < this.getBounds().y + this.getBounds().height) {
                     //Intersects with bottom side
-                    isCollision = true;
                     isDown = true;
+                    intersectY = gameObject.getHeight() - ((this.getBounds().y + this.getBounds().height)-(intersection.y + intersection.height));
                     //Gdx.app.log("DEBUG", "Bottom");
                 }
 
                 break searchLoop;
             }
         }
+
+        if(intersectX < intersectY){
+            if(isRight || isLeft){
+                isDown = false;
+                isUp = false;
+            }
+        }
+
+        if(intersectY < intersectX){
+            if(isDown || isUp){
+                isRight = false;
+                isLeft = false;
+            }
+        }
+
+        intersectX = 0;
+        intersectY = 0;
     }
 }

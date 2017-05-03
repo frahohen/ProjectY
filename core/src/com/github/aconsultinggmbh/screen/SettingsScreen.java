@@ -2,6 +2,8 @@ package com.github.aconsultinggmbh.screen;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -14,8 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
-
-public class MainMenuScreen implements Screen {
+public class SettingsScreen implements Screen {
 
     private final ProjectY screenManager;
 
@@ -23,16 +24,16 @@ public class MainMenuScreen implements Screen {
     private TextureAtlas atlas;
     private Skin skin;
     private Table table;
-    private TextButton buttonExit, buttonCreateGame, buttonJoinGame, buttonSettings;
+    private TextButton buttonBack, buttonCalib, buttonAccelero, buttonTMP2;
     private BitmapFont font;
 
-    public MainMenuScreen(ProjectY screenManager) {
+    public SettingsScreen(ProjectY screenManager) {
         this.screenManager = screenManager;
         create();
     }
 
     private void create(){
-
+        final Preferences settings = Gdx.app.getPreferences("ProjectY_settings");
         Gdx.app.setLogLevel(Application.LOG_DEBUG);
 
         stage = new Stage();
@@ -52,20 +53,49 @@ public class MainMenuScreen implements Screen {
         textButtonStyle.font = font;
         textButtonStyle.fontColor = Color.WHITE;
 
-        buttonCreateGame = new TextButton("Spiel Erstellen", textButtonStyle);
-        buttonCreateGame.pad(20);
-        buttonCreateGame.addListener(new InputListener(){
+        buttonCalib = new TextButton("Ruhelage setzten", textButtonStyle);
+        buttonCalib.pad(20);
+        buttonCalib.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                Gdx.app.log("DEBUG", "Create Game");
-                screenManager.setScreen(new GameScreen(screenManager));
+                Gdx.app.log("DEBUG", "Ruhelage bestimmt");
+                if(Gdx.input.isPeripheralAvailable(Input.Peripheral.Accelerometer)){ // Accelero eingelesen
+                    float accelZ = Gdx.input.getAccelerometerZ(); // Ruhelage gesetz (Aktuelle Position)
+                    float accelX = Gdx.input.getAccelerometerX();
+                    float accelY = Gdx.input.getAccelerometerY();
+
+                    settings.putFloat("x",accelX); // Speicherung der Ruhe in Settings  Parameter können immer verwendet werden
+                    settings.putFloat("y",accelY);
+                    settings.putFloat("z",accelZ);
+                    settings.flush(); // jetzt speichern
+                }
+
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
+        buttonAccelero = new TextButton("Accelerometer:"+settings.getBoolean("accelero",false), textButtonStyle);
+
+
+        buttonAccelero.pad(20);
+
+        //Ob Accelero aktiv oder nicht ist und wieder in die Settings speichern
+        // Settings bleiben dauerhaft
+        buttonAccelero.addListener(new InputListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                Gdx.app.log("DEBUG", "Pressed");
+                settings.putBoolean("accelero",!settings.getBoolean("accelero",false));
+                settings.flush();
+                buttonAccelero.setText("Accelerometer:"+settings.getBoolean("accelero",false));
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
 
-        buttonJoinGame = new TextButton("Spiel Beitreten", textButtonStyle);
-        buttonJoinGame.pad(20);
-        buttonJoinGame.addListener(new InputListener(){
+        // butttonTMP2 --> Platzhalter
+
+        buttonTMP2 = new TextButton("Template 2", textButtonStyle);
+        buttonTMP2.pad(20);
+        buttonTMP2.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 Gdx.app.log("DEBUG", "Pressed");
@@ -74,36 +104,27 @@ public class MainMenuScreen implements Screen {
             }
         });
 
-        buttonSettings = new TextButton("Einstellungen", textButtonStyle);
-        buttonSettings.pad(20);
-        buttonSettings.addListener(new InputListener(){
+        // zurück zum Hauptmenü
+
+        buttonBack = new TextButton("Hauptmenü", textButtonStyle);
+        buttonBack.pad(20);
+        buttonBack.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                Gdx.app.log("DEBUG", "Pressed");
+                Gdx.app.log("DEBUG", "Hauptmenü öffnen");
 
-                screenManager.setScreen(new SettingsScreen(screenManager)); // öffnen den Einstellungs View
-                return super.touchDown(event, x, y, pointer, button); //Button irgendwas
-            }
-        });
-
-        buttonExit = new TextButton("Spiel Beenden", textButtonStyle);
-        buttonExit.pad(20);
-        buttonExit.addListener(new InputListener(){
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                Gdx.app.log("DEBUG", "Exit Game");
-                Gdx.app.exit();
+                screenManager.setScreen(new MainMenuScreen(screenManager));
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
 
-        table.add(buttonCreateGame).width(600).pad(10);
+        table.add(buttonCalib).width(600).pad(10);
         table.row();
-        table.add(buttonJoinGame).width(600).pad(10);
+        table.add(buttonAccelero).width(600).pad(10);
         table.row();
-        table.add(buttonSettings).width(600).pad(10);
+        table.add(buttonTMP2).width(600).pad(10);
         table.row();
-        table.add(buttonExit).width(600).pad(10);
+        table.add(buttonBack).width(600).pad(10);
         //table.debug();
         stage.addActor(table);
         Gdx.input.setInputProcessor(stage);

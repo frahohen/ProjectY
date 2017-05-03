@@ -3,6 +3,8 @@ package com.github.aconsultinggmbh.screen;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -10,7 +12,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -21,7 +23,7 @@ import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.github.aconsultinggmbh.gameobject.Bullet;
 import com.github.aconsultinggmbh.gameobject.GameObject;
-import com.github.aconsultinggmbh.gameobject.Item;
+import com.github.aconsultinggmbh.gameobject.Healthbar;
 import com.github.aconsultinggmbh.gameobject.ItemInvulnerability;
 import com.github.aconsultinggmbh.gameobject.Player;
 import com.github.aconsultinggmbh.map.GameMap;
@@ -45,7 +47,8 @@ import java.util.concurrent.Executors;
 public class GameScreen implements Screen {
 
     private final ProjectY screenManager;
-
+    private Vector3 calib;
+    private boolean accelero;
     private OrthographicCamera camera;
     private SpriteBatch batch;
     private Stage stage;
@@ -57,6 +60,8 @@ public class GameScreen implements Screen {
     private ArrayList<GameObject> items;
     private ArrayList<Bullet> bullets;
     private ArrayList<GameObject> enemies;
+
+    private Healthbar hp;
 
     private float playerSpeed = 5.0f;
     private float scale = 6.0f;
@@ -79,9 +84,20 @@ public class GameScreen implements Screen {
         create();
     }
 
+    private void getPreferences(){
+        // Einlesen der Settings Parameter für diese Klasse mit Default Werten
+        Preferences settings = Gdx.app.getPreferences("ProjectY_settings");
+        float x=settings.getFloat("x",0f); // 0f ist für wenn ein Fehler irgendwo Auftritt
+        float y=settings.getFloat("y",0f);
+        float z=settings.getFloat("z",0f);
+        calib.set(x,y,z);
+        accelero=settings.getBoolean("accelero",false);
+    }
     private void create(){
+
         Gdx.app.setLogLevel(Application.LOG_DEBUG);
 
+        calib=new Vector3();
         batch = new SpriteBatch();
 
         camera = new OrthographicCamera();
@@ -100,8 +116,9 @@ public class GameScreen implements Screen {
                 map.getSpawnMap().getSpawnPoint(0).getY()-64,
                 "Player0"
         );
-        player.setRender(true);
 
+        player.setRender(true);
+        hp= new Healthbar();
         enemies = new ArrayList<GameObject>();
         for(int i = 1; i < map.getSpawnMap().getSize(); i++){
             enemies.add(
@@ -114,6 +131,8 @@ public class GameScreen implements Screen {
             );
         }
 
+        bullets = new ArrayList<Bullet>();
+
         items = new ArrayList<GameObject>();
         for(int i = 0; i < 10; i++){
             int position = new Random().nextInt(map.getFloorMap().getSize());
@@ -124,8 +143,6 @@ public class GameScreen implements Screen {
                     "Item"+i
             ));
         }
-
-        bullets = new ArrayList<Bullet>();
 
         // Camera set to player position
         camera.position.x = player.getX();
@@ -176,10 +193,11 @@ public class GameScreen implements Screen {
 
                 bullets.add(
                         new Bullet(
-                            "data/bullet.png",
-                            player.getX()+64-16,
-                            player.getY()+64-16,
-                            "Bullet")
+                                "data/bullet.png",
+                                player.getX()+64-16,
+                                player.getY()+64-16,
+                                "Bullet"
+                        )
                 );
                 bullets.get(bullets.size()-1).setDirectionX(touchpad.getWasPrecentX());
                 bullets.get(bullets.size()-1).setDirectionY(touchpad.getWasPrecentY());
@@ -192,6 +210,7 @@ public class GameScreen implements Screen {
         stage.addActor(labelScore);
         stage.addActor(buttonFire);
         stage.addActor(touchpad.getTouchpad());
+        stage.addActor(hp.getBar());
         Gdx.input.setInputProcessor(stage);
         //** GUI ** - END
 
@@ -229,21 +248,32 @@ public class GameScreen implements Screen {
         }, 10);
 
         //** SERVER ** - END
+        getPreferences();
     }
 
     @Override
     public void show() {
     }
-
+    int test=0;
     @Override
     public void render(float delta) {
+
+
         Gdx.gl.glClearColor(0.100f, 0.314f, 0.314f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         camera.update();
-
         touchpad.calcFuture();
 
-        player.move(touchpad.getTouchpad().getKnobPercentX() * playerSpeed, touchpad.getTouchpad().getKnobPercentY() * playerSpeed);
+        // Ist Accelero aktiv und aktiviert
+        if(Gdx.input.isPeripheralAvailable(Input.Peripheral.Accelerometer)&&accelero) {
+            float accelZ = Gdx.input.getAccelerometerZ() - calib.z; // aktuelle Position - der Ruhelage
+            float accelY = Gdx.input.getAccelerometerY() - calib.y;
+            player.move(accelY, accelZ); // Bewegung des Spielers
+
+
+        }else {
+            player.move(touchpad.getTouchpad().getKnobPercentX() * playerSpeed, touchpad.getTouchpad().getKnobPercentY() * playerSpeed);
+        }
         player.collideWithMap(map.getCollisionMap());
 
         camera.position.x = player.getX();
@@ -256,12 +286,14 @@ public class GameScreen implements Screen {
         for(int i = 0; i < items.size(); i++){
             if(collidedItemName.equals(items.get(i).getName())) {
                 //Gdx.app.log("DEBUG",items.get(i).getName() + " touched");
+                player.giveItemBehaviour(items, items.get(i));
                 items.remove(i);
             }else{
                 items.get(i).render(batch, camera);
                 items.get(i).setRender(true);
             }
         }
+
 
         // Enemies
         for(int i = 0; i < enemies.size(); i++){
@@ -288,7 +320,8 @@ public class GameScreen implements Screen {
             bullets.get(i).setEnemyName(collidedEnemyName);
 
             if(!bullets.get(i).getEnemyName().equals("")){
-                score+=10;
+                //score+=10;
+                score = bullets.get(i).checkScore(score);
                 bullets.remove(i);
             } else if(bullets.get(i).isCollision()){
                 bullets.remove(i);
@@ -362,4 +395,6 @@ public class GameScreen implements Screen {
         );
         player.setRender(true);
     }
+
+
 }

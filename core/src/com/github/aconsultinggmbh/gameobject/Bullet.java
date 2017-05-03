@@ -1,8 +1,6 @@
 package com.github.aconsultinggmbh.gameobject;
 
-
 public class Bullet extends GameObject {
-
     private float directionX;
     private float directionY;
     private String EnemyName;
@@ -37,5 +35,12 @@ public class Bullet extends GameObject {
 
     public void setEnemyName(String enemyName) {
         EnemyName = enemyName;
+    }
+
+    public int checkScore(int score) {
+        if (!this.getEnemyName().equals("")) {
+            score += 10;
+        }
+        return score;
     }
 }
