@@ -8,16 +8,48 @@ import com.badlogic.gdx.net.ServerSocketHints;
 import com.badlogic.gdx.net.Socket;
 
 public class Server implements Runnable {
+
+    private String ip;
+    private int port;
+
+    public Server(String ip, int port) {
+        this.ip = ip;
+        this.port = port;
+    }
+
     @Override
     public void run() {
         ServerSocketHints hints = new ServerSocketHints();
-        ServerSocket server = Gdx.net.newServerSocket(Net.Protocol.TCP, 9999, hints);
+        ServerSocket server = Gdx.net.newServerSocket(Net.Protocol.TCP, port, hints);
         // wait for the next client connection
         while (true) {
-            Socket client = server.accept(null);
-            // read message and send it back
-            Gdx.app.log("SERVER","Client connected");
-            new Thread(new ServerThread(client)).start();
+            try {
+                Socket client = server.accept(null);
+
+                // read message and send it back
+                if(client.isConnected()) {
+                    Gdx.app.log("SERVER", "Client connected");
+                    new Thread(new ServerThread(client)).start();
+                }
+            }catch (Exception e){
+                Gdx.app.log("SERVER", "An error occured", e);
+            }
         }
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
     }
 }

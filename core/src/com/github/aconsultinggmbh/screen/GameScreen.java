@@ -233,9 +233,18 @@ public class GameScreen implements Screen {
             Gdx.app.log("DEBUG","Address: " + addresses.get(i));
         }
 
-        new Thread(new Server()).start();
-        new Thread(new Client(1)).start();
-        new Thread(new Client(2)).start();
+        final Server server = new Server("localhost",9999);
+        new Thread(server).start();
+
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                new Thread(new Client(1, server.getIp(), server.getPort())).start();
+                new Thread(new Client(2, server.getIp(), server.getPort())).start();
+                new Thread(new Client(3, server.getIp(), server.getPort())).start();
+            }
+        }, 2);
+
         //** SERVER ** - END
         getPreferences();
     }

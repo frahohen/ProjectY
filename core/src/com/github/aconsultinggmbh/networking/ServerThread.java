@@ -21,10 +21,9 @@ public class ServerThread implements Runnable{
         while (true) {
             try {
                 String clientMessage = new BufferedReader(new InputStreamReader(client.getInputStream())).readLine();
-                //Gdx.app.log("SERVER", clientMessage);
-                //client.getOutputStream().write("PONG\n".getBytes());
+                Gdx.app.log("SERVER", clientMessage);
             } catch (IOException e) {
-                Gdx.app.log("SERVER", "an error occured", e);
+                Gdx.app.log("SERVER", "An error occured", e);
             }
         }
     }
