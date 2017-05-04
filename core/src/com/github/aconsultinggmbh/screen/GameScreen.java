@@ -28,7 +28,6 @@ import com.github.aconsultinggmbh.gameobject.ItemInvulnerability;
 import com.github.aconsultinggmbh.gameobject.Player;
 import com.github.aconsultinggmbh.map.GameMap;
 import com.github.aconsultinggmbh.socket.Client;
-import com.github.aconsultinggmbh.socket.ClientThread;
 import com.github.aconsultinggmbh.socket.Server;
 import com.github.aconsultinggmbh.utils.GameTouchpad;
 
@@ -53,6 +52,8 @@ public class GameScreen implements Screen {
     private SpriteBatch batch;
     private Stage stage;
 
+    private boolean menuIsActive=false;
+
     private GameTouchpad touchpad;
 
     private GameMap map;
@@ -68,7 +69,7 @@ public class GameScreen implements Screen {
 
     private TextureAtlas atlas;
     private Skin skin;
-    private TextButton buttonFire;
+    private TextButton buttonFire,buttonMenue;
     private BitmapFont font;
 
     private Label labelScore;
@@ -179,7 +180,26 @@ public class GameScreen implements Screen {
         round = 0;
         labelRound = new Label("Round: "+round, labelStyle);
         labelRound.setWidth(400);
-        labelRound.setPosition(40, Gdx.graphics.getHeight() - labelScore.getHeight()-20);
+        labelRound.setPosition(40, Gdx.graphics.getHeight() -200);
+
+        final GameScreen gameScreen=this;
+        buttonMenue = new TextButton("Menü", textButtonStyle);
+        buttonMenue.setWidth(300);
+        buttonMenue.setHeight(120);
+        buttonMenue.setPosition(40, Gdx.graphics.getHeight()-110);
+        buttonMenue.pad(20);
+        buttonMenue.addListener(new InputListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                //menü öffnen
+                if(!menuIsActive){
+                    menuIsActive=!menuIsActive;
+                    SettingsInGame set =new SettingsInGame(stage,screenManager,gameScreen);
+                }
+
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
 
         buttonFire = new TextButton("Fire", textButtonStyle);
         buttonFire.setWidth(300);
@@ -190,7 +210,6 @@ public class GameScreen implements Screen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 Gdx.app.log("DEBUG", "Fire");
-
                 bullets.add(
                         new Bullet(
                                 "data/bullet.png",
@@ -209,6 +228,7 @@ public class GameScreen implements Screen {
         stage.addActor(labelRound);
         stage.addActor(labelScore);
         stage.addActor(buttonFire);
+        stage.addActor(buttonMenue);
         stage.addActor(touchpad.getTouchpad());
         stage.addActor(hp.getBar());
         Gdx.input.setInputProcessor(stage);
@@ -347,6 +367,8 @@ public class GameScreen implements Screen {
         // Draw stage for touchpad
         stage.act(delta);
         stage.draw();
+
+
     }
 
     @Override
@@ -371,7 +393,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        stage.dispose();
     }
 
     private void respawn(){
@@ -396,5 +418,16 @@ public class GameScreen implements Screen {
         player.setRender(true);
     }
 
+    public void setMenuIsActive(boolean x){
+        menuIsActive=x;
+    }
+    public void setAccelero(boolean x){
+        accelero=x;
+    }
+    public void setCalib(float x, float y, float z){
+        calib.x=x;
+        calib.y=y;
+        calib.z=z;
+    }
 
 }
