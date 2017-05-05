@@ -1,4 +1,4 @@
-package com.github.aconsultinggmbh.tests;
+//package com.github.aconsultinggmbh.tests;
 
 
 import com.github.aconsultinggmbh.gameobject.Bullet;
