@@ -1,4 +1,4 @@
-package com.github.aconsultinggmbh.test;
+package com.github.aconsultinggmbh.tests;
 
 import com.github.aconsultinggmbh.gameobject.GameObject;
 import com.github.aconsultinggmbh.gameobject.Item;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 
-public class ItemTest extends GameTest{
+public class ItemTest extends GameTest {
     private Item item;
     private ItemInvulnerability itemInvulnerability;
     private ArrayList<GameObject> items;

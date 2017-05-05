@@ -1,4 +1,5 @@
-package com.github.aconsultinggmbh.test;
+package com.github.aconsultinggmbh.tests;
+
 
 import com.github.aconsultinggmbh.gameobject.Bullet;
 import com.github.aconsultinggmbh.gameobject.GameObject;
@@ -47,5 +48,6 @@ public class ScoreTest extends GameTest {
         assertEquals(10, bullet.checkScore(score));
         */
       assertEquals(1,1);
+
     }
 }
