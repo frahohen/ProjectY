@@ -27,8 +27,13 @@ import com.github.aconsultinggmbh.gameobject.Healthbar;
 import com.github.aconsultinggmbh.gameobject.ItemInvulnerability;
 import com.github.aconsultinggmbh.gameobject.Player;
 import com.github.aconsultinggmbh.map.GameMap;
+
+import com.github.aconsultinggmbh.socket.Client;
+import com.github.aconsultinggmbh.socket.Server;
+
 import com.github.aconsultinggmbh.networking.Client;
 import com.github.aconsultinggmbh.networking.Server;
+
 import com.github.aconsultinggmbh.utils.GameTouchpad;
 
 import java.net.Inet4Address;
@@ -52,6 +57,8 @@ public class GameScreen implements Screen {
     private SpriteBatch batch;
     private Stage stage;
 
+    private boolean scoreboardIsActive=false;
+
     private GameTouchpad touchpad;
 
     private GameMap map;
@@ -67,8 +74,11 @@ public class GameScreen implements Screen {
 
     private TextureAtlas atlas;
     private Skin skin;
-    private TextButton buttonFire;
+    private TextButton buttonFire, buttonScore;
     private BitmapFont font;
+
+    ScoreBoard sb;
+    final GameScreen gameScreen=this;
 
     private Label labelScore;
     private Label labelRound;
@@ -77,6 +87,9 @@ public class GameScreen implements Screen {
 
     private String collidedItemName;
     private String collidedEnemyName;
+
+    private long start, end;
+    private boolean flag = true;
 
     public GameScreen(ProjectY screenManager) {
         this.screenManager = screenManager;
@@ -173,12 +186,44 @@ public class GameScreen implements Screen {
         Label.LabelStyle labelStyle = new Label.LabelStyle( font, Color.WHITE);
         labelScore = new Label("Score: "+score, labelStyle);
         labelScore.setWidth(400);
-        labelScore.setPosition(Gdx.graphics.getWidth()- labelScore.getWidth()-40, Gdx.graphics.getHeight() - labelScore.getHeight()-20);
+        labelScore.setPosition(Gdx.graphics.getWidth()- labelScore.getWidth() +60, Gdx.graphics.getHeight() -200);
 
         round = 0;
         labelRound = new Label("Round: "+round, labelStyle);
         labelRound.setWidth(400);
         labelRound.setPosition(40, Gdx.graphics.getHeight() - labelScore.getHeight()-20);
+
+        //ScoreboardButton
+
+        buttonScore = new TextButton("Score", textButtonStyle);
+        buttonScore.setWidth(300);
+        buttonScore.setHeight(120);
+        buttonScore.setPosition(Gdx.graphics.getWidth()- buttonScore.getWidth()-40, Gdx.graphics.getHeight()-110);
+        buttonScore.pad(20);
+        buttonScore.addListener(new InputListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+
+                //Scoreboard anzeigen
+                if(scoreboardIsActive == false){
+                    scoreboardIsActive=!scoreboardIsActive;
+                    sb =new ScoreBoard(stage,screenManager,gameScreen, score, player);
+                }
+                //Scoreboard ausblenden
+                else if (scoreboardIsActive){
+                    scoreboardIsActive=!scoreboardIsActive;
+                    Gdx.app.log("DEBUG", "Kappa");
+
+                    Label[] arr = sb.getLabelPlayerLabelScore();
+                    for(Label l: arr){
+                        l.remove();
+                    }
+
+                }
+
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
 
         buttonFire = new TextButton("Fire", textButtonStyle);
         buttonFire.setWidth(300);
@@ -189,7 +234,6 @@ public class GameScreen implements Screen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 Gdx.app.log("DEBUG", "Fire");
-
                 bullets.add(
                         new Bullet(
                                 "data/bullet.png",
@@ -208,6 +252,7 @@ public class GameScreen implements Screen {
         stage.addActor(labelRound);
         stage.addActor(labelScore);
         stage.addActor(buttonFire);
+        stage.addActor(buttonScore);
         stage.addActor(touchpad.getTouchpad());
         stage.addActor(hp.getBar());
         Gdx.input.setInputProcessor(stage);
@@ -304,9 +349,28 @@ public class GameScreen implements Screen {
         }
 
         if(enemies.size() == 0){
-            respawn();
-            collidedEnemyName = "";
-            collidedItemName = "";
+            //Scoreboard anzeigen
+            if(flag){
+                flag = false;
+                start = System.currentTimeMillis();
+                scoreboardIsActive=true;
+                sb = new ScoreBoard(stage,screenManager,gameScreen, score, player);
+            }
+            end = System.currentTimeMillis();
+
+            //5 sec delay fuer respawn
+            if((end - start) >= 5000) {
+                //Scoreboard ausblenden
+                scoreboardIsActive = false;
+                Label[] arr = sb.getLabelPlayerLabelScore();
+                for(Label l: arr){
+                    l.remove();
+                }
+
+                respawn();
+                collidedEnemyName = "";
+                collidedItemName = "";
+            }
         }
 
         // Bullets
@@ -345,6 +409,8 @@ public class GameScreen implements Screen {
         // Draw stage for touchpad
         stage.act(delta);
         stage.draw();
+
+
     }
 
     @Override
@@ -369,10 +435,17 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        stage.dispose();
     }
 
+    public void showScoreBoard(){
+        sb =new ScoreBoard(stage,screenManager,gameScreen, score, player);
+        long i = System.currentTimeMillis();
+    }
     private void respawn(){
+
+
+
         round++;
         for(int i = 1; i < map.getSpawnMap().getSize(); i++){
             enemies.add(
@@ -394,5 +467,13 @@ public class GameScreen implements Screen {
         player.setRender(true);
     }
 
+    public void setAccelero(boolean x){
+        accelero=x;
+    }
+    public void setCalib(float x, float y, float z){
+        calib.x=x;
+        calib.y=y;
+        calib.z=z;
+    }
 
 }
