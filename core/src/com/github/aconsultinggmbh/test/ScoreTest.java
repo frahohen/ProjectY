@@ -14,10 +14,10 @@ import static org.junit.Assert.assertEquals;
 public class ScoreTest extends GameTest {
 
     private ArrayList<GameObject> players;
-    private String path = "android\\assets\\data\\playerExample.png";
+    private String path = "android/assets/data/playerExample.png";
     private Player player;
     private ArrayList<GameObject> bullets;
-    private String path2 = "android\\assets\\data/bullet.png";
+    private String path2 = "android/assets/data/bullet.png";
     private Bullet bullet;
     private int score;
 
