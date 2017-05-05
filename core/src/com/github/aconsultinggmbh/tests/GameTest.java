@@ -1,3 +1,5 @@
+//package com.github.aconsultinggmbh.tests;
+
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
@@ -13,7 +15,7 @@ public class GameTest {
     // This is our "test" application
     private static Application application;
 
-    // Before running any tests, initialize the application with the headless backend
+    // Before running any com.github.aconsultinggmbh.tests, initialize the application with the headless backend
     @BeforeClass
     public static void init() {
         // Note that we don't need to implement any of the listener's methods
