@@ -35,13 +35,17 @@ public class Server implements Runnable {
                 // read message and send it back
                 if(client.isConnected()) {
                     Gdx.app.log("SERVER", "Client connected");
-                    serverThreads.add(new ServerThread(client, id++));
+                    serverThreads.add(new ServerThread(this, client, id++));
                     new Thread(serverThreads.get(serverThreads.size()-1)).start();
                 }
             }catch (Exception e){
                 Gdx.app.log("SERVER", "An error occured", e);
             }
         }
+    }
+
+    public int getThreadSize() {
+        return serverThreads.size();
     }
 
     public String getIp() {
