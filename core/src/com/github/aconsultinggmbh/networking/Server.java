@@ -7,16 +7,20 @@ import com.badlogic.gdx.net.ServerSocket;
 import com.badlogic.gdx.net.ServerSocketHints;
 import com.badlogic.gdx.net.Socket;
 
+import java.util.ArrayList;
+
 public class Server implements Runnable {
 
     private String ip;
     private int port;
     private int id;
+    private ArrayList<ServerThread> serverThreads;
 
     public Server(String ip, int port) {
         this.ip = ip;
         this.port = port;
         id = 0;
+        serverThreads = new ArrayList<ServerThread>();
     }
 
     @Override
@@ -31,7 +35,8 @@ public class Server implements Runnable {
                 // read message and send it back
                 if(client.isConnected()) {
                     Gdx.app.log("SERVER", "Client connected");
-                    new Thread(new ServerThread(client, id++)).start();
+                    serverThreads.add(new ServerThread(client, id++));
+                    new Thread(serverThreads.get(serverThreads.size()-1)).start();
                 }
             }catch (Exception e){
                 Gdx.app.log("SERVER", "An error occured", e);
