@@ -1,5 +1,5 @@
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
+package com.github.aconsultinggmbh.test;
+
 import com.github.aconsultinggmbh.gameobject.GameObject;
 import com.github.aconsultinggmbh.gameobject.Item;
 import com.github.aconsultinggmbh.gameobject.ItemInvulnerability;
@@ -11,9 +11,6 @@ import org.junit.Test;
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 public class ItemTest extends GameTest{
     private Item item;
