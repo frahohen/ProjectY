@@ -73,6 +73,7 @@ public class GameScreen implements Screen {
     private BitmapFont font;
 
     ScoreBoard sb;
+    final GameScreen gameScreen=this;
 
     private Label labelScore;
     private Label labelRound;
@@ -183,8 +184,6 @@ public class GameScreen implements Screen {
         labelRound = new Label("Round: "+round, labelStyle);
         labelRound.setWidth(400);
         labelRound.setPosition(40, Gdx.graphics.getHeight() - labelScore.getHeight()-20);
-
-        final GameScreen gameScreen=this;
 
         //ScoreboardButton
 
@@ -413,6 +412,10 @@ public class GameScreen implements Screen {
         stage.dispose();
     }
 
+    public void showScoreBoard(){
+        sb =new ScoreBoard(stage,screenManager,gameScreen, score, player);
+        long i = System.currentTimeMillis();
+    }
     private void respawn(){
 
 
