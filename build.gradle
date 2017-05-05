@@ -95,7 +95,7 @@ project(":core") {
             html.destination "${buildDir}/jacocoHtml"
         }
     }
-	sourceSets.test.java.srcDirs = ["src/com/github/aconsultinggmbh/test"]
+	sourceSets.test.java.srcDirs = ["src/com/github/aconsultinggmbh/test/"]
 
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
