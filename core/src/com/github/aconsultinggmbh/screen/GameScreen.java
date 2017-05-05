@@ -27,13 +27,8 @@ import com.github.aconsultinggmbh.gameobject.Healthbar;
 import com.github.aconsultinggmbh.gameobject.ItemInvulnerability;
 import com.github.aconsultinggmbh.gameobject.Player;
 import com.github.aconsultinggmbh.map.GameMap;
-
-import com.github.aconsultinggmbh.socket.Client;
-import com.github.aconsultinggmbh.socket.Server;
-
 import com.github.aconsultinggmbh.networking.Client;
 import com.github.aconsultinggmbh.networking.Server;
-
 import com.github.aconsultinggmbh.utils.GameTouchpad;
 
 import java.net.Inet4Address;
@@ -45,8 +40,9 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+
+//import com.github.aconsultinggmbh.socket.Client;
+//import com.github.aconsultinggmbh.socket.Server;
 
 public class GameScreen implements Screen {
 
