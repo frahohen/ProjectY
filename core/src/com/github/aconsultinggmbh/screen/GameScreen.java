@@ -83,6 +83,9 @@ public class GameScreen implements Screen {
     private String collidedItemName;
     private String collidedEnemyName;
 
+    private long start, end;
+    private boolean flag = true;
+
     public GameScreen(ProjectY screenManager) {
         this.screenManager = screenManager;
         create();
@@ -342,9 +345,28 @@ public class GameScreen implements Screen {
         }
 
         if(enemies.size() == 0){
-            respawn();
-            collidedEnemyName = "";
-            collidedItemName = "";
+            //Scoreboard anzeigen
+            if(flag){
+                flag = false;
+                start = System.currentTimeMillis();
+                scoreboardIsActive=true;
+                sb = new ScoreBoard(stage,screenManager,gameScreen, score, player);
+            }
+            end = System.currentTimeMillis();
+
+            //5 sec delay fuer respawn
+            if((end - start) >= 5000) {
+                //Scoreboard ausblenden
+                scoreboardIsActive = false;
+                Label[] arr = sb.getLabelPlayerLabelScore();
+                for(Label l: arr){
+                    l.remove();
+                }
+
+                respawn();
+                collidedEnemyName = "";
+                collidedItemName = "";
+            }
         }
 
         // Bullets
