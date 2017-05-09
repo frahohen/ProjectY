@@ -36,7 +36,7 @@ public class ScoreTest extends GameTest {
 
     @Test
     public void ScoreTest() {
-      /*  bullet = new Bullet(path2, 0, 0, "Bullet");
+        bullet = new Bullet(path, 0, 0, "Bullet");
         assertEquals(
                 player.getName(),
                 bullet.collideWithObject(players)
@@ -44,7 +44,7 @@ public class ScoreTest extends GameTest {
 
         bullet.setEnemyName(player.getName());
         assertEquals(10, bullet.checkScore(score));
-        */
+
       assertEquals(1,1);
 
     }

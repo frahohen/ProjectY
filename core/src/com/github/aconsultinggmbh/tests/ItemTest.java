@@ -5,6 +5,7 @@ import com.github.aconsultinggmbh.gameobject.Item;
 import com.github.aconsultinggmbh.gameobject.ItemInvulnerability;
 import com.github.aconsultinggmbh.gameobject.Player;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ public class ItemTest extends GameTest {
     private String path = "core/src/com/github/aconsultinggmbh/tests/resources/item.png";
     private Player player;
 
-    //@Before
+    @Before
     public void setup() {
         item = new Item(path, 0,0, "Item");
         itemInvulnerability = new ItemInvulnerability(path, 0,0, "Item");
@@ -34,7 +35,7 @@ public class ItemTest extends GameTest {
         players.add(player);
     }
 
-  // @Test
+   @Test
     public void testCollideWithItem(){ //item with item
         Item newItem = new Item(path, 0,0, "NewItem");
 
@@ -50,12 +51,12 @@ public class ItemTest extends GameTest {
 
     @Test
     public void testCollideWithPlayer (){ //player mit item
-      /*  Item newItem = new Item(path, 0,0, "NewItem");
+       Item newItem = new Item(path, 0,0, "NewItem");
 
         assertEquals(
                 player.getName(),
                 newItem.collideWithObject(players)
-        );*/
+        );
       assertEquals(1,1);
     }
 
