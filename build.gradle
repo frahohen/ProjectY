@@ -84,6 +84,7 @@ project(":core") {
         finalizedBy jacocoTestReport
     }
 
+
     jacoco {
         toolVersion = "0.7.7.201606060606"
     }
@@ -95,7 +96,7 @@ project(":core") {
             html.destination "${buildDir}/jacocoHtml"
         }
     }
-	sourceSets.test.java.srcDirs = ["src/com/github/aconsultinggmbh/tests/"]
+	sourceSets.test.java.srcDirs = ["com/github/aconsultinggmbh/tests"]
 
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"

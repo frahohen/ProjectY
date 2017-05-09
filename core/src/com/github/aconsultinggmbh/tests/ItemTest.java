@@ -1,4 +1,4 @@
-//package com.github.aconsultinggmbh.tests;
+package com.github.aconsultinggmbh.tests;
 
 import com.github.aconsultinggmbh.gameobject.GameObject;
 import com.github.aconsultinggmbh.gameobject.Item;
@@ -16,10 +16,10 @@ public class ItemTest extends GameTest {
     private ItemInvulnerability itemInvulnerability;
     private ArrayList<GameObject> items;
     private ArrayList<GameObject> players;
-    private String path = "core/src/com/github/aconsultinggmbh/test/resources/item.png";
+    private String path = "core/src/com/github/aconsultinggmbh/tests/resources/item.png";
     private Player player;
 
-   // @Before
+    //@Before
     public void setup() {
         item = new Item(path, 0,0, "Item");
         itemInvulnerability = new ItemInvulnerability(path, 0,0, "Item");
@@ -34,7 +34,7 @@ public class ItemTest extends GameTest {
         players.add(player);
     }
 
-   // @Test
+  // @Test
     public void testCollideWithItem(){ //item with item
         Item newItem = new Item(path, 0,0, "NewItem");
 
