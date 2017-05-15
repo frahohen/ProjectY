@@ -45,4 +45,32 @@ public class ScoreTest extends GameTest {
         assertEquals(10, bullet.checkScore(score));
 
     }
+
+    @Test
+    public void initBulletTest() {
+
+        String name ="TestBullet";
+        Bullet b= new Bullet(path,0,0,name);
+        assertEquals(0f,b.getDirectionX(),0);
+        assertEquals(0f,b.getDirectionY(),0);
+        assertEquals(name,b.getName());
+        assertEquals("",b.getEnemyName());
+    }
+    @Test
+
+    public void bulletEnemyNameTest() {
+        Bullet b= new Bullet(path,0,0,"Bullet");
+        String te="TestEnemy";
+        b.setEnemyName(te);
+        assertEquals(te,b.getEnemyName());
+    }
+    @Test
+
+    public void bulletDirectionTest() {
+        Bullet b= new Bullet(path,0,0,"Bullet");
+        bullet.setDirectionX(20);
+        assertEquals(20,bullet.getDirectionX(),0);
+        bullet.setDirectionY(50);
+        assertEquals(50,bullet.getDirectionY(),0);
+    }
 }
