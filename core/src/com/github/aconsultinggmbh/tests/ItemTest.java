@@ -1,5 +1,5 @@
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
+package com.github.aconsultinggmbh.tests;
+
 import com.github.aconsultinggmbh.gameobject.GameObject;
 import com.github.aconsultinggmbh.gameobject.Item;
 import com.github.aconsultinggmbh.gameobject.ItemInvulnerability;
@@ -11,16 +11,13 @@ import org.junit.Test;
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
-public class ItemTest extends GameTest{
+public class ItemTest extends GameTest {
     private Item item;
     private ItemInvulnerability itemInvulnerability;
     private ArrayList<GameObject> items;
     private ArrayList<GameObject> players;
-    private String path = "core/src/com/github/aconsultinggmbh/test/resources/item.png";
+    private String path = "core/src/com/github/aconsultinggmbh/tests/resources/item.png";
     private Player player;
 
     @Before
@@ -38,7 +35,7 @@ public class ItemTest extends GameTest{
         players.add(player);
     }
 
-    @Test
+   @Test
     public void testCollideWithItem(){ //item with item
         Item newItem = new Item(path, 0,0, "NewItem");
 
@@ -54,12 +51,13 @@ public class ItemTest extends GameTest{
 
     @Test
     public void testCollideWithPlayer (){ //player mit item
-        Item newItem = new Item(path, 0,0, "NewItem");
+       Item newItem = new Item(path, 0,0, "NewItem");
 
         assertEquals(
                 player.getName(),
                 newItem.collideWithObject(players)
         );
+      assertEquals(1,1);
     }
 
     //Gegner mit item ??

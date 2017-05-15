@@ -1,3 +1,6 @@
+package com.github.aconsultinggmbh.tests;
+
+
 import com.github.aconsultinggmbh.gameobject.Bullet;
 import com.github.aconsultinggmbh.gameobject.GameObject;
 import com.github.aconsultinggmbh.gameobject.Player;
@@ -12,10 +15,9 @@ import static org.junit.Assert.assertEquals;
 public class ScoreTest extends GameTest {
 
     private ArrayList<GameObject> players;
-    private String path = "android\\assets\\data\\playerExample.png";
+    private String path = "core/src/com/github/aconsultinggmbh/tests/resources/item.png";
     private Player player;
     private ArrayList<GameObject> bullets;
-    private String path2 = "android\\assets\\data/bullet.png";
     private Bullet bullet;
     private int score;
 
@@ -27,7 +29,7 @@ public class ScoreTest extends GameTest {
         players.add(player);
 
         bullets = new ArrayList<GameObject>();
-        bullet = new Bullet(path2, 0, 0, "Bullet");
+        bullet = new Bullet(path, 0, 0, "Bullet");
         bullets.add(bullet);
 
         score = 0;
@@ -35,7 +37,7 @@ public class ScoreTest extends GameTest {
 
     @Test
     public void ScoreTest() {
-        bullet = new Bullet(path2, 0, 0, "Bullet");
+        bullet = new Bullet(path, 0, 0, "Bullet");
         assertEquals(
                 player.getName(),
                 bullet.collideWithObject(players)
@@ -43,6 +45,8 @@ public class ScoreTest extends GameTest {
 
         bullet.setEnemyName(player.getName());
         assertEquals(10, bullet.checkScore(score));
+
+      assertEquals(1,1);
 
     }
 
