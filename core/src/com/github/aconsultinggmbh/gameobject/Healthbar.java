@@ -71,6 +71,12 @@ public class Healthbar {
     public ProgressBar getBar(){
         return health;
     }
+    public int getCurrentHp(){
+        return currentHp;
+    }
+    public int getMaxHP(){
+        return maxHP;
+    }
 
 
 }
