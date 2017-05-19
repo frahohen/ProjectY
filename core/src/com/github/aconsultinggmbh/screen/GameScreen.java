@@ -41,9 +41,6 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Random;
 
-//import com.github.aconsultinggmbh.socket.Client;
-//import com.github.aconsultinggmbh.socket.Server;
-
 public class GameScreen implements Screen {
 
     private final ProjectY screenManager;

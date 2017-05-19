@@ -32,7 +32,7 @@ public class Client implements Runnable {
             objectOutputStream = new ObjectOutputStream(client.getOutputStream());
             objectInputStream = new ObjectInputStream(client.getInputStream());
 
-            Message message = new Message("I am connected\n");
+            Message message = new Message("I am connected");
             while (true) {
                 objectOutputStream.writeObject(message);
             }

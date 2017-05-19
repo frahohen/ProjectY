@@ -10,6 +10,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 public class ServerThread implements Runnable{
+    private Server server;
     private Socket client;
     private String serverMessage;
     private int id;
@@ -17,7 +18,8 @@ public class ServerThread implements Runnable{
     private ObjectOutputStream objectOutputStream;
     private ObjectInputStream objectInputStream;
 
-    public ServerThread(Socket client, int id) {
+    public ServerThread(Server server, Socket client, int id) {
+        this.server = server;
         this.client = client;
         this.id = id;
     }
@@ -32,12 +34,20 @@ public class ServerThread implements Runnable{
             Message message;
             while (true) {
                 message = (Message) objectInputStream.readObject();
-                Gdx.app.log("SERVER", "Client " + id + " says: " + message.getMessage());
+                Gdx.app.log("SERVER", "Client " + id + " says: " + message.getMessage() + " -- Thread-Size: " + server.getThreadSize());
             }
         } catch (IOException e) {
             Gdx.app.log("SERVER", "An error occured", e);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
