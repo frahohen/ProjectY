@@ -117,7 +117,7 @@ public class GameScreen implements Screen {
         //** GAME ** -START
         map = new GameMap("map.tmx",scale);
 
-        /*
+
         player = new Player(
                 "data/playerExample.png",
                 map.getSpawnMap().getSpawnPoint(0).getX()-64,
@@ -138,7 +138,6 @@ public class GameScreen implements Screen {
                     )
             );
         }
-        */
 
         bullets = new ArrayList<Bullet>();
 

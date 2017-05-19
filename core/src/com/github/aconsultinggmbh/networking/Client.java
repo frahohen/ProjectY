@@ -34,8 +34,10 @@ public class Client implements Runnable {
             objectInputStream = new ObjectInputStream(client.getInputStream());
 
             String message = (String) objectInputStream.readObject();
+            Gdx.app.log("CLIENT",message);
             // erstelle den Spieler mit dem String in message
             //....
+
             ArrayList<String> list = (ArrayList<String>) objectInputStream.readObject();
             // erstelle die Gameobjekte mit den Namen in der Arraylist
             //....
