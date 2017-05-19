@@ -27,12 +27,11 @@ public class Server implements Runnable {
     public void run() {
         ServerSocketHints hints = new ServerSocketHints();
         ServerSocket server = Gdx.net.newServerSocket(Net.Protocol.TCP, port, hints);
-        // wait for the next client connection
+        // Wait for the next client connection
         while (true) {
             try {
                 Socket client = server.accept(null);
 
-                // read message and send it back
                 if(client.isConnected()) {
                     Gdx.app.log("SERVER", "Client connected");
                     serverThreads.add(new ServerThread(this, client, id++));
@@ -40,6 +39,14 @@ public class Server implements Runnable {
                 }
             }catch (Exception e){
                 Gdx.app.log("SERVER", "An error occured", e);
+            }
+        }
+    }
+
+    public synchronized void updateClients(int id){
+        for(int i = 0; i < serverThreads.size(); i++){
+            if(id != serverThreads.get(i).getId()){
+                // Update everyone else but not the client that occured a change
             }
         }
     }
