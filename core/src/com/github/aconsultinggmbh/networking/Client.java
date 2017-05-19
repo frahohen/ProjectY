@@ -10,6 +10,7 @@ import com.github.aconsultinggmbh.networking.message.Message;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 
 public class Client implements Runnable {
     private String ip;
@@ -32,12 +33,22 @@ public class Client implements Runnable {
             objectOutputStream = new ObjectOutputStream(client.getOutputStream());
             objectInputStream = new ObjectInputStream(client.getInputStream());
 
-            Message message = new Message("I am connected");
-            while (true) {
-                objectOutputStream.writeObject(message);
-            }
+            String message = (String) objectInputStream.readObject();
+            // erstelle den Spieler mit dem String in message
+            //....
+            ArrayList<String> list = (ArrayList<String>) objectInputStream.readObject();
+            // erstelle die Gameobjekte mit den Namen in der Arraylist
+            //....
+            //while (true) {
+
+                list = (ArrayList<String>) objectInputStream.readObject();
+                // erstelle die neuen Gameobjekte (Gegner) falls vorhanden
+                //....
+            //}
         } catch (IOException e) {
             Gdx.app.log("CLIENT", "An error occured", e);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
 
     }
