@@ -6,7 +6,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.github.aconsultinggmbh.gameobject.Player;
+
+import java.util.ArrayList;
 
 
 /**
@@ -18,17 +19,17 @@ public class ScoreBoard {
     private final ProjectY screenManager;
     private BitmapFont font;
     private GameScreen gameScreen;
+    private ArrayList<Label> labels = new ArrayList<Label>();
 
     private Label labelScore, labelPlayer, labelPlayerName, labelPlayerScore;
 
 
-    public ScoreBoard(Stage stage, ProjectY sm, final GameScreen gameScreen, int score, Player player){
+    public ScoreBoard(ProjectY sm, final GameScreen gameScreen){
         this.screenManager = sm;
 
         this.gameScreen=gameScreen;
 
         final Preferences settings = Gdx.app.getPreferences("ProjectY_settings");
-
         font = new BitmapFont();
         font.getData().setScale(5.0f);
 
@@ -41,27 +42,43 @@ public class ScoreBoard {
         labelScore.setWidth(400);
         labelScore.setPosition((Gdx.graphics.getWidth() / 2)- labelScore.getWidth() +500, Gdx.graphics.getHeight() - labelScore.getHeight()-200);
 
-        labelPlayerName = new Label(player.getName(), labelStyle);
+
+        labels.add(labelPlayer);
+        labels.add(labelScore);
+    }
+
+    public void addPlayer(String playerName, int score){
+
+        font = new BitmapFont();
+        font.getData().setScale(5.0f);
+
+        Label.LabelStyle labelStyle = new Label.LabelStyle( font, Color.WHITE);
+
+        int size = 2;
+        int height = 300;               //height of added labels
+        while(labels.size() > size){
+            height = height + 100;
+            size = size + 2;
+        }
+
+        labelPlayerName = new Label(playerName, labelStyle);
         labelPlayerName.setWidth(400);
-        labelPlayerName.setPosition((Gdx.graphics.getWidth() / 2)- labelPlayerName.getWidth() +50, Gdx.graphics.getHeight() - labelScore.getHeight()-300);
+        labelPlayerName.setPosition((Gdx.graphics.getWidth() / 2)- labelPlayerName.getWidth() +50, Gdx.graphics.getHeight() - labelScore.getHeight()-height);
 
         labelPlayerScore = new Label(""+score, labelStyle);
         labelPlayerScore.setWidth(400);
-        labelPlayerScore.setPosition((Gdx.graphics.getWidth() / 2)- labelPlayerScore.getWidth() +500, Gdx.graphics.getHeight() - labelScore.getHeight()-300);
+        labelPlayerScore.setPosition((Gdx.graphics.getWidth() / 2)- labelPlayerScore.getWidth() +500, Gdx.graphics.getHeight() - labelScore.getHeight()-height);
 
-        stage.addActor(labelPlayer);
-        stage.addActor(labelScore);
-        stage.addActor(labelPlayerName);
-        stage.addActor(labelPlayerScore);
-
+        labels.add(labelPlayerName);
+        labels.add(labelPlayerScore);
     }
 
-    public Label[] getLabelPlayerLabelScore() {
-        Label[] arr = new Label[4];
-        arr[0] = labelPlayer;
-        arr[1] = labelScore;
-        arr[2] = labelPlayerName;
-        arr[3] = labelPlayerScore;
-        return arr;
+    public ArrayList<Label> getLabels() {
+        return labels;
+    }
+    public void showScoreboard(Stage stage){
+        for(int i = 0; i < labels.size(); i++){
+            stage.addActor(labels.get(i));
+        }
     }
 }

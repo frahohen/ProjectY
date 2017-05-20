@@ -73,7 +73,7 @@ public class GameScreen implements Screen {
     private TextButton buttonFire, buttonScore;
     private BitmapFont font;
 
-    ScoreBoard sb;
+    private ScoreBoard sb;
     final GameScreen gameScreen=this;
 
     private Label labelScore;
@@ -190,7 +190,10 @@ public class GameScreen implements Screen {
         labelRound.setPosition(40, Gdx.graphics.getHeight() - labelScore.getHeight()-20);
 
         //ScoreboardButton
-
+        sb = new ScoreBoard(screenManager,gameScreen);
+        sb.addPlayer(player.getName(),score);
+        sb.addPlayer("Fritz", 50);
+        sb.addPlayer("Fritz", 50);
         buttonScore = new TextButton("Score", textButtonStyle);
         buttonScore.setWidth(300);
         buttonScore.setHeight(120);
@@ -203,14 +206,14 @@ public class GameScreen implements Screen {
                 //Scoreboard anzeigen
                 if(scoreboardIsActive == false){
                     scoreboardIsActive=!scoreboardIsActive;
-                    sb =new ScoreBoard(stage,screenManager,gameScreen, score, player);
+                    sb.showScoreboard(stage);
                 }
                 //Scoreboard ausblenden
                 else if (scoreboardIsActive){
                     scoreboardIsActive=!scoreboardIsActive;
                     Gdx.app.log("DEBUG", "Kappa");
 
-                    Label[] arr = sb.getLabelPlayerLabelScore();
+                    ArrayList<Label> arr = sb.getLabels();
                     for(Label l: arr){
                         l.remove();
                     }
@@ -350,7 +353,7 @@ public class GameScreen implements Screen {
                 flag = false;
                 start = System.currentTimeMillis();
                 scoreboardIsActive=true;
-                sb = new ScoreBoard(stage,screenManager,gameScreen, score, player);
+                sb.showScoreboard(stage);
             }
             end = System.currentTimeMillis();
 
@@ -358,7 +361,7 @@ public class GameScreen implements Screen {
             if((end - start) >= 5000) {
                 //Scoreboard ausblenden
                 scoreboardIsActive = false;
-                Label[] arr = sb.getLabelPlayerLabelScore();
+                ArrayList<Label> arr = sb.getLabels();
                 for(Label l: arr){
                     l.remove();
                 }
@@ -434,10 +437,7 @@ public class GameScreen implements Screen {
         stage.dispose();
     }
 
-    public void showScoreBoard(){
-        sb =new ScoreBoard(stage,screenManager,gameScreen, score, player);
-        long i = System.currentTimeMillis();
-    }
+
     private void respawn(){
 
 
