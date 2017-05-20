@@ -1,7 +1,7 @@
 //package com.github.aconsultinggmbh.tests;
 
 
-public class HealthbarTest extends GameTest {
+//public class HealthbarTest extends GameTest {
    /* Ist dann nächste Woche aktiv müssen noch Änderungen vorgenommen werden.
 
     Healthbar hpbar;
@@ -28,6 +28,6 @@ public class HealthbarTest extends GameTest {
         assertEquals(0,hpbar.getCurrentHp());
     } */
 
-}
+//}
 
 
