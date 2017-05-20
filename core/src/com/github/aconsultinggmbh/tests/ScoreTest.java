@@ -15,7 +15,7 @@ import static org.junit.Assert.assertEquals;
 public class ScoreTest extends GameTest {
 
     private ArrayList<GameObject> players;
-    private String path = "core/src/com/github/aconsultinggmbh/tests/resources/item.png";
+    private String path = "android/assets/item.png";
     private Player player;
     private ArrayList<GameObject> bullets;
     private Bullet bullet;

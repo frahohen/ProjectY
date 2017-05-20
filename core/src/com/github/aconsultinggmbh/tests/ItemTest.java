@@ -17,7 +17,7 @@ public class ItemTest extends GameTest {
     private ItemInvulnerability itemInvulnerability;
     private ArrayList<GameObject> items;
     private ArrayList<GameObject> players;
-    private String path = "core/src/com/github/aconsultinggmbh/tests/resources/item.png";
+    private String path = "android/assets/item.png";
     private Player player;
 
     @Before
