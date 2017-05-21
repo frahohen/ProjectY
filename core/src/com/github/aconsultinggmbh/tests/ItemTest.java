@@ -1,5 +1,7 @@
 package com.github.aconsultinggmbh.tests;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.github.aconsultinggmbh.gameobject.GameObject;
 import com.github.aconsultinggmbh.gameobject.Item;
 import com.github.aconsultinggmbh.gameobject.ItemInvulnerability;
@@ -17,11 +19,15 @@ public class ItemTest extends GameTest {
     private ItemInvulnerability itemInvulnerability;
     private ArrayList<GameObject> items;
     private ArrayList<GameObject> players;
-    private String path = "android/assets/item.png";
+    private String path;
     private Player player;
 
     @Before
     public void setup() {
+
+        FileHandle fh = Gdx.files.internal("android/assets/item.png");
+        this.path = fh.file().getAbsolutePath().replace("core/","");
+
         item = new Item(path, 0,0, "Item");
         itemInvulnerability = new ItemInvulnerability(path, 0,0, "Item");
 
