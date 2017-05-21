@@ -355,6 +355,7 @@ public class GameScreen implements Screen {
             if((end - start) >= 5000) {
                 //Scoreboard ausblenden
                 scoreboardIsActive = false;
+                flag= true;
                 Label[] arr = sb.getLabelPlayerLabelScore();
                 for(Label l: arr){
                     l.remove();
