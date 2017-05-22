@@ -9,7 +9,7 @@ public class ProjectY extends Game {
 
 	@Override
 	public void create() {
-		this.setScreen(new MainMenuScreen(this));
+		this.setScreen(new SplashScreen(this));
 	}
 
 	@Override
