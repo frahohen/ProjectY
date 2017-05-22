@@ -1,30 +1,29 @@
 package com.github.aconsultinggmbh.screen;
 
+/**
+ * Created by Alex on 09.05.2017.
+ */
+
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Net;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.net.ServerSocket;
-import com.badlogic.gdx.net.ServerSocketHints;
-import com.badlogic.gdx.net.Socket;
-import com.badlogic.gdx.net.SocketHints;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 
 
-public class MainMenuScreen implements Screen {
+public class MultiplayerMenuScreen implements Screen {
 
     private final ProjectY screenManager;
 
@@ -32,10 +31,11 @@ public class MainMenuScreen implements Screen {
     private TextureAtlas atlas;
     private Skin skin;
     private Table table;
-    private TextButton buttonExit, buttonCreateGame, buttonJoinGame, buttonSettings;
+    private TextButton buttonExit, buttonHostGame, buttonJoinGame;
     private BitmapFont font;
+    private TextField tfIpAddress;
 
-    public MainMenuScreen(ProjectY screenManager) {
+    public MultiplayerMenuScreen(ProjectY screenManager) {
         this.screenManager = screenManager;
         create();
     }
@@ -61,56 +61,80 @@ public class MainMenuScreen implements Screen {
         textButtonStyle.font = font;
         textButtonStyle.fontColor = Color.WHITE;
 
-        buttonCreateGame = new TextButton("Singleplayer", textButtonStyle);
-        buttonCreateGame.pad(20);
-        buttonCreateGame.addListener(new InputListener(){
+
+        buttonHostGame = new TextButton("Join Game", textButtonStyle);
+        buttonHostGame.pad(20);
+        buttonHostGame.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                Gdx.app.log("DEBUG", "Create Game");
-                screenManager.setScreen(new GameScreen(screenManager));
+                Gdx.app.log("DEBUG", "Join Game");
+                Gdx.input.getTextInput(new Input.TextInputListener() {
+                    @Override
+                    public void input (String text) {
+                        //TEXT = IP ADDRESS für Multiplayer zum verwenden
+
+                        boolean validIP=true;
+                        String [] x =text.split("\\.");
+                        if(x.length!=4){
+                            validIP=false;
+                        }
+                        for(String y:x) {
+                            try {
+                                int i = Integer.parseInt(y);
+                                if (i < 0 || i > 255) {
+                                    validIP = false;
+                                }
+                            } catch (Exception e) {
+                                validIP = false;
+                            }
+                        }
+
+                       if(validIP){
+                            //Verbindung hier aufbauen...
+                            screenManager.setScreen(new LobbyScreen(screenManager,false));
+                       }else{
+                           //ERRORMESSAGE ANZEIGEN(muss ich noch machen)
+                       }
+                    }
+                    @Override
+                    public void canceled () {
+                        //??????? Hat keine Funktion muss aber wegen abstract-override da sein (Vlt kommt ja noch ein sinn xD)
+                    }
+                }, "Enter Host-IP-Address", "192.168.0.1", "Enter here");
+
+
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
 
-        buttonJoinGame = new TextButton("Multiplayer", textButtonStyle);
+        buttonJoinGame = new TextButton("Host game", textButtonStyle);
         buttonJoinGame.pad(20);
         buttonJoinGame.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                Gdx.app.log("DEBUG", "Pressed");
-                screenManager.setScreen(new MultiplayerMenuScreen(screenManager));
+                Gdx.app.log("DEBUG", "Host game");
+                screenManager.setScreen(new LobbyScreen(screenManager,true));
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
 
-        buttonSettings = new TextButton("Einstellungen", textButtonStyle);
-        buttonSettings.pad(20);
-        buttonSettings.addListener(new InputListener(){
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                Gdx.app.log("DEBUG", "Pressed");
 
-                screenManager.setScreen(new SettingsScreen(screenManager)); // öffnen den Einstellungs View
-                return super.touchDown(event, x, y, pointer, button); //Button irgendwas
-            }
-        });
 
-        buttonExit = new TextButton("Spiel Beenden", textButtonStyle);
+        buttonExit = new TextButton("Hauptmenü", textButtonStyle);
         buttonExit.pad(20);
         buttonExit.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                Gdx.app.log("DEBUG", "Exit Game");
-                Gdx.app.exit();
+                Gdx.app.log("DEBUG", "Hauptmenü öffnen");
+                screenManager.setScreen(new MainMenuScreen(screenManager));
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
 
-        table.add(buttonCreateGame).width(600).pad(10);
+
+        table.add(buttonHostGame).width(600).pad(10);
         table.row();
         table.add(buttonJoinGame).width(600).pad(10);
-        table.row();
-        table.add(buttonSettings).width(600).pad(10);
         table.row();
         table.add(buttonExit).width(600).pad(10);
         //table.debug();
