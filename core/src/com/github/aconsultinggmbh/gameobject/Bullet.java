@@ -5,12 +5,14 @@ public class Bullet extends GameObject {
     private float directionY;
     private String EnemyName;
 
+
     public Bullet(String objectTexture, float x, float y, String name) {
         super(objectTexture, x, y, name);
 
         this.directionX = 0;
         this.directionY = 0;
         this.EnemyName = "";
+
     }
 
     public float getDirectionX() {
