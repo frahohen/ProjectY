@@ -41,6 +41,7 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Random;
 
+
 public class GameScreen implements Screen {
 
     private final ProjectY screenManager;
@@ -49,6 +50,8 @@ public class GameScreen implements Screen {
     private OrthographicCamera camera;
     private SpriteBatch batch;
     private Stage stage;
+
+    private boolean menuIsActive=false;
 
     private boolean scoreboardIsActive=false;
 
@@ -67,7 +70,7 @@ public class GameScreen implements Screen {
 
     private TextureAtlas atlas;
     private Skin skin;
-    private TextButton buttonFire, buttonScore;
+    private TextButton buttonFire, buttonScore,buttonMenue;
     private BitmapFont font;
 
     ScoreBoard sb;
@@ -184,7 +187,26 @@ public class GameScreen implements Screen {
         round = 0;
         labelRound = new Label("Round: "+round, labelStyle);
         labelRound.setWidth(400);
-        labelRound.setPosition(40, Gdx.graphics.getHeight() - labelScore.getHeight()-20);
+        labelRound.setPosition(40, Gdx.graphics.getHeight() -200);
+
+        final GameScreen gameScreen=this;
+        buttonMenue = new TextButton("Menü", textButtonStyle);
+        buttonMenue.setWidth(300);
+        buttonMenue.setHeight(120);
+        buttonMenue.setPosition(40, Gdx.graphics.getHeight()-110);
+        buttonMenue.pad(20);
+        buttonMenue.addListener(new InputListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                //menü öffnen
+                if(!menuIsActive){
+                    menuIsActive=!menuIsActive;
+                    SettingsInGame set =new SettingsInGame(stage,screenManager,gameScreen);
+                }
+
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
 
         //ScoreboardButton
 
@@ -246,6 +268,7 @@ public class GameScreen implements Screen {
         stage.addActor(labelScore);
         stage.addActor(buttonFire);
         stage.addActor(buttonScore);
+        stage.addActor(buttonMenue);
         stage.addActor(touchpad.getTouchpad());
         stage.addActor(hp.getBar());
         Gdx.input.setInputProcessor(stage);
@@ -461,6 +484,9 @@ public class GameScreen implements Screen {
         player.setRender(true);
     }
 
+    public void setMenuIsActive(boolean x){
+        menuIsActive=x;
+    }
     public void setAccelero(boolean x){
         accelero=x;
     }
