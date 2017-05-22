@@ -1,8 +1,15 @@
-//package com.github.aconsultinggmbh.tests;
+package com.github.aconsultinggmbh.tests;
 
 
-//public class HealthbarTest extends GameTest {
-   /* Ist dann nächste Woche aktiv müssen noch Änderungen vorgenommen werden.
+import com.github.aconsultinggmbh.gameobject.Healthbar;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+
+public class HealthbarTest extends GameTest {
+   // Ist dann nächste Woche aktiv müssen noch Änderungen vorgenommen werden.
 
     Healthbar hpbar;
     @Before
@@ -26,8 +33,8 @@
         assertEquals(100,hpbar.getCurrentHp());
         hpbar.changeHP(110);     //100-110=-10 -> 0 ist minimum
         assertEquals(0,hpbar.getCurrentHp());
-    } */
+    }
 
-//}
+}
 
 
