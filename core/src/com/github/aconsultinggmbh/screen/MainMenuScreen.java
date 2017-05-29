@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.github.aconsultinggmbh.utils.StyleHandler;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -33,7 +34,7 @@ public class MainMenuScreen implements Screen {
     private Skin skin;
     private Table table;
     private TextButton buttonExit, buttonCreateGame, buttonJoinGame, buttonSettings;
-    private BitmapFont font;
+    //private BitmapFont font;
 
     public MainMenuScreen(ProjectY screenManager) {
         this.screenManager = screenManager;
@@ -46,22 +47,22 @@ public class MainMenuScreen implements Screen {
 
         stage = new Stage();
 
-        atlas = new TextureAtlas("button/button.pack");
+       atlas = new TextureAtlas("button/button.pack");
         skin = new Skin(atlas);
 
         table = new Table(skin);
         table.setBounds(0,0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        font = new BitmapFont();
+        /*  font = new BitmapFont();
         font.getData().setScale(5.0f);
 
-        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
+      TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
         textButtonStyle.up = skin.getDrawable("buttonOff");
         textButtonStyle.down = skin.getDrawable("buttonOn");
         textButtonStyle.font = font;
-        textButtonStyle.fontColor = Color.WHITE;
+        textButtonStyle.fontColor = Color.WHITE;*/
 
-        buttonCreateGame = new TextButton("Singleplayer", textButtonStyle);
+        buttonCreateGame = new TextButton("Singleplayer", StyleHandler.getButtonStyle());
         buttonCreateGame.pad(20);
         buttonCreateGame.addListener(new InputListener(){
             @Override
@@ -72,7 +73,7 @@ public class MainMenuScreen implements Screen {
             }
         });
 
-        buttonJoinGame = new TextButton("Multiplayer", textButtonStyle);
+        buttonJoinGame = new TextButton("Multiplayer", StyleHandler.getButtonStyle());
         buttonJoinGame.pad(20);
         buttonJoinGame.addListener(new InputListener(){
             @Override
@@ -83,7 +84,7 @@ public class MainMenuScreen implements Screen {
             }
         });
 
-        buttonSettings = new TextButton("Einstellungen", textButtonStyle);
+        buttonSettings = new TextButton("Einstellungen", StyleHandler.getButtonStyle());
         buttonSettings.pad(20);
         buttonSettings.addListener(new InputListener(){
             @Override
@@ -95,7 +96,7 @@ public class MainMenuScreen implements Screen {
             }
         });
 
-        buttonExit = new TextButton("Spiel Beenden", textButtonStyle);
+        buttonExit = new TextButton("Spiel Beenden", StyleHandler.getButtonStyle());
         buttonExit.pad(20);
         buttonExit.addListener(new InputListener(){
             @Override

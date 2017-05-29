@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.github.aconsultinggmbh.gameobject.Player;
+import com.github.aconsultinggmbh.utils.StyleHandler;
 
 
 /**
@@ -16,7 +17,7 @@ import com.github.aconsultinggmbh.gameobject.Player;
 public class ScoreBoard {
 
     private final ProjectY screenManager;
-    private BitmapFont font;
+   // private BitmapFont font;
     private GameScreen gameScreen;
 
     private Label labelScore, labelPlayer, labelPlayerName, labelPlayerScore;
@@ -29,23 +30,23 @@ public class ScoreBoard {
 
         final Preferences settings = Gdx.app.getPreferences("ProjectY_settings");
 
-        font = new BitmapFont();
+      /*  font = new BitmapFont();
         font.getData().setScale(5.0f);
 
-        Label.LabelStyle labelStyle = new Label.LabelStyle( font, Color.WHITE);
-        labelPlayer = new Label("Player: ", labelStyle);
+        Label.LabelStyle labelStyle = new Label.LabelStyle( font, Color.WHITE);*/
+        labelPlayer = new Label("Player: ", StyleHandler.getLabelStyle());
         labelPlayer.setWidth(400);
         labelPlayer.setPosition((Gdx.graphics.getWidth() / 2)- labelPlayer.getWidth()+50, Gdx.graphics.getHeight() - labelPlayer.getHeight()-200);
 
-        labelScore = new Label("Score: ", labelStyle);
+        labelScore = new Label("Score: ", StyleHandler.getLabelStyle());
         labelScore.setWidth(400);
         labelScore.setPosition((Gdx.graphics.getWidth() / 2)- labelScore.getWidth() +500, Gdx.graphics.getHeight() - labelScore.getHeight()-200);
 
-        labelPlayerName = new Label(player.getName(), labelStyle);
+        labelPlayerName = new Label(player.getName(), StyleHandler.getLabelStyle());
         labelPlayerName.setWidth(400);
         labelPlayerName.setPosition((Gdx.graphics.getWidth() / 2)- labelPlayerName.getWidth() +50, Gdx.graphics.getHeight() - labelScore.getHeight()-300);
 
-        labelPlayerScore = new Label(""+score, labelStyle);
+        labelPlayerScore = new Label(""+score, StyleHandler.getLabelStyle());
         labelPlayerScore.setWidth(400);
         labelPlayerScore.setPosition((Gdx.graphics.getWidth() / 2)- labelPlayerScore.getWidth() +500, Gdx.graphics.getHeight() - labelScore.getHeight()-300);
 

@@ -14,6 +14,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.github.aconsultinggmbh.utils.HomeButton;
+import com.github.aconsultinggmbh.utils.StyleHandler;
 
 import java.net.Inet4Address;
 import java.net.InetAddress;
@@ -35,7 +37,7 @@ public class LobbyScreen implements Screen {
     private Skin skin;
     private Table table;
     private TextButton buttonExit, buttonStartGame;
-    private BitmapFont font;
+   // private BitmapFont font;
     private Label labelInfo1,labelInfo2,labelInfo3,labelPlayerConnected;
 
     public LobbyScreen(ProjectY screenManager,boolean host) {
@@ -55,7 +57,7 @@ public class LobbyScreen implements Screen {
         table = new Table(skin);
         table.setBounds(0,0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        font = new BitmapFont();
+       /*  font = new BitmapFont();
         font.getData().setScale(5.0f);
 
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
@@ -64,15 +66,15 @@ public class LobbyScreen implements Screen {
         textButtonStyle.font = font;
         textButtonStyle.fontColor = Color.WHITE;
 
-        Label.LabelStyle labelStyle = new Label.LabelStyle( font, Color.WHITE);
-        labelInfo1 = new Label("Willkommen in der Lobby!", labelStyle);
+        Label.LabelStyle labelStyle = new Label.LabelStyle( font, Color.WHITE);*/
+        labelInfo1 = new Label("Willkommen in der Lobby!", StyleHandler.getLabelStyle());
         labelInfo1.setWidth(500);
-        labelInfo2 = new Label("Warten auf Spieler...", labelStyle);
+        labelInfo2 = new Label("Warten auf Spieler...", StyleHandler.getLabelStyle());
         labelInfo2.setWidth(500);
-        labelInfo3 = new Label("", labelStyle);
+        labelInfo3 = new Label("", StyleHandler.getLabelStyle());
         labelInfo3.setWidth(500);
         //Fraglich?? wollen wir haben, dass er anzeigt wieviele spieler gerade in der Lobby sind?
-        labelPlayerConnected  = new Label("Spieler verbunden:---", labelStyle);
+        labelPlayerConnected  = new Label("Spieler verbunden:---", StyleHandler.getLabelStyle());
         labelInfo3.setWidth(500);
         if(host){
 
@@ -94,7 +96,7 @@ public class LobbyScreen implements Screen {
             }catch(Exception e){
                labelInfo3.setText("Error getting Host-IP!");
             }
-            buttonStartGame = new TextButton("Spiel starten", textButtonStyle);
+            buttonStartGame = new TextButton("Spiel starten", StyleHandler.getButtonStyle());
             buttonStartGame.pad(20);
             buttonStartGame.addListener(new InputListener(){
                 @Override
@@ -114,20 +116,8 @@ public class LobbyScreen implements Screen {
         }
 
 
-
-        buttonExit = new TextButton("Hauptmenü", textButtonStyle);
+        buttonExit = new HomeButton(screenManager);
         buttonExit.pad(20);
-        buttonExit.addListener(new InputListener(){
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                Gdx.app.log("DEBUG", "Hauptmenü öffnen");
-                /*          ------------
-                       HIER DIE VERBINDUNG ABBRECHEN
-                            ---------------  */
-                screenManager.setScreen(new MainMenuScreen(screenManager));
-                return super.touchDown(event, x, y, pointer, button);
-            }
-        });
 
 
         table.add(labelInfo1);

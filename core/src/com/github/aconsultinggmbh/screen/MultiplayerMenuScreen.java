@@ -21,6 +21,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.github.aconsultinggmbh.utils.HomeButton;
+import com.github.aconsultinggmbh.utils.StyleHandler;
 
 
 public class MultiplayerMenuScreen implements Screen {
@@ -55,14 +57,14 @@ public class MultiplayerMenuScreen implements Screen {
         font = new BitmapFont();
         font.getData().setScale(5.0f);
 
-        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
+      /*  TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
         textButtonStyle.up = skin.getDrawable("buttonOff");
         textButtonStyle.down = skin.getDrawable("buttonOn");
         textButtonStyle.font = font;
-        textButtonStyle.fontColor = Color.WHITE;
+        textButtonStyle.fontColor = Color.WHITE;*/
 
 
-        buttonHostGame = new TextButton("Join Game", textButtonStyle);
+        buttonHostGame = new TextButton("Join Game", StyleHandler.getButtonStyle());
         buttonHostGame.pad(20);
         buttonHostGame.addListener(new InputListener(){
             @Override
@@ -107,7 +109,7 @@ public class MultiplayerMenuScreen implements Screen {
             }
         });
 
-        buttonJoinGame = new TextButton("Host game", textButtonStyle);
+        buttonJoinGame = new TextButton("Host game", StyleHandler.getButtonStyle());
         buttonJoinGame.pad(20);
         buttonJoinGame.addListener(new InputListener(){
             @Override
@@ -120,16 +122,8 @@ public class MultiplayerMenuScreen implements Screen {
 
 
 
-        buttonExit = new TextButton("Hauptmenü", textButtonStyle);
+        buttonExit = new HomeButton(screenManager);
         buttonExit.pad(20);
-        buttonExit.addListener(new InputListener(){
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                Gdx.app.log("DEBUG", "Hauptmenü öffnen");
-                screenManager.setScreen(new MainMenuScreen(screenManager));
-                return super.touchDown(event, x, y, pointer, button);
-            }
-        });
 
 
         table.add(buttonHostGame).width(600).pad(10);

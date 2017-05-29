@@ -12,6 +12,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.github.aconsultinggmbh.utils.HomeButton;
+import com.github.aconsultinggmbh.utils.StyleHandler;
 
 /**
  * Created by maile on 04.05.17.
@@ -24,7 +26,7 @@ public class SettingsInGame {
     private Skin skin;
     private Table table;
     private TextButton buttonBack, buttonCalib, buttonAccelero, buttonPlay;
-    private BitmapFont font;
+  //  private BitmapFont font;
     private GameScreen gameScreen;
 
     public SettingsInGame(Stage stage, ProjectY sm, final GameScreen gameScreen){
@@ -39,18 +41,18 @@ public class SettingsInGame {
         table = new Table(skin);
         table.setBounds(0,0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        font = new BitmapFont();
+       /* font = new BitmapFont();
         font.getData().setScale(5.0f);
 
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
         textButtonStyle.up = skin.getDrawable("buttonOff");
         textButtonStyle.down = skin.getDrawable("buttonOn");
         textButtonStyle.font = font;
-        textButtonStyle.fontColor = Color.WHITE;
+        textButtonStyle.fontColor = Color.WHITE;*/
 
         // Spiel fortsetzen
 
-        buttonPlay = new TextButton("Spiel fortsetzen", textButtonStyle);
+        buttonPlay = new TextButton("Spiel fortsetzen", StyleHandler.getButtonStyle());
         buttonPlay.pad(20);
         buttonPlay.addListener(new InputListener(){
             @Override
@@ -62,7 +64,7 @@ public class SettingsInGame {
             }
         });
 
-        buttonCalib = new TextButton("Ruhelage setzten", textButtonStyle);
+        buttonCalib = new TextButton("Ruhelage setzten", StyleHandler.getButtonStyle());
         buttonCalib.pad(20);
         buttonCalib.addListener(new InputListener(){
             @Override
@@ -84,7 +86,7 @@ public class SettingsInGame {
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
-        buttonAccelero = new TextButton("Accelerometer:"+settings.getBoolean("accelero",false), textButtonStyle);
+        buttonAccelero = new TextButton("Accelerometer:"+settings.getBoolean("accelero",false), StyleHandler.getButtonStyle());
 
 
         buttonAccelero.pad(20);
@@ -109,16 +111,8 @@ public class SettingsInGame {
 
         // zurück zum Hauptmenü
 
-        buttonBack = new TextButton("Hauptmenü", textButtonStyle);
+        buttonBack = new HomeButton(screenManager);
         buttonBack.pad(20);
-        buttonBack.addListener(new InputListener(){
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                Gdx.app.log("DEBUG", "Hauptmenü öffnen");
-                screenManager.setScreen(new MainMenuScreen(screenManager));
-                return super.touchDown(event, x, y, pointer, button);
-            }
-        });
 
         table.add(buttonCalib).width(600).pad(10);
         table.row();
