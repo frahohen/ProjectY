@@ -50,14 +50,10 @@ public class ScoreTest extends GameTest {
 
         bullet.setEnemyName(player.getName());
         assertEquals(10, bullet.checkScore(score));
-
-      assertEquals(1,1);
-
     }
 
     @Test
     public void initBulletTest() {
-
         String name ="TestBullet";
         Bullet b= new Bullet(path,0,0,name);
         assertEquals(0f,b.getDirectionX(),0);
@@ -65,16 +61,16 @@ public class ScoreTest extends GameTest {
         assertEquals(name,b.getName());
         assertEquals("",b.getEnemyName());
     }
-    @Test
 
+    @Test
     public void bulletEnemyNameTest() {
         Bullet b= new Bullet(path,0,0,"Bullet");
         String te="TestEnemy";
         b.setEnemyName(te);
         assertEquals(te,b.getEnemyName());
     }
-    @Test
 
+    @Test
     public void bulletDirectionTest() {
         Bullet b= new Bullet(path,0,0,"Bullet");
         bullet.setDirectionX(20);

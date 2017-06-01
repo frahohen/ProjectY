@@ -44,7 +44,6 @@ public class ItemTest extends GameTest {
    @Test
     public void testCollideWithItem(){ //item with item
         Item newItem = new Item(path, 0,0, "NewItem");
-
         assertEquals(
                 item.getName(),
                 newItem.collideWithObject(items)
@@ -58,12 +57,10 @@ public class ItemTest extends GameTest {
     @Test
     public void testCollideWithPlayer (){ //player mit item
        Item newItem = new Item(path, 0,0, "NewItem");
-
         assertEquals(
                 player.getName(),
                 newItem.collideWithObject(players)
         );
-      assertEquals(1,1);
     }
 
     //Gegner mit item ??
