@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -81,6 +82,8 @@ public class GameScreen implements Screen {
     private int score;
     private int round;
 
+    private Sound fireSound,announcer;
+
     private String collidedItemName;
     private String collidedEnemyName;
 
@@ -101,9 +104,19 @@ public class GameScreen implements Screen {
         calib.set(x,y,z);
         accelero=settings.getBoolean("accelero",false);
     }
+
+
+    private void soundsInit(){
+        fireSound= Gdx.audio.newSound(Gdx.files.internal("Bulletshot.wav"));
+        announcer= Gdx.audio.newSound(Gdx.files.internal("roundstart_announcer.wav"));
+    }
+
+
     private void create(){
 
         Gdx.app.setLogLevel(Application.LOG_DEBUG);
+
+        soundsInit();
 
         calib=new Vector3();
         batch = new SpriteBatch();
@@ -257,6 +270,7 @@ public class GameScreen implements Screen {
                                 "Bullet"
                         )
                 );
+                fireSound.play();
                 bullets.get(bullets.size()-1).setDirectionX(touchpad.getWasPrecentX());
                 bullets.get(bullets.size()-1).setDirectionY(touchpad.getWasPrecentY());
 
@@ -293,9 +307,9 @@ public class GameScreen implements Screen {
         for(int i = 0; i < addresses.size(); i++){
             Gdx.app.log("DEBUG","Address: " + addresses.get(i));
         }
-
-        final Server server = new Server("localhost",9999);
+        final Server server = new Server("localhost", 9999);
         new Thread(server).start();
+
 
         Timer.schedule(new Timer.Task() {
             @Override
@@ -303,11 +317,14 @@ public class GameScreen implements Screen {
                 new Thread(new Client(server.getIp(), server.getPort())).start();
                 new Thread(new Client(server.getIp(), server.getPort())).start();
                 new Thread(new Client(server.getIp(), server.getPort())).start();
-            }
-        }, 2);
+                }
+            }, 2);
 
         //** SERVER ** - END
+        //Server-Code verhindert, dass zurück zum Hauptmenü mit nachfolgendenden erneuten Spielstart funktioniert
         getPreferences();
+        announcer.play();
+
     }
 
     @Override
@@ -316,7 +333,6 @@ public class GameScreen implements Screen {
     int test=0;
     @Override
     public void render(float delta) {
-
 
         Gdx.gl.glClearColor(0.100f, 0.314f, 0.314f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -452,6 +468,8 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
+
+        fireSound.dispose();
         stage.dispose();
     }
 
@@ -461,7 +479,7 @@ public class GameScreen implements Screen {
     }
     private void respawn(){
 
-
+        announcer.play();
 
         round++;
         for(int i = 1; i < map.getSpawnMap().getSize(); i++){
