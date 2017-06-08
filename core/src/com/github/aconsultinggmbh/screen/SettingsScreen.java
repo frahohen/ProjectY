@@ -2,12 +2,9 @@ package com.github.aconsultinggmbh.screen;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -15,7 +12,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.github.aconsultinggmbh.utils.AcceleroButton;
 import com.github.aconsultinggmbh.utils.HomeButton;
+import com.github.aconsultinggmbh.utils.RuhelageButton;
 import com.github.aconsultinggmbh.utils.StyleHandler;
 
 public class SettingsScreen implements Screen {
@@ -55,43 +54,44 @@ public class SettingsScreen implements Screen {
         textButtonStyle.font = font;
         textButtonStyle.fontColor = Color.WHITE;*/
 
-        buttonCalib = new TextButton("Ruhelage setzten", StyleHandler.getButtonStyle());
+        buttonCalib=new RuhelageButton();
+        //  buttonCalib = new TextButton("Ruhelage setzten", StyleHandler.getButtonStyle());
         buttonCalib.pad(20);
-        buttonCalib.addListener(new InputListener(){
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                Gdx.app.log("DEBUG", "Ruhelage bestimmt");
-                if(Gdx.input.isPeripheralAvailable(Input.Peripheral.Accelerometer)){ // Accelero eingelesen
-                    float accelZ = Gdx.input.getAccelerometerZ(); // Ruhelage gesetz (Aktuelle Position)
-                    float accelX = Gdx.input.getAccelerometerX();
-                    float accelY = Gdx.input.getAccelerometerY();
+      //  buttonCalib.addListener(new InputListener(){
+       //     @Override
+       //     public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+      //          Gdx.app.log("DEBUG", "Ruhelage bestimmt");
+      //          if(Gdx.input.isPeripheralAvailable(Input.Peripheral.Accelerometer)){ // Accelero eingelesen
+      //              float accelZ = Gdx.input.getAccelerometerZ(); // Ruhelage gesetz (Aktuelle Position)
+      //              float accelX = Gdx.input.getAccelerometerX();
+       //             float accelY = Gdx.input.getAccelerometerY();
 
-                    settings.putFloat("x",accelX); // Speicherung der Ruhe in Settings  Parameter können immer verwendet werden
-                    settings.putFloat("y",accelY);
-                    settings.putFloat("z",accelZ);
-                    settings.flush(); // jetzt speichern
-                }
+       //             settings.putFloat("x",accelX); // Speicherung der Ruhe in Settings  Parameter können immer verwendet werden
+      //              settings.putFloat("y",accelY);
+      //              settings.putFloat("z",accelZ);
+                    //     settings.flush(); // jetzt speichern
+     //           }
 
-                return super.touchDown(event, x, y, pointer, button);
-            }
-        });
-        buttonAccelero = new TextButton("Accelerometer:"+settings.getBoolean("accelero",false), StyleHandler.getButtonStyle());
+       //         return super.touchDown(event, x, y, pointer, button);
+      //      }
+      //  });
+       // buttonAccelero = new TextButton("Accelerometer:"+settings.getBoolean("accelero",false), StyleHandler.getButtonStyle());
 
-
+        buttonAccelero=new AcceleroButton();
         buttonAccelero.pad(20);
 
         //Ob Accelero aktiv oder nicht ist und wieder in die Settings speichern
         // Settings bleiben dauerhaft
-        buttonAccelero.addListener(new InputListener(){
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                Gdx.app.log("DEBUG", "Pressed");
-                settings.putBoolean("accelero",!settings.getBoolean("accelero",false));
-                settings.flush();
-                buttonAccelero.setText("Accelerometer:"+settings.getBoolean("accelero",false));
-                return super.touchDown(event, x, y, pointer, button);
-            }
-        });
+       // buttonAccelero.addListener(new InputListener(){
+        //    @Override
+        //   public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+        //        Gdx.app.log("DEBUG", "Pressed");
+        //        settings.putBoolean("accelero",!settings.getBoolean("accelero",false));
+         //       settings.flush();
+         //       buttonAccelero.setText("Accelerometer:"+settings.getBoolean("accelero",false));
+         //       return super.touchDown(event, x, y, pointer, button);
+          //  }
+        //});
 
         // butttonTMP2 --> Platzhalter
 
