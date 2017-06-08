@@ -40,14 +40,7 @@ public class SettingsInGame {
         table = new Table(skin);
         table.setBounds(0,0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-       /* font = new BitmapFont();
-        font.getData().setScale(5.0f);
 
-        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
-        textButtonStyle.up = skin.getDrawable("buttonOff");
-        textButtonStyle.down = skin.getDrawable("buttonOn");
-        textButtonStyle.font = font;
-        textButtonStyle.fontColor = Color.WHITE;*/
 
         // Spiel fortsetzen
 
@@ -63,48 +56,11 @@ public class SettingsInGame {
             }
         });
         buttonCalib =new RuhelageButton(gameScreen);
-    //    buttonCalib = new TextButton("Ruhelage setzten", StyleHandler.getButtonStyle());
         buttonCalib.pad(20);
-    //    buttonCalib.addListener(new InputListener(){
-      //      @Override
-       //     public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-        //        Gdx.app.log("DEBUG", "Ruhelage bestimmt");
-          //      if(Gdx.input.isPeripheralAvailable(Input.Peripheral.Accelerometer)){ // Accelero eingelesen
-      //              float accelZ = Gdx.input.getAccelerometerZ(); // Ruhelage gesetz (Aktuelle Position)
-       //             float accelX = Gdx.input.getAccelerometerX();
-       //             float accelY = Gdx.input.getAccelerometerY();
-
-      //              settings.putFloat("x",accelX); // Speicherung der Ruhe in Settings  Parameter können immer verwendet werden
-       //             settings.putFloat("y",accelY);
-       //             settings.putFloat("z",accelZ);
-       //             settings.flush(); // jetzt speichern
-        //            gameScreen.setCalib(accelX,accelY,accelZ);
-
-         //       }
-
-         //       return super.touchDown(event, x, y, pointer, button);
-      //      }
-    //    });
-      //  buttonAccelero = new TextButton("Accelerometer:"+settings.getBoolean("accelero",false), StyleHandler.getButtonStyle());
 
         buttonAccelero=new AcceleroButton(gameScreen);
         buttonAccelero.pad(20);
 
-        //Ob Accelero aktiv oder nicht ist und wieder in die Settings speichern
-        // Settings bleiben dauerhaft
-      //  buttonAccelero.addListener(new InputListener(){
-      //      @Override
-      //      public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-        //         Gdx.app.log("DEBUG", "Pressed");
-//
-        //               gameScreen.setAccelero(!settings.getBoolean("accelero",false));
-//                settings.putBoolean("accelero",!settings.getBoolean("accelero",false));
-//                settings.flush();
-
-        //               buttonAccelero.setText("Accelerometer:"+settings.getBoolean("accelero",false));
-        //        return super.touchDown(event, x, y, pointer, button);
-        //   }
-        //});
 
 
 

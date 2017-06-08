@@ -26,11 +26,7 @@ public class AcceleroButton extends TextButton {
                                      float y,
                                      int pointer,
                                      int button) {
-
-                Gdx.app.log("DEBUG", "Pressed");
-                settings.putBoolean("accelero",!settings.getBoolean("accelero",false));
-                settings.flush();
-                setText("Accelerometer:"+settings.getBoolean("accelero",false));
+                setAccelero();
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
@@ -47,14 +43,17 @@ public class AcceleroButton extends TextButton {
                                      int pointer,
                                      int button) {
 
-                Gdx.app.log("DEBUG", "Pressed");
-
-                settings.putBoolean("accelero",!settings.getBoolean("accelero",false));
-                settings.flush();
-                setText("Accelerometer:"+settings.getBoolean("accelero",false));
+                setAccelero();
                 gameScreen.setAccelero(settings.getBoolean("accelero",false));
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
+    }
+    private void setAccelero(){
+
+        Gdx.app.log("DEBUG", "Pressed");
+        settings.putBoolean("accelero",!settings.getBoolean("accelero",false));
+        settings.flush();
+        setText("Accelerometer:"+settings.getBoolean("accelero",false));
     }
 }

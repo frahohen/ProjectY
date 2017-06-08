@@ -3,9 +3,7 @@ package com.github.aconsultinggmbh.screen;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -57,16 +55,7 @@ public class LobbyScreen implements Screen {
         table = new Table(skin);
         table.setBounds(0,0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-       /*  font = new BitmapFont();
-        font.getData().setScale(5.0f);
 
-        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
-        textButtonStyle.up = skin.getDrawable("buttonOff");
-        textButtonStyle.down = skin.getDrawable("buttonOn");
-        textButtonStyle.font = font;
-        textButtonStyle.fontColor = Color.WHITE;
-
-        Label.LabelStyle labelStyle = new Label.LabelStyle( font, Color.WHITE);*/
         labelInfo1 = new Label("Willkommen in der Lobby!", StyleHandler.getLabelStyle());
         labelInfo1.setWidth(500);
         labelInfo2 = new Label("Warten auf Spieler...", StyleHandler.getLabelStyle());
