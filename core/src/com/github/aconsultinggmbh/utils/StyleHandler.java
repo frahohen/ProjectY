@@ -15,8 +15,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
     //Damit alle Buttons,labels, etc.. gleich aussehen
 
 public class  StyleHandler {
-    final static int buttonWidth= (int)(Gdx.graphics.getWidth()/3.f);
-    final static int labelWidth= (int)(Gdx.graphics.getWidth()/18.f*5.f);
+    final static float buttonWidth= Gdx.graphics.getWidth()/3.f;
+    final static float labelWidth= Gdx.graphics.getWidth()/18.f*5.f;
 
     public static TextButton.TextButtonStyle getButtonStyle(){
         //Buttonstyle
@@ -41,10 +41,10 @@ public class  StyleHandler {
         font.getData().setScale(5.0f);
         return font;
     }
-    public static int getButtonWidth(){
+    public static float getButtonWidth(){
         return buttonWidth;
     }
-    public static int getLabelWidth(){
+    public static float getLabelWidth(){
         return labelWidth;
     }
 }

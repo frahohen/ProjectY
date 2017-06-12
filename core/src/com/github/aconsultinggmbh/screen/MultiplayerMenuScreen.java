@@ -16,8 +16,8 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.github.aconsultinggmbh.utils.CustomButton;
 import com.github.aconsultinggmbh.utils.HomeButton;
 import com.github.aconsultinggmbh.utils.StyleHandler;
 
@@ -30,8 +30,7 @@ public class MultiplayerMenuScreen implements Screen {
     private TextureAtlas atlas;
     private Skin skin;
     private Table table;
-    private TextButton buttonExit, buttonHostGame, buttonJoinGame;
-    private BitmapFont font;
+    private CustomButton buttonExit, buttonHostGame, buttonJoinGame;
     private TextField tfIpAddress;
 
     public MultiplayerMenuScreen(ProjectY screenManager) {
@@ -51,14 +50,11 @@ public class MultiplayerMenuScreen implements Screen {
         table = new Table(skin);
         table.setBounds(0,0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        font = new BitmapFont();
-        font.getData().setScale(5.0f);
 
 
 
 
-        buttonHostGame = new TextButton("Join Game", StyleHandler.getButtonStyle());
-        buttonHostGame.pad(20);
+        buttonHostGame = new CustomButton("Join Game");
         buttonHostGame.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -102,8 +98,7 @@ public class MultiplayerMenuScreen implements Screen {
             }
         });
 
-        buttonJoinGame = new TextButton("Host game", StyleHandler.getButtonStyle());
-        buttonJoinGame.pad(20);
+        buttonJoinGame = new CustomButton("Host game");
         buttonJoinGame.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -116,7 +111,6 @@ public class MultiplayerMenuScreen implements Screen {
 
 
         buttonExit = new HomeButton(screenManager);
-        buttonExit.pad(20);
 
 
         table.add(buttonHostGame).width(StyleHandler.getButtonWidth()).pad(10);

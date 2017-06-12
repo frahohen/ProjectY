@@ -11,11 +11,11 @@ import com.github.aconsultinggmbh.screen.ProjectY;
  * Created by Alex on 29.05.2017.
  */
 
-public class HomeButton extends TextButton {
+public class HomeButton extends CustomButton {
 
     //Zurück zum Hauptmenü Button
     public HomeButton(final ProjectY screenManager){
-        super("Hauptmenü",StyleHandler.getButtonStyle());
+        super("Hauptmenü");
         this.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {

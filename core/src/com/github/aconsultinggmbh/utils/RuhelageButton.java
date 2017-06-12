@@ -11,7 +11,7 @@ import com.github.aconsultinggmbh.screen.GameScreen;
  * Created by maile on 08.06.17.
  */
 
-public class RuhelageButton extends TextButton {
+public class RuhelageButton extends CustomButton{
 
     final Preferences settings = Gdx.app.getPreferences("ProjectY_settings");
     private float accelX,accelY,accelZ;
@@ -19,7 +19,7 @@ public class RuhelageButton extends TextButton {
     public RuhelageButton(final GameScreen gameScreen){
 
 
-        super("Ruhelage setzen",StyleHandler.getButtonStyle());
+        super("Ruhelage setzen");
 
         this.addListener(new InputListener(){
             @Override
@@ -39,7 +39,7 @@ public class RuhelageButton extends TextButton {
     }
     public RuhelageButton(){
 
-        super("Ruhelage setzen",StyleHandler.getButtonStyle());
+        super("Ruhelage setzen");
 
         this.addListener(new InputListener(){
                              @Override

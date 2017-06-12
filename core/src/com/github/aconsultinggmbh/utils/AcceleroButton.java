@@ -11,13 +11,13 @@ import com.github.aconsultinggmbh.screen.GameScreen;
  * Created by maile on 08.06.17.
  */
 
-public class AcceleroButton extends TextButton {
+public class AcceleroButton extends CustomButton {
 
     final Preferences settings = Gdx.app.getPreferences("ProjectY_settings");
 
     public AcceleroButton() {
 
-        super("Init", StyleHandler.getButtonStyle());
+        super("Init");
         this.setText("Accelerometer: "+settings.getBoolean("accelero",false));
         this.addListener(new InputListener() {
             @Override
@@ -33,7 +33,7 @@ public class AcceleroButton extends TextButton {
     }
     public AcceleroButton(final GameScreen gameScreen) {
 
-        super("Init", StyleHandler.getButtonStyle());
+        super("Init");
         this.setText("Accelerometer: "+settings.getBoolean("accelero",false));
         this.addListener(new InputListener() {
             @Override

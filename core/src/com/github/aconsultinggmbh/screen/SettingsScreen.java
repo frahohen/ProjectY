@@ -11,8 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.github.aconsultinggmbh.utils.AcceleroButton;
+import com.github.aconsultinggmbh.utils.CustomButton;
 import com.github.aconsultinggmbh.utils.HomeButton;
 import com.github.aconsultinggmbh.utils.RuhelageButton;
 import com.github.aconsultinggmbh.utils.StyleHandler;
@@ -25,7 +25,7 @@ public class SettingsScreen implements Screen {
     private TextureAtlas atlas;
     private Skin skin;
     private Table table;
-    private TextButton buttonBack, buttonCalib, buttonAccelero, buttonTMP2;
+    private CustomButton buttonBack, buttonCalib, buttonAccelero, buttonTMP2;
    // private BitmapFont font;
 
     public SettingsScreen(ProjectY screenManager) {
@@ -48,17 +48,14 @@ public class SettingsScreen implements Screen {
 
 
         buttonCalib=new RuhelageButton();
-        buttonCalib.pad(20);
 
         buttonAccelero=new AcceleroButton();
-        buttonAccelero.pad(20);
 
 
 
         // butttonTMP2 --> Platzhalter
 
-        buttonTMP2 = new TextButton("Template 2", StyleHandler.getButtonStyle());
-        buttonTMP2.pad(20);
+        buttonTMP2 = new CustomButton("Template 2");
         buttonTMP2.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -70,7 +67,6 @@ public class SettingsScreen implements Screen {
 
 
         buttonBack = new HomeButton(screenManager);
-        buttonBack.pad(20);
 
         table.add(buttonCalib).width(StyleHandler.getButtonWidth()).pad(10);
         table.row();

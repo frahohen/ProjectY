@@ -17,7 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.github.aconsultinggmbh.utils.CustomButton;
 import com.github.aconsultinggmbh.utils.StyleHandler;
 
 
@@ -29,7 +29,7 @@ public class MainMenuScreen implements Screen {
     private TextureAtlas atlas;
     private Skin skin;
     private Table table;
-    private TextButton buttonExit, buttonCreateGame, buttonJoinGame, buttonSettings;
+    private CustomButton buttonExit, buttonCreateGame, buttonJoinGame, buttonSettings;
     //private BitmapFont font;
     private Sound menuSound;
 
@@ -52,8 +52,7 @@ public class MainMenuScreen implements Screen {
         table.setBounds(0,0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
 
-        buttonCreateGame = new TextButton("Singleplayer", StyleHandler.getButtonStyle());
-        buttonCreateGame.pad(20);
+        buttonCreateGame = new CustomButton("Singleplayer");
         buttonCreateGame.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -63,8 +62,7 @@ public class MainMenuScreen implements Screen {
             }
         });
 
-        buttonJoinGame = new TextButton("Multiplayer", StyleHandler.getButtonStyle());
-        buttonJoinGame.pad(20);
+        buttonJoinGame = new CustomButton("Multiplayer");
         buttonJoinGame.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -74,8 +72,7 @@ public class MainMenuScreen implements Screen {
             }
         });
 
-        buttonSettings = new TextButton("Einstellungen", StyleHandler.getButtonStyle());
-        buttonSettings.pad(20);
+        buttonSettings = new CustomButton("Einstellungen");
         buttonSettings.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -85,8 +82,7 @@ public class MainMenuScreen implements Screen {
             }
         });
 
-        buttonExit = new TextButton("Spiel Beenden", StyleHandler.getButtonStyle());
-        buttonExit.pad(20);
+        buttonExit = new CustomButton("Spiel Beenden");
         buttonExit.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {

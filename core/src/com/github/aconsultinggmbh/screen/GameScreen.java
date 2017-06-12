@@ -17,9 +17,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.github.aconsultinggmbh.gameobject.Bullet;
@@ -30,6 +28,8 @@ import com.github.aconsultinggmbh.gameobject.Player;
 import com.github.aconsultinggmbh.map.GameMap;
 import com.github.aconsultinggmbh.networking.Client;
 import com.github.aconsultinggmbh.networking.Server;
+import com.github.aconsultinggmbh.utils.CustomButton;
+import com.github.aconsultinggmbh.utils.CustomLabel;
 import com.github.aconsultinggmbh.utils.GameTouchpad;
 
 import java.net.Inet4Address;
@@ -69,16 +69,16 @@ public class GameScreen implements Screen {
     private float playerSpeed = 5.0f;
     private float scale = 6.0f;
 
-    private TextureAtlas atlas;
-    private Skin skin;
-    private TextButton buttonFire, buttonScore,buttonMenue;
-    private BitmapFont font;
+   // private TextureAtlas atlas;
+   // private Skin skin;
+    private CustomButton buttonFire, buttonScore,buttonMenue;
+   // private BitmapFont font;
 
     ScoreBoard sb;
     final GameScreen gameScreen=this;
 
-    private Label labelScore;
-    private Label labelRound;
+    private CustomLabel labelScore;
+    private CustomLabel labelRound;
     private int score;
     private int round;
 
@@ -177,7 +177,7 @@ public class GameScreen implements Screen {
         touchpad.setPosition(Gdx.graphics.getWidth()- touchpad.getTouchpad().getWidth() -20, 20);
 
         stage = new Stage(new ScreenViewport(), batch);
-
+/*
         // Button for shooting and Score
         atlas = new TextureAtlas("button/button.pack");
         skin = new Skin(atlas);
@@ -190,24 +190,25 @@ public class GameScreen implements Screen {
         textButtonStyle.down = skin.getDrawable("buttonOn");
         textButtonStyle.font = font;
         textButtonStyle.fontColor = Color.WHITE;
-
+*/
         score = 0;
-        Label.LabelStyle labelStyle = new Label.LabelStyle( font, Color.WHITE);
-        labelScore = new Label("Score: "+score, labelStyle);
-        labelScore.setWidth(400);
+        //Label.LabelStyle labelStyle = new Label.LabelStyle( font, Color.WHITE);
+      //  labelScore = new Label("Score: "+score, labelStyle);
+      //  labelScore.setWidth(400);
+        labelScore=new CustomLabel("Score: "+score);
         labelScore.setPosition(Gdx.graphics.getWidth()- labelScore.getWidth() +60, Gdx.graphics.getHeight() -200);
 
         round = 0;
-        labelRound = new Label("Round: "+round, labelStyle);
-        labelRound.setWidth(400);
+       // labelRound = new Label("Round: "+round, labelStyle);
+       // labelRound.setWidth(400);
+        labelRound=new CustomLabel("Round: "+round);
         labelRound.setPosition(40, Gdx.graphics.getHeight() -200);
 
         final GameScreen gameScreen=this;
-        buttonMenue = new TextButton("Menü", textButtonStyle);
+        buttonMenue = new CustomButton("Menü");
         buttonMenue.setWidth(300);
         buttonMenue.setHeight(120);
         buttonMenue.setPosition(40, Gdx.graphics.getHeight()-110);
-        buttonMenue.pad(20);
         buttonMenue.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -223,11 +224,10 @@ public class GameScreen implements Screen {
 
         //ScoreboardButton
 
-        buttonScore = new TextButton("Score", textButtonStyle);
+        buttonScore = new CustomButton("Score");
         buttonScore.setWidth(300);
         buttonScore.setHeight(120);
         buttonScore.setPosition(Gdx.graphics.getWidth()- buttonScore.getWidth()-40, Gdx.graphics.getHeight()-110);
-        buttonScore.pad(20);
         buttonScore.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -242,8 +242,8 @@ public class GameScreen implements Screen {
                     scoreboardIsActive=!scoreboardIsActive;
                     Gdx.app.log("DEBUG", "Kappa");
 
-                    Label[] arr = sb.getLabelPlayerLabelScore();
-                    for(Label l: arr){
+                    CustomLabel[] arr = sb.getLabelPlayerLabelScore();
+                    for(CustomLabel l: arr){
                         l.remove();
                     }
 
@@ -253,11 +253,10 @@ public class GameScreen implements Screen {
             }
         });
 
-        buttonFire = new TextButton("Fire", textButtonStyle);
+        buttonFire = new CustomButton("Fire");
         buttonFire.setWidth(300);
         buttonFire.setHeight(120);
         buttonFire.setPosition(20, 20);
-        buttonFire.pad(20);
         buttonFire.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -395,8 +394,8 @@ public class GameScreen implements Screen {
                 //Scoreboard ausblenden
                 scoreboardIsActive = false;
                 flag= true;
-                Label[] arr = sb.getLabelPlayerLabelScore();
-                for(Label l: arr){
+                CustomLabel[] arr = sb.getLabelPlayerLabelScore();
+                for(CustomLabel l: arr){
                     l.remove();
                 }
 
