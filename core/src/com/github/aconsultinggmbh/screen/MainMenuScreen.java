@@ -80,7 +80,6 @@ public class MainMenuScreen implements Screen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 Gdx.app.log("DEBUG", "Pressed");
-
                 screenManager.setScreen(new SettingsScreen(screenManager)); // öffnen den Einstellungs View
                 return super.touchDown(event, x, y, pointer, button); //Button irgendwas
             }
@@ -97,13 +96,13 @@ public class MainMenuScreen implements Screen {
             }
         });
 
-        table.add(buttonCreateGame).width(600).pad(10);
+        table.add(buttonCreateGame).width(StyleHandler.getButtonWidth()).pad(10);
         table.row();
-        table.add(buttonJoinGame).width(600).pad(10);
+        table.add(buttonJoinGame).width(StyleHandler.getButtonWidth()).pad(10);
         table.row();
-        table.add(buttonSettings).width(600).pad(10);
+        table.add(buttonSettings).width(StyleHandler.getButtonWidth()).pad(10);
         table.row();
-        table.add(buttonExit).width(600).pad(10);
+        table.add(buttonExit).width(StyleHandler.getButtonWidth()).pad(10);
         //table.debug();
         stage.addActor(table);
         Gdx.input.setInputProcessor(stage);
@@ -148,6 +147,5 @@ public class MainMenuScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
-        menuSound.dispose();
     }
 }

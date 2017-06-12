@@ -119,11 +119,11 @@ public class MultiplayerMenuScreen implements Screen {
         buttonExit.pad(20);
 
 
-        table.add(buttonHostGame).width(600).pad(10);
+        table.add(buttonHostGame).width(StyleHandler.getButtonWidth()).pad(10);
         table.row();
-        table.add(buttonJoinGame).width(600).pad(10);
+        table.add(buttonJoinGame).width(StyleHandler.getButtonWidth()).pad(10);
         table.row();
-        table.add(buttonExit).width(600).pad(10);
+        table.add(buttonExit).width(StyleHandler.getButtonWidth()).pad(10);
         //table.debug();
         stage.addActor(table);
         Gdx.input.setInputProcessor(stage);

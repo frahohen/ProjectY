@@ -69,13 +69,13 @@ public class SettingsInGame {
         buttonBack = new HomeButton(screenManager);
         buttonBack.pad(20);
 
-        table.add(buttonCalib).width(600).pad(10);
+        table.add(buttonCalib).width(StyleHandler.getButtonWidth()).pad(10);
         table.row();
-        table.add(buttonAccelero).width(600).pad(10);
+        table.add(buttonAccelero).width(StyleHandler.getButtonWidth()).pad(10);
         table.row();
-        table.add(buttonPlay).width(600).pad(10);
+        table.add(buttonPlay).width(StyleHandler.getButtonWidth()).pad(10);
         table.row();
-        table.add(buttonBack).width(600).pad(10);
+        table.add(buttonBack).width(StyleHandler.getButtonWidth()).pad(10);
         //table.debug();
 
         stage.addActor(table);

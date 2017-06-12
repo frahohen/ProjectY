@@ -57,14 +57,14 @@ public class LobbyScreen implements Screen {
 
 
         labelInfo1 = new Label("Willkommen in der Lobby!", StyleHandler.getLabelStyle());
-        labelInfo1.setWidth(500);
+        labelInfo1.setWidth(StyleHandler.getLabelWidth());
         labelInfo2 = new Label("Warten auf Spieler...", StyleHandler.getLabelStyle());
-        labelInfo2.setWidth(500);
+        labelInfo2.setWidth(StyleHandler.getLabelWidth());
         labelInfo3 = new Label("", StyleHandler.getLabelStyle());
-        labelInfo3.setWidth(500);
+        labelInfo3.setWidth(StyleHandler.getLabelWidth());
         //Fraglich?? wollen wir haben, dass er anzeigt wieviele spieler gerade in der Lobby sind?
         labelPlayerConnected  = new Label("Spieler verbunden:---", StyleHandler.getLabelStyle());
-        labelInfo3.setWidth(500);
+        labelInfo3.setWidth(StyleHandler.getLabelWidth());
         if(host){
 
             try {
@@ -118,10 +118,10 @@ public class LobbyScreen implements Screen {
         table.add(labelInfo3);
         table.row();
         if(host) {
-            table.add(buttonStartGame).width(600).pad(10);
+            table.add(buttonStartGame).width(StyleHandler.getButtonWidth()).pad(10);
         }
         table.row();
-        table.add(buttonExit).width(600).pad(10);
+        table.add(buttonExit).width(StyleHandler.getButtonWidth()).pad(10);
         //table.debug();
         stage.addActor(table);
         Gdx.input.setInputProcessor(stage);

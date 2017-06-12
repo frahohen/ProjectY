@@ -1,5 +1,6 @@
 package com.github.aconsultinggmbh.utils;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -14,6 +15,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
     //Damit alle Buttons,labels, etc.. gleich aussehen
 
 public class  StyleHandler {
+    final static int buttonWidth= (int)(Gdx.graphics.getWidth()/3.f);
+    final static int labelWidth= (int)(Gdx.graphics.getWidth()/18.f*5.f);
 
     public static TextButton.TextButtonStyle getButtonStyle(){
         //Buttonstyle
@@ -37,5 +40,11 @@ public class  StyleHandler {
         BitmapFont font = new BitmapFont();
         font.getData().setScale(5.0f);
         return font;
+    }
+    public static int getButtonWidth(){
+        return buttonWidth;
+    }
+    public static int getLabelWidth(){
+        return labelWidth;
     }
 }

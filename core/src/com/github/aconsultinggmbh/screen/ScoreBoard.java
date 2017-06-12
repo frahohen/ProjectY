@@ -35,20 +35,20 @@ public class ScoreBoard {
 
         Label.LabelStyle labelStyle = new Label.LabelStyle( font, Color.WHITE);*/
         labelPlayer = new Label("Player: ", StyleHandler.getLabelStyle());
-        labelPlayer.setWidth(400);
-        labelPlayer.setPosition((Gdx.graphics.getWidth() / 2)- labelPlayer.getWidth()+50, Gdx.graphics.getHeight() - labelPlayer.getHeight()-200);
+        labelPlayer.setWidth(StyleHandler.getLabelWidth());
+        labelPlayer.setPosition((Gdx.graphics.getWidth() / 2)- labelPlayer.getWidth()*2/3, Gdx.graphics.getHeight() - labelPlayer.getHeight()-200);
 
         labelScore = new Label("Score: ", StyleHandler.getLabelStyle());
-        labelScore.setWidth(400);
-        labelScore.setPosition((Gdx.graphics.getWidth() / 2)- labelScore.getWidth() +500, Gdx.graphics.getHeight() - labelScore.getHeight()-200);
+        labelScore.setWidth(StyleHandler.getLabelWidth());
+        labelScore.setPosition((Gdx.graphics.getWidth() / 2)- labelScore.getWidth()*2/3 +StyleHandler.getLabelWidth()*2/3, Gdx.graphics.getHeight() - labelScore.getHeight()-200);
 
         labelPlayerName = new Label(player.getName(), StyleHandler.getLabelStyle());
-        labelPlayerName.setWidth(400);
-        labelPlayerName.setPosition((Gdx.graphics.getWidth() / 2)- labelPlayerName.getWidth() +50, Gdx.graphics.getHeight() - labelScore.getHeight()-300);
+        labelPlayerName.setWidth(StyleHandler.getLabelWidth());
+        labelPlayerName.setPosition((Gdx.graphics.getWidth() / 2)- labelPlayerName.getWidth()*2/3 , Gdx.graphics.getHeight() - labelScore.getHeight()-300);
 
         labelPlayerScore = new Label(""+score, StyleHandler.getLabelStyle());
-        labelPlayerScore.setWidth(400);
-        labelPlayerScore.setPosition((Gdx.graphics.getWidth() / 2)- labelPlayerScore.getWidth() +500, Gdx.graphics.getHeight() - labelScore.getHeight()-300);
+        labelPlayerScore.setWidth(StyleHandler.getLabelWidth());
+        labelPlayerScore.setPosition((Gdx.graphics.getWidth() / 2)- labelPlayerScore.getWidth()*2/3 +StyleHandler.getLabelWidth()*2/3, Gdx.graphics.getHeight() - labelScore.getHeight()-300);
 
         stage.addActor(labelPlayer);
         stage.addActor(labelScore);
