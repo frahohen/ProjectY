@@ -10,6 +10,9 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.github.aconsultinggmbh.networking.Client;
+import com.github.aconsultinggmbh.networking.Server;
+import com.github.aconsultinggmbh.networking.message.MessageTag;
 import com.github.aconsultinggmbh.utils.CustomButton;
 import com.github.aconsultinggmbh.utils.CustomLabel;
 import com.github.aconsultinggmbh.utils.HomeButton;
@@ -38,12 +41,26 @@ public class LobbyScreen implements Screen {
    // private BitmapFont font;
     private CustomLabel labelInfo1,labelInfo2,labelInfo3,labelPlayerConnected;
 
+    private Server server;
+    private Client client;
+
+    private boolean host;
+    private boolean startGame;
+
     public LobbyScreen(ProjectY screenManager,boolean host) {
         this.screenManager = screenManager;
-        create(host);
+        this.host = host;
+        startGame = false;
+        create();
     }
 
-    private void create(final boolean host){
+    public LobbyScreen(ProjectY screenManager,boolean host,Client client) {
+        this.client = client;
+        this.screenManager = screenManager;
+        create();
+    }
+
+    private void create(){
 
         Gdx.app.setLogLevel(Application.LOG_DEBUG);
 
@@ -78,6 +95,18 @@ public class LobbyScreen implements Screen {
                 }
                 labelInfo3.setText("Host-IP: "+addresses.get(0));
 
+                // Create Server
+                server = new Server("localhost", 9999);
+                // Start Server
+                new Thread(server).start();
+
+                // Wait until Server is ready
+                Thread.sleep(100);
+                // Create Host
+                client = new Client(server.getIp(), server.getPort());
+                // Start Host
+                new Thread(client).start();
+
             }catch(Exception e){
                labelInfo3.setText("Error getting Host-IP!");
             }
@@ -90,6 +119,7 @@ public class LobbyScreen implements Screen {
                     /*Hier wird das Multiplayer Spiel gestartet (nur vom Host aus möglich)
                     screenManager.setScreen(new MultiplayerGameScreen(screenManager));
                      */
+                    startGame = true;
 
                     return super.touchDown(event, x, y, pointer, button);
                 }
@@ -100,6 +130,15 @@ public class LobbyScreen implements Screen {
         }
 
 
+        // TODO: Hier müsste der Client und der server beendet werden:
+        /* Code:
+            if(host){
+                	client = null;
+                	server = null;
+                } else {
+                	client = null;
+                }
+         */
         buttonExit = new HomeButton(screenManager);
 
 
@@ -132,6 +171,23 @@ public class LobbyScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0,0,0,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        if(startGame){
+            server.updateClients(MessageTag.START);
+            startGame = false;
+        }
+        if(client.isStartGame()){
+            screenManager.setScreen(new MultiplayerGameScreen(screenManager,host,client,server));
+        }
+
+        if(host){
+            // Get from Server the Number
+            labelPlayerConnected.setText("Spieler verbunden: " + server.getNumberOfClientsConnected());
+
+        }else{
+            // Get the update from Server
+            labelPlayerConnected.setText("Spieler verbunden: " + client.getNumberOfClientsConnected());
+        }
 
         stage.act(delta);
         stage.draw();

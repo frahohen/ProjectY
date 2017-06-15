@@ -19,15 +19,24 @@ public class ScoreBoard {
     private final ProjectY screenManager;
    // private BitmapFont font;
     private GameScreen gameScreen;
+    private MultiplayerGameScreen multiplayerGameScreen;
 
     private CustomLabel labelScore, labelPlayer, labelPlayerName, labelPlayerScore;
 
 
     public ScoreBoard(Stage stage, ProjectY sm, final GameScreen gameScreen, int score, Player player){
         this.screenManager = sm;
-
         this.gameScreen=gameScreen;
+        init(stage, sm, score, player);
+    }
 
+    public ScoreBoard(Stage stage, ProjectY sm, final MultiplayerGameScreen gameScreen, int score, Player player){
+        this.screenManager = sm;
+        this.multiplayerGameScreen=gameScreen;
+        init(stage, sm, score, player);
+    }
+
+    private void init(Stage stage, ProjectY sm, int score, Player player){
         final Preferences settings = Gdx.app.getPreferences("ProjectY_settings");
 
 
@@ -47,7 +56,6 @@ public class ScoreBoard {
         stage.addActor(labelScore);
         stage.addActor(labelPlayerName);
         stage.addActor(labelPlayerScore);
-
     }
 
     public CustomLabel[] getLabelPlayerLabelScore() {
