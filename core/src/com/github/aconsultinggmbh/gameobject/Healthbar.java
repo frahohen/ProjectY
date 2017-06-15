@@ -38,12 +38,8 @@ public class Healthbar {
 
        // TextureRegionDrawable textureBar = new TextureRegionDrawable(new TextureRegion(hpTexture));
        //Balken erzeugen
-        barStyle = new ProgressBarStyle(skin.newDrawable("white", Color.DARK_GRAY), skin.newDrawable("white",Color.RED));//erste farbe: "verlorene" HP, zweite Farbe: aktuelle Hp
-        barStyle.knob.setMinHeight(height);
-        barStyle.background.setMinHeight(height);
-        barStyle.knobBefore = barStyle.knob;
-        barStyle.knob.setMinWidth(0);
         health = new ProgressBar(0f, maxHP, 1f, false, barStyle);
+        setStyle(Color.RED);
         health.setWidth(width);
 
         //Balken oben mittig platzieren
@@ -53,13 +49,22 @@ public class Healthbar {
 
     }
 
+    public void setStyle(Color color) {
+        barStyle = new ProgressBarStyle(skin.newDrawable("white", Color.DARK_GRAY), skin.newDrawable("white",color));//erste farbe: "verlorene" HP, zweite Farbe: aktuelle Hp
+        barStyle.knob.setMinHeight(height);
+        barStyle.background.setMinHeight(height);
+        barStyle.knobBefore = barStyle.knob;
+        barStyle.knob.setMinWidth(0);
+        health.setStyle(barStyle);
+    }
+
     public void changeHP(int delta){            //Veringert aktuelle Hitpoints um den Wert delta, negatives delta "heilt" den Spieler
-        currentHp-=delta;
-        if(currentHp>maxHP)currentHp=maxHP;     //Maximale HP-Anzahl kann nicht überschritten werden
-        if(currentHp>0){
-            health.setValue(currentHp);
+        currentHp=delta;
+        if(currentHp>maxHP){
+            currentHp=maxHP;     //Maximale HP-Anzahl kann nicht Ã¼berschritten werden
+
         }else{
-            health.setValue(0);
+            health.setValue(currentHp);
 
             //DO KILL THINGY HERE
             //Wird erst Implementiert

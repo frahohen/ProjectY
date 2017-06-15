@@ -26,18 +26,27 @@ public class SettingsInGame {
     private Table table;
     private CustomButton buttonBack, buttonCalib, buttonAccelero, buttonPlay;
     private GameScreen gameScreen;
+    private MultiplayerGameScreen multiplayerGameScreen;
 
     public SettingsInGame(Stage stage, ProjectY sm, final GameScreen gameScreen){
         this.screenManager = sm;
-
         this.gameScreen=gameScreen;
 
+        init(stage, sm);
+    }
+
+    public SettingsInGame(Stage stage, ProjectY sm, final MultiplayerGameScreen gameScreen){
+        this.screenManager = sm;
+        this.multiplayerGameScreen=gameScreen;
+
+        init(stage, sm);
+    }
+
+    public void init(Stage stage, ProjectY sm){
         atlas = new TextureAtlas("button/button.pack");
         skin = new Skin(atlas);
         table = new Table(skin);
         table.setBounds(0,0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-
-
 
         // Spiel fortsetzen
 
@@ -54,7 +63,6 @@ public class SettingsInGame {
         buttonCalib =new RuhelageButton(gameScreen);
 
         buttonAccelero=new AcceleroButton(gameScreen);
-
         // zurück zum Hauptmenü
         buttonBack = new HomeButton(screenManager);
 
@@ -72,7 +80,11 @@ public class SettingsInGame {
 
     void destroyButtons(){
         table.remove();
-        gameScreen.setMenuIsActive(false);
+        if(gameScreen == null){
+            multiplayerGameScreen.setMenuIsActive(false);
+        }else {
+            gameScreen.setMenuIsActive(false);
+        }
 
     }
 

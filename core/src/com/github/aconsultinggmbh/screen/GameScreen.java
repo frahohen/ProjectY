@@ -287,39 +287,6 @@ public class GameScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
         //** GUI ** - END
 
-        //** SERVER ** - START
-        List<String> addresses = new ArrayList<String>();
-
-        try {
-            Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
-            for(NetworkInterface ni : Collections.list(interfaces)){
-                for(InetAddress address : Collections.list(ni.getInetAddresses())){
-                    if(address instanceof Inet4Address){
-                        addresses.add(address.getHostAddress());
-                    }
-                }
-            }
-        } catch (SocketException e) {
-            e.printStackTrace();
-        }
-
-        for(int i = 0; i < addresses.size(); i++){
-            Gdx.app.log("DEBUG","Address: " + addresses.get(i));
-        }
-        final Server server = new Server("localhost", 9999);
-        new Thread(server).start();
-
-
-        Timer.schedule(new Timer.Task() {
-            @Override
-            public void run() {
-                new Thread(new Client(server.getIp(), server.getPort())).start();
-                new Thread(new Client(server.getIp(), server.getPort())).start();
-                new Thread(new Client(server.getIp(), server.getPort())).start();
-                }
-            }, 2);
-
-        //** SERVER ** - END
         //Server-Code verhindert, dass zurück zum Hauptmenü mit nachfolgendenden erneuten Spielstart funktioniert
         getPreferences();
         announcer.play();
