@@ -307,8 +307,17 @@ public class GameScreen implements Screen {
 
         // Ist Accelero aktiv und aktiviert
         if(Gdx.input.isPeripheralAvailable(Input.Peripheral.Accelerometer)&&accelero) {
-            float accelZ = Gdx.input.getAccelerometerZ() - calib.z; // aktuelle Position - der Ruhelage
-            float accelY = Gdx.input.getAccelerometerY() - calib.y;
+            float accelZ = Gdx.input.getAccelerometerZ(); // aktuelle Position - der Ruhelage
+            if(calib.z>0){
+                accelZ -=calib.z;
+                if(accelZ<(calib.z-10))accelZ=calib.z-10;
+                accelZ*=10/(10-calib.z);
+            } else if (calib.z < 0) {
+                accelZ -=calib.z;
+                if(accelZ>(10+calib.z))accelZ=10+calib.z;
+                accelZ*=10/(10+calib.z);
+            }
+            float accelY = Gdx.input.getAccelerometerY();
             player.move(accelY, accelZ); // Bewegung des Spielers
 
 
