@@ -139,7 +139,7 @@ public class GameScreen implements Screen {
         );
 
         player.setRender(true);
-        hp= new Healthbar();
+        hp= new Healthbar(player);
         enemies = new ArrayList<GameObject>();
         for(int i = 1; i < map.getSpawnMap().getSize(); i++){
             enemies.add(

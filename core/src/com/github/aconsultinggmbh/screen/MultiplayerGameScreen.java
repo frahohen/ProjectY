@@ -206,7 +206,7 @@ public class MultiplayerGameScreen implements Screen {
         //** SERVER ** - END
 
         //** GUI ** - START
-        hp= new Healthbar();
+         hp=new Healthbar(player);
         touchpad = new GameTouchpad("data/touchBackground.png","data/touchKnob.png");
         touchpad.setRadius(10);
         touchpad.setBounds(15,15,200,200);
@@ -400,7 +400,9 @@ public class MultiplayerGameScreen implements Screen {
             //Gdx.app.log("DEBUG", health+"");
             if(player.getHealthPoints() != health){
                 player.setHealthPoints(health);
-                hp.changeHP(health);
+                hp.update(health);
+                Gdx.app.log("Debug",health+";"+host);
+                if(health==0)respawn();
             }
         }
 
@@ -537,9 +539,9 @@ public class MultiplayerGameScreen implements Screen {
                 for(CustomLabel l: arr){
                     l.remove();
                 }
-
+ */
                 respawn();
-                */
+
                 collidedEnemyName = "";
                 collidedItemName = "";
             /*
@@ -786,17 +788,18 @@ public class MultiplayerGameScreen implements Screen {
         }
 
         if(alive == 1 && respawn == false){
-            respawn = false;
+            respawn = true;
         }
 
         if(respawn){
             round++;
-
+            Gdx.app.log("Debug","Respawn:"+host);
             announcer.play();
             if(host){
                 server.getItemAndTaken().clear();
                 server.getPlayerAndGodMode().clear();
                 server.getPlayerAndHealth().clear();
+                server.getPlayerAndPosition().clear();
 
                 try {
                     Thread.sleep(1000);
@@ -845,6 +848,7 @@ public class MultiplayerGameScreen implements Screen {
             }
             respawn = false;
         }
+        hp.setPlayer(player);
 
     }
 
