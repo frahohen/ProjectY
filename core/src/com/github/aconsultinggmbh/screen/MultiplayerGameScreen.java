@@ -206,7 +206,7 @@ public class MultiplayerGameScreen implements Screen {
         //** SERVER ** - END
 
         //** GUI ** - START
-        hp= new Healthbar();
+         hp=new Healthbar(player);
         touchpad = new GameTouchpad("data/touchBackground.png","data/touchKnob.png");
         touchpad.setRadius(10);
         touchpad.setBounds(15,15,200,200);
@@ -376,8 +376,17 @@ public class MultiplayerGameScreen implements Screen {
             if(player.getHealthPoints() > 0) {
                 // Ist Accelero aktiv und aktiviert
                 if (Gdx.input.isPeripheralAvailable(Input.Peripheral.Accelerometer) && accelero) {
-                    float accelZ = Gdx.input.getAccelerometerZ() - calib.z; // aktuelle Position - der Ruhelage
-                    float accelY = Gdx.input.getAccelerometerY() - calib.y;
+                    float accelZ = Gdx.input.getAccelerometerZ(); // aktuelle Position - der Ruhelage
+                    if(calib.z>0){
+                        accelZ -=calib.z;
+                        if(accelZ<(calib.z-10))accelZ=calib.z-10;
+                        accelZ*=10/(10-calib.z);
+                    } else if (calib.z < 0) {
+                        accelZ -=calib.z;
+                        if(accelZ>(10+calib.z))accelZ=10+calib.z;
+                        accelZ*=10/(10+calib.z);
+                    }
+                    float accelY = Gdx.input.getAccelerometerY();
                     player.move(accelY, accelZ); // Bewegung des Spielers
                 } else {
                     player.move(touchpad.getTouchpad().getKnobPercentX() * playerSpeed, touchpad.getTouchpad().getKnobPercentY() * playerSpeed);
@@ -400,7 +409,9 @@ public class MultiplayerGameScreen implements Screen {
             //Gdx.app.log("DEBUG", health+"");
             if(player.getHealthPoints() != health){
                 player.setHealthPoints(health);
-                hp.changeHP(health);
+                hp.update(health);
+                Gdx.app.log("Debug",health+";"+host);
+                if(health==0)respawn();
             }
         }
 
@@ -537,9 +548,9 @@ public class MultiplayerGameScreen implements Screen {
                 for(CustomLabel l: arr){
                     l.remove();
                 }
-
+ */
                 respawn();
-                */
+
                 collidedEnemyName = "";
                 collidedItemName = "";
             /*
@@ -786,17 +797,18 @@ public class MultiplayerGameScreen implements Screen {
         }
 
         if(alive == 1 && respawn == false){
-            respawn = false;
+            respawn = true;
         }
 
         if(respawn){
             round++;
-
+            Gdx.app.log("Debug","Respawn:"+host);
             announcer.play();
             if(host){
                 server.getItemAndTaken().clear();
                 server.getPlayerAndGodMode().clear();
                 server.getPlayerAndHealth().clear();
+                server.getPlayerAndPosition().clear();
 
                 try {
                     Thread.sleep(1000);
@@ -845,6 +857,7 @@ public class MultiplayerGameScreen implements Screen {
             }
             respawn = false;
         }
+        hp.setPlayer(player);
 
     }
 

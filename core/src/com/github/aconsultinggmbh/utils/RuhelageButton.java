@@ -59,9 +59,16 @@ public class RuhelageButton extends CustomButton{
     }
 
     private void setRuhelage(){
-        accelZ = Gdx.input.getAccelerometerZ(); // Ruhelage gesetz (Aktuelle Position)
-        accelX = Gdx.input.getAccelerometerX();
-        accelY = Gdx.input.getAccelerometerY();
+        accelZ = Gdx.input.getAccelerometerZ(); // Ruhelage gesetz (Aktuelle Position) nur Neigung wird gesetzt (damit man z.B.: im Liegen spielen kann)
+     //   accelX = Gdx.input.getAccelerometerX();
+     //   accelY = Gdx.input.getAccelerometerY();
+        accelX=0;
+        accelY=0;
+        if(accelZ>5){     //Bewegungsraum maximal auf die Hälfte einschränken
+            accelZ=5;
+        }else if(accelZ<-5){
+            accelZ=-5;
+        }
 
         settings.putFloat("x",accelX); // Speicherung der Ruhe in Settings  Parameter können immer verwendet werden
         settings.putFloat("y",accelY);
