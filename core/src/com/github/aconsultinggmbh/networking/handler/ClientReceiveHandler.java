@@ -1,15 +1,13 @@
 package com.github.aconsultinggmbh.networking.handler;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.Map;
-
 import com.badlogic.gdx.Gdx;
 import com.github.aconsultinggmbh.networking.Client;
 import com.github.aconsultinggmbh.networking.message.Message;
 import com.github.aconsultinggmbh.networking.message.MessageTag;
-import com.github.aconsultinggmbh.point.MapPosition;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 public class ClientReceiveHandler implements Runnable{
 
@@ -70,6 +68,10 @@ public class ClientReceiveHandler implements Runnable{
 					if(message.getLabelMessage().equals(MessageTag.PLAYERHEALTH)){
 						client.setPlayerAndHealth(message.getMessageHashMap().getHashMapIntegerMessage());
 					}
+
+					/*if(message.getLabelMessage().equals(MessageTag.PLAYERSCORE)){
+						client.setPlayerAndScore(message.getMessageHashMap().getHashMapIntegerMessage());
+					}*/
 					
 					if(message.getLabelMessage().equals(MessageTag.ITEMPOSITION)){
 						client.setItemAndPosition(message.getMessageHashMap().getHashMapMapPositionMessage());

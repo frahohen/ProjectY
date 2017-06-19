@@ -30,6 +30,7 @@ public class Client implements Runnable {
     
     private HashMap<String, MapPosition> playerAndPosition;
     private HashMap<String, Integer> playerAndHealth;
+	private HashMap<String, Integer> playerAndScore;
     private HashMap<String, MapPosition> itemAndPosition;
     private HashMap<String, Boolean> itemAndTaken;
     private HashMap<String, Boolean> playerAndGodMode;
@@ -46,6 +47,7 @@ public class Client implements Runnable {
         startGame = false;
         playerAndPosition = new HashMap<String, MapPosition>();
         playerAndHealth = new HashMap<String, Integer>();
+		playerAndScore = new HashMap<String, Integer>();
         itemAndPosition = new HashMap<String, MapPosition>();
         itemAndTaken = new HashMap<String, Boolean>();
         playerAndGodMode = new HashMap<String, Boolean>();
@@ -101,6 +103,14 @@ public class Client implements Runnable {
 
 	public synchronized void setPlayerAndHealth(HashMap<String, Integer> playerAndHealth) {
 		this.playerAndHealth = playerAndHealth;
+	}
+
+	public synchronized HashMap<String, Integer> getPlayerAndScore() {
+		return playerAndScore;
+	}
+
+	public synchronized void setPlayerAndScore(HashMap<String, Integer> playerAndScore) {
+		this.playerAndScore = playerAndScore;
 	}
 
 	public synchronized HashMap<String, MapPosition> getPlayerAndPosition() {

@@ -1,14 +1,13 @@
 package com.github.aconsultinggmbh.networking.handler;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-
-import com.badlogic.gdx.Gdx;
 import com.github.aconsultinggmbh.networking.ServerThread;
 import com.github.aconsultinggmbh.networking.message.Message;
 import com.github.aconsultinggmbh.networking.message.MessageTag;
 import com.github.aconsultinggmbh.point.MapPosition;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 public class ServerReceiveHandler implements Runnable {
 
@@ -57,6 +56,16 @@ public class ServerReceiveHandler implements Runnable {
 						
 						serverThread.getServer().updateClients(message.getLabelMessage());
 					}
+
+					/*if(message.getLabelMessage().equals(MessageTag.PLAYERSCORE)){
+						String stringMessage = message.getStringMessage();
+						String[] stringArray = stringMessage.split(":");
+
+						serverThread.getServer().getPlayerAndScore().put(stringArray[0], Integer.parseInt(stringArray[1]));
+						//Gdx.app.log("DEBUG", stringArray[0]+":"+stringArray[1]);
+
+						serverThread.getServer().updateClients(message.getLabelMessage());
+					}*/
 					
 					if(message.getLabelMessage().equals(MessageTag.ITEMTAKEN)){
 						serverThread.getServer().getItemAndTaken().put(message.getStringMessage(), true);

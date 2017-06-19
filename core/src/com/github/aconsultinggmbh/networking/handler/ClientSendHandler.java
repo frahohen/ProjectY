@@ -1,14 +1,13 @@
 package com.github.aconsultinggmbh.networking.handler;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-
-import com.badlogic.gdx.Gdx;
 import com.github.aconsultinggmbh.networking.Client;
 import com.github.aconsultinggmbh.networking.message.Message;
 import com.github.aconsultinggmbh.networking.message.MessageTag;
 import com.github.aconsultinggmbh.point.MapPosition;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 public class ClientSendHandler implements Runnable {
 
@@ -50,6 +49,12 @@ public class ClientSendHandler implements Runnable {
 					objectOutputStream.writeObject(message);
 					triggerMessage = "";
 				}
+
+				/*if(triggerMessage.equals(MessageTag.PLAYERSCORE)){
+					message = new Message(MessageTag.PLAYERSCORE, stringMessage);
+					objectOutputStream.writeObject(message);
+					triggerMessage = "";
+				}*/
 				
 				if(triggerMessage.equals(MessageTag.ITEMTAKEN)){
 					message = new Message(MessageTag.ITEMTAKEN, stringMessage);
