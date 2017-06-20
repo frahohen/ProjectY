@@ -57,16 +57,6 @@ public class ServerReceiveHandler implements Runnable {
 						serverThread.getServer().updateClients(message.getLabelMessage());
 					}
 
-					/*if(message.getLabelMessage().equals(MessageTag.PLAYERSCORE)){
-						String stringMessage = message.getStringMessage();
-						String[] stringArray = stringMessage.split(":");
-
-						serverThread.getServer().getPlayerAndScore().put(stringArray[0], Integer.parseInt(stringArray[1]));
-						//Gdx.app.log("DEBUG", stringArray[0]+":"+stringArray[1]);
-
-						serverThread.getServer().updateClients(message.getLabelMessage());
-					}*/
-					
 					if(message.getLabelMessage().equals(MessageTag.ITEMTAKEN)){
 						serverThread.getServer().getItemAndTaken().put(message.getStringMessage(), true);
 						serverThread.getServer().updateClients(message.getLabelMessage());
@@ -74,6 +64,11 @@ public class ServerReceiveHandler implements Runnable {
 					
 					if(message.getLabelMessage().equals(MessageTag.PLAYERGODMODE)){
 						serverThread.getServer().getPlayerAndGodMode().put(serverThread.getId()+"", message.isBooleanMessage());
+						serverThread.getServer().updateClients(message.getLabelMessage());
+					}
+
+					if(message.getLabelMessage().equals(MessageTag.GAMEOVER)){
+						serverThread.getServer().getPlayerAndGodMode().put(serverThread.getId()+"", message.isBooleanMessage()); //////
 						serverThread.getServer().updateClients(message.getLabelMessage());
 					}
 					

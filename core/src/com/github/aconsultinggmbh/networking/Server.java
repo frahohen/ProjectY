@@ -22,10 +22,10 @@ public class Server implements Runnable {
     private int numberOfClientsConnected;
     private HashMap<String, MapPosition> playerAndPosition;
     private HashMap<String, Integer> playerAndHealth;
-	private HashMap<String, Integer> playerAndScore;
     private HashMap<String, MapPosition> itemAndPosition;
     private HashMap<String, Boolean> itemAndTaken;
     private HashMap<String, Boolean> playerAndGodMode;
+	private HashMap<String, Boolean> playerAndGameover;
     private HashMap<String, MapPosition> bulletAndPosition;
     private HashMap<String, Boolean> bulletAndExist;
 
@@ -37,10 +37,10 @@ public class Server implements Runnable {
         serverThreads = new ArrayList<ServerThread>();
         playerAndPosition = new HashMap<String, MapPosition>();
         playerAndHealth = new HashMap<String, Integer>();
-		playerAndScore = new HashMap<String, Integer>();
         itemAndPosition = new HashMap<String, MapPosition>();
         itemAndTaken = new HashMap<String, Boolean>();
         playerAndGodMode = new HashMap<String, Boolean>();
+		playerAndGameover = new HashMap<String, Boolean>();
         bulletAndPosition = new HashMap<String, MapPosition>();
         bulletAndExist = new HashMap<String, Boolean>();
     }
@@ -148,14 +148,6 @@ public class Server implements Runnable {
 		this.playerAndHealth = playerAndHealth;
 	}
 
-	public synchronized HashMap<String, Integer> getPlayerAndScore() {
-		return playerAndScore;
-	}
-
-	public synchronized void setPlayerAndScore(HashMap<String, Integer> playerAndScore) {
-		this.playerAndScore = playerAndScore;
-	}
-
 	public synchronized HashMap<String, MapPosition> getItemAndPosition() {
 		return itemAndPosition;
 	}
@@ -178,6 +170,14 @@ public class Server implements Runnable {
 
 	public synchronized void setPlayerAndGodMode(HashMap<String, Boolean> playerAndGodMode) {
 		this.playerAndGodMode = playerAndGodMode;
+	}
+
+	public synchronized HashMap<String, Boolean> getPlayerAndGameover() {
+		return playerAndGameover;
+	}
+
+	public synchronized void setPlayerAndGameover(HashMap<String, Boolean> playerAndGameover) {
+		this.playerAndGameover = playerAndGameover;
 	}
 
 	public synchronized HashMap<String, MapPosition> getBulletAndPosition() {

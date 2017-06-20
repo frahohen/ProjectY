@@ -49,12 +49,6 @@ public class ClientSendHandler implements Runnable {
 					objectOutputStream.writeObject(message);
 					triggerMessage = "";
 				}
-
-				/*if(triggerMessage.equals(MessageTag.PLAYERSCORE)){
-					message = new Message(MessageTag.PLAYERSCORE, stringMessage);
-					objectOutputStream.writeObject(message);
-					triggerMessage = "";
-				}*/
 				
 				if(triggerMessage.equals(MessageTag.ITEMTAKEN)){
 					message = new Message(MessageTag.ITEMTAKEN, stringMessage);
@@ -64,6 +58,12 @@ public class ClientSendHandler implements Runnable {
 				
 				if(triggerMessage.equals(MessageTag.PLAYERGODMODE)){
 					message = new Message(MessageTag.PLAYERGODMODE, booleanMessage);
+					objectOutputStream.writeObject(message);
+					triggerMessage = "";
+				}
+
+				if(triggerMessage.equals(MessageTag.GAMEOVER)){
+					message = new Message(MessageTag.GAMEOVER, booleanMessage);
 					objectOutputStream.writeObject(message);
 					triggerMessage = "";
 				}

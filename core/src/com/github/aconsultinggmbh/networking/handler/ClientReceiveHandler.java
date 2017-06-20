@@ -68,10 +68,6 @@ public class ClientReceiveHandler implements Runnable{
 					if(message.getLabelMessage().equals(MessageTag.PLAYERHEALTH)){
 						client.setPlayerAndHealth(message.getMessageHashMap().getHashMapIntegerMessage());
 					}
-
-					/*if(message.getLabelMessage().equals(MessageTag.PLAYERSCORE)){
-						client.setPlayerAndScore(message.getMessageHashMap().getHashMapIntegerMessage());
-					}*/
 					
 					if(message.getLabelMessage().equals(MessageTag.ITEMPOSITION)){
 						client.setItemAndPosition(message.getMessageHashMap().getHashMapMapPositionMessage());
@@ -83,6 +79,10 @@ public class ClientReceiveHandler implements Runnable{
 					
 					if(message.getLabelMessage().equals(MessageTag.PLAYERGODMODE)){
 						client.setPlayerAndGodMode(message.getMessageHashMap().getHashMapBooleanMessage());
+					}
+
+					if(message.getLabelMessage().equals(MessageTag.GAMEOVER)){
+						client.setPlayerAndGameover(message.getMessageHashMap().getHashMapBooleanMessage());
 					}
 					
 					if(message.getLabelMessage().equals(MessageTag.PLAYERBULLETEXIST)){

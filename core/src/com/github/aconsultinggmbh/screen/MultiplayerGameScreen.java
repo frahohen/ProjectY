@@ -10,11 +10,13 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.github.aconsultinggmbh.gameobject.Bullet;
 import com.github.aconsultinggmbh.gameobject.GameObject;
@@ -84,6 +86,7 @@ public class MultiplayerGameScreen implements Screen {
 
     private long start, end;
     private boolean flag = true;
+    private boolean gameover = false;
 
     //Added
     //private boolean isMouse;
@@ -555,6 +558,9 @@ public class MultiplayerGameScreen implements Screen {
                     if (client.getPlayerAndGodMode().containsKey(enemies.get(i).getName())) {
                         godMode = client.getPlayerAndGodMode().get(enemies.get(i).getName());
                     }
+                    if (client.getPlayerAndGameover().containsKey(enemies.get(i).getName())) {
+                        gameover = true;
+                    }
 
                     if (!godMode) {
                         health = health - 25;
@@ -670,6 +676,33 @@ public class MultiplayerGameScreen implements Screen {
         }
 
         map.showFloorMapBounds(false,camera,scale);
+
+        if(score >= 50){
+            client.getClientSendHandler().updateClients(MessageTag.GAMEOVER, true);
+            gameover = true;
+        }
+
+        //check if others have gamover
+        //if (client.getPlayerAndGameover().containsKey(enemies.get(i).getName())) {
+        //    godMode = client.getPlayerAndGodMode().get(enemies.get(i).getName());
+        //}
+
+        if(gameover){
+            BitmapFont font = new BitmapFont();
+            font.getData().setScale(5.0f);
+
+            Label.LabelStyle labelStyle = new Label.LabelStyle( font, Color.BLUE);
+            Label  l1 = new Label("GAME OVER", labelStyle);
+            l1.setWidth(400);
+            l1.setPosition(Gdx.graphics.getWidth()- l1.getWidth() -900, Gdx.graphics.getHeight() -400);
+
+            Label  l2 = new Label("SOMEONE IS INSANE", labelStyle);
+            l2.setWidth(400);
+            l2.setPosition(Gdx.graphics.getWidth()- l2.getWidth() -900, Gdx.graphics.getHeight() -500);
+
+            stage.addActor(l1);
+            stage.addActor(l2);
+        }
 
         // Draw stage for touchpad
         stage.act(delta);

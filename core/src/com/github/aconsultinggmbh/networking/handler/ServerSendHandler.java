@@ -78,16 +78,6 @@ public class ServerSendHandler implements Runnable {
 						objectOutputStream.writeObject(message);
 						serverThread.setTriggerMessage("");
 	        	}
-
-				/*if(serverThread.getTriggerMessage().equals(MessageTag.PLAYERSCORE)){
-
-					MessageHashMap hashMap = new MessageHashMap();
-					hashMap.setHashMapIntegerMessage(serverThread.getServer().getPlayerAndScore());
-					message = new Message(MessageTag.PLAYERSCORE, hashMap);
-
-					objectOutputStream.writeObject(message);
-					serverThread.setTriggerMessage("");
-				}*/
 	        	
 	        	if(serverThread.getTriggerMessage().equals(MessageTag.ITEMPOSITION)){
 	        		
@@ -116,6 +106,15 @@ public class ServerSendHandler implements Runnable {
 	        		objectOutputStream.writeObject(message);
 	        		serverThread.setTriggerMessage("");
 	        	}
+
+				if(serverThread.getTriggerMessage().equals(MessageTag.GAMEOVER)){
+					MessageHashMap hashMap = new MessageHashMap();
+					hashMap.setHashMapBooleanMessage(serverThread.getServer().getPlayerAndGodMode()); ///////
+					message = new Message(MessageTag.GAMEOVER, hashMap);
+
+					objectOutputStream.writeObject(message);
+					serverThread.setTriggerMessage("");
+				}
 	        	
 	        	if(serverThread.getTriggerMessage().equals(MessageTag.PLAYERBULLETEXIST)){
 	        		MessageHashMap hashMap = new MessageHashMap();
