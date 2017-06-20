@@ -1,14 +1,13 @@
 package com.github.aconsultinggmbh.networking.handler;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-
-import com.badlogic.gdx.Gdx;
 import com.github.aconsultinggmbh.networking.ServerThread;
 import com.github.aconsultinggmbh.networking.message.Message;
 import com.github.aconsultinggmbh.networking.message.MessageTag;
 import com.github.aconsultinggmbh.point.MapPosition;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 public class ServerReceiveHandler implements Runnable {
 
@@ -57,7 +56,7 @@ public class ServerReceiveHandler implements Runnable {
 						
 						serverThread.getServer().updateClients(message.getLabelMessage());
 					}
-					
+
 					if(message.getLabelMessage().equals(MessageTag.ITEMTAKEN)){
 						serverThread.getServer().getItemAndTaken().put(message.getStringMessage(), true);
 						serverThread.getServer().updateClients(message.getLabelMessage());
@@ -65,6 +64,11 @@ public class ServerReceiveHandler implements Runnable {
 					
 					if(message.getLabelMessage().equals(MessageTag.PLAYERGODMODE)){
 						serverThread.getServer().getPlayerAndGodMode().put(serverThread.getId()+"", message.isBooleanMessage());
+						serverThread.getServer().updateClients(message.getLabelMessage());
+					}
+
+					if(message.getLabelMessage().equals(MessageTag.GAMEOVER)){
+						serverThread.getServer().getPlayerAndGodMode().put(serverThread.getId()+"", message.isBooleanMessage()); //////
 						serverThread.getServer().updateClients(message.getLabelMessage());
 					}
 					

@@ -27,12 +27,14 @@ public class Client implements Runnable {
     
     private int numberOfClientsConnected;
     private boolean startGame;
+	private boolean endGame;
     
     private HashMap<String, MapPosition> playerAndPosition;
     private HashMap<String, Integer> playerAndHealth;
     private HashMap<String, MapPosition> itemAndPosition;
     private HashMap<String, Boolean> itemAndTaken;
     private HashMap<String, Boolean> playerAndGodMode;
+	private HashMap<String, Boolean> playerAndGameover;
     private HashMap<String, MapPosition> bulletAndPosition;
     private HashMap<String, Boolean> bulletAndExist;
     private int id;
@@ -44,13 +46,16 @@ public class Client implements Runnable {
         this.ip = ip;
         this.port = port;
         startGame = false;
+		endGame = true;
         playerAndPosition = new HashMap<String, MapPosition>();
         playerAndHealth = new HashMap<String, Integer>();
         itemAndPosition = new HashMap<String, MapPosition>();
         itemAndTaken = new HashMap<String, Boolean>();
         playerAndGodMode = new HashMap<String, Boolean>();
+		playerAndGameover = new HashMap<String, Boolean>();
         bulletAndPosition = new HashMap<String, MapPosition>();
         bulletAndExist = new HashMap<String, Boolean>();
+
     }
 
     @Override
@@ -135,6 +140,14 @@ public class Client implements Runnable {
 		this.playerAndGodMode = playerAndGodMode;
 	}
 
+	public synchronized HashMap<String, Boolean> getPlayerAndGameover() {
+		return playerAndGameover;
+	}
+
+	public synchronized void setPlayerAndGameover(HashMap<String, Boolean> playerAndGameover) {
+		this.playerAndGameover = playerAndGameover;
+	}
+
 	public synchronized HashMap<String, MapPosition> getBulletAndPosition() {
 		return bulletAndPosition;
 	}
@@ -157,6 +170,14 @@ public class Client implements Runnable {
 
 	public void setStartGame(boolean startGame) {
 		this.startGame = startGame;
+	}
+
+	public boolean isEndGame() {
+		return endGame;
+	}
+
+	public void setEndGame(boolean endGame) {
+		this.endGame = endGame;
 	}
 
 	public int getNumberOfClientsConnected() {

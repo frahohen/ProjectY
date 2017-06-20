@@ -1,15 +1,13 @@
 package com.github.aconsultinggmbh.networking.handler;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.Map;
-
 import com.badlogic.gdx.Gdx;
 import com.github.aconsultinggmbh.networking.Client;
 import com.github.aconsultinggmbh.networking.message.Message;
 import com.github.aconsultinggmbh.networking.message.MessageTag;
-import com.github.aconsultinggmbh.point.MapPosition;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 public class ClientReceiveHandler implements Runnable{
 
@@ -82,6 +80,10 @@ public class ClientReceiveHandler implements Runnable{
 					if(message.getLabelMessage().equals(MessageTag.PLAYERGODMODE)){
 						client.setPlayerAndGodMode(message.getMessageHashMap().getHashMapBooleanMessage());
 					}
+
+					if(message.getLabelMessage().equals(MessageTag.GAMEOVER)){
+						client.setPlayerAndGameover(message.getMessageHashMap().getHashMapBooleanMessage());
+					}
 					
 					if(message.getLabelMessage().equals(MessageTag.PLAYERBULLETEXIST)){
 						client.setBulletAndExist(message.getMessageHashMap().getHashMapBooleanMessage());
@@ -94,6 +96,7 @@ public class ClientReceiveHandler implements Runnable{
 				    	    Gdx.app.log("DEBUG", key + "!" + value);
 						}
 						*/
+						client.setEndGame(true);
 					}
 					
 					if(message.getLabelMessage().equals(MessageTag.PLAYERBULLETPOSITION)){

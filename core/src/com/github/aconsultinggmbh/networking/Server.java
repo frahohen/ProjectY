@@ -25,6 +25,7 @@ public class Server implements Runnable {
     private HashMap<String, MapPosition> itemAndPosition;
     private HashMap<String, Boolean> itemAndTaken;
     private HashMap<String, Boolean> playerAndGodMode;
+	private HashMap<String, Boolean> playerAndGameover;
     private HashMap<String, MapPosition> bulletAndPosition;
     private HashMap<String, Boolean> bulletAndExist;
 
@@ -39,6 +40,7 @@ public class Server implements Runnable {
         itemAndPosition = new HashMap<String, MapPosition>();
         itemAndTaken = new HashMap<String, Boolean>();
         playerAndGodMode = new HashMap<String, Boolean>();
+		playerAndGameover = new HashMap<String, Boolean>();
         bulletAndPosition = new HashMap<String, MapPosition>();
         bulletAndExist = new HashMap<String, Boolean>();
     }
@@ -82,9 +84,14 @@ public class Server implements Runnable {
         	}
         	
         	if(labelMessage.equals(MessageTag.PLAYERHEALTH)){
-        		//Create for every Server Thread a Message that is been send
-        		serverThreads.get(i).setTriggerMessage(labelMessage);
-        	}
+				//Create for every Server Thread a Message that is been send
+				serverThreads.get(i).setTriggerMessage(labelMessage);
+			}
+
+			/*if(labelMessage.equals(MessageTag.PLAYERSCORE)){
+				//Create for every Server Thread a Message that is been send
+				serverThreads.get(i).setTriggerMessage(labelMessage);
+			}*/
         	
         	if(labelMessage.equals(MessageTag.ITEMPOSITION)){
         		//Create for every Server Thread a Message that is been send
@@ -163,6 +170,14 @@ public class Server implements Runnable {
 
 	public synchronized void setPlayerAndGodMode(HashMap<String, Boolean> playerAndGodMode) {
 		this.playerAndGodMode = playerAndGodMode;
+	}
+
+	public synchronized HashMap<String, Boolean> getPlayerAndGameover() {
+		return playerAndGameover;
+	}
+
+	public synchronized void setPlayerAndGameover(HashMap<String, Boolean> playerAndGameover) {
+		this.playerAndGameover = playerAndGameover;
 	}
 
 	public synchronized HashMap<String, MapPosition> getBulletAndPosition() {

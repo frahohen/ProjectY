@@ -1,16 +1,13 @@
 package com.github.aconsultinggmbh.networking.handler;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.HashMap;
-
-import com.badlogic.gdx.Gdx;
 import com.github.aconsultinggmbh.networking.ServerThread;
 import com.github.aconsultinggmbh.networking.message.Message;
 import com.github.aconsultinggmbh.networking.message.MessageHashMap;
 import com.github.aconsultinggmbh.networking.message.MessageTag;
-import com.github.aconsultinggmbh.point.MapPosition;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 public class ServerSendHandler implements Runnable {
 
@@ -73,13 +70,13 @@ public class ServerSendHandler implements Runnable {
 	        	}
 	        	
 	        	if(serverThread.getTriggerMessage().equals(MessageTag.PLAYERHEALTH)){
-	        		
-	        		MessageHashMap hashMap = new MessageHashMap();
-	        		hashMap.setHashMapIntegerMessage(serverThread.getServer().getPlayerAndHealth());
-	        		message = new Message(MessageTag.PLAYERHEALTH, hashMap);
-	        		
-	        		objectOutputStream.writeObject(message);
-	        		serverThread.setTriggerMessage("");
+
+						MessageHashMap hashMap = new MessageHashMap();
+						hashMap.setHashMapIntegerMessage(serverThread.getServer().getPlayerAndHealth());
+						message = new Message(MessageTag.PLAYERHEALTH, hashMap);
+
+						objectOutputStream.writeObject(message);
+						serverThread.setTriggerMessage("");
 	        	}
 	        	
 	        	if(serverThread.getTriggerMessage().equals(MessageTag.ITEMPOSITION)){
@@ -109,6 +106,15 @@ public class ServerSendHandler implements Runnable {
 	        		objectOutputStream.writeObject(message);
 	        		serverThread.setTriggerMessage("");
 	        	}
+
+				if(serverThread.getTriggerMessage().equals(MessageTag.GAMEOVER)){
+					MessageHashMap hashMap = new MessageHashMap();
+					hashMap.setHashMapBooleanMessage(serverThread.getServer().getPlayerAndGodMode()); ///////
+					message = new Message(MessageTag.GAMEOVER, hashMap);
+
+					objectOutputStream.writeObject(message);
+					serverThread.setTriggerMessage("");
+				}
 	        	
 	        	if(serverThread.getTriggerMessage().equals(MessageTag.PLAYERBULLETEXIST)){
 	        		MessageHashMap hashMap = new MessageHashMap();

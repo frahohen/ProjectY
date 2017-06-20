@@ -10,6 +10,7 @@ public final class MessageTag {
 	public static final String ITEMPOSITION = "ITEMPOSITION";
 	public static final String ITEMTAKEN = "ITEMTAKEN";
 	public static final String PLAYERGODMODE = "PLAYERGODMODE";
+	public static final String GAMEOVER = "GAMEOVER";
 	public static final String PLAYERBULLETPOSITION = "PLAYERBULLETPOSITION";
 	public static final String PLAYERBULLETEXIST = "PLAYERBULLETEXIST";
 }
