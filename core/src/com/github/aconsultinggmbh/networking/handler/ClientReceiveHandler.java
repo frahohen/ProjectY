@@ -96,6 +96,7 @@ public class ClientReceiveHandler implements Runnable{
 				    	    Gdx.app.log("DEBUG", key + "!" + value);
 						}
 						*/
+						client.setEndGame(true);
 					}
 					
 					if(message.getLabelMessage().equals(MessageTag.PLAYERBULLETPOSITION)){

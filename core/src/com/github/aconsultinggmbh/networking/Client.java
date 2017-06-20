@@ -27,6 +27,7 @@ public class Client implements Runnable {
     
     private int numberOfClientsConnected;
     private boolean startGame;
+	private boolean endGame;
     
     private HashMap<String, MapPosition> playerAndPosition;
     private HashMap<String, Integer> playerAndHealth;
@@ -45,6 +46,7 @@ public class Client implements Runnable {
         this.ip = ip;
         this.port = port;
         startGame = false;
+		endGame = true;
         playerAndPosition = new HashMap<String, MapPosition>();
         playerAndHealth = new HashMap<String, Integer>();
         itemAndPosition = new HashMap<String, MapPosition>();
@@ -53,6 +55,7 @@ public class Client implements Runnable {
 		playerAndGameover = new HashMap<String, Boolean>();
         bulletAndPosition = new HashMap<String, MapPosition>();
         bulletAndExist = new HashMap<String, Boolean>();
+
     }
 
     @Override
@@ -167,6 +170,14 @@ public class Client implements Runnable {
 
 	public void setStartGame(boolean startGame) {
 		this.startGame = startGame;
+	}
+
+	public boolean isEndGame() {
+		return endGame;
+	}
+
+	public void setEndGame(boolean endGame) {
+		this.endGame = endGame;
 	}
 
 	public int getNumberOfClientsConnected() {

@@ -677,15 +677,23 @@ public class MultiplayerGameScreen implements Screen {
 
         map.showFloorMapBounds(false,camera,scale);
 
-        if(score >= 50){
+        if(score >= 50 ){
             client.getClientSendHandler().updateClients(MessageTag.GAMEOVER, true);
             gameover = true;
         }
 
         //check if others have gamover
-        //if (client.getPlayerAndGameover().containsKey(enemies.get(i).getName())) {
-        //    godMode = client.getPlayerAndGodMode().get(enemies.get(i).getName());
-        //}
+        if(client.isEndGame()) {
+            for (Map.Entry<String, Boolean> entry : client.getPlayerAndGameover().entrySet()) {
+                String key = entry.getKey();
+                boolean value = entry.getValue();
+
+                if (value) {
+                    gameover = true;
+                }
+            }
+            client.setEndGame(false);
+        }
 
         if(gameover){
             BitmapFont font = new BitmapFont();
@@ -702,6 +710,20 @@ public class MultiplayerGameScreen implements Screen {
 
             stage.addActor(l1);
             stage.addActor(l2);
+
+            if(flag){
+                flag = false;
+                start = System.currentTimeMillis();
+            }
+            end = System.currentTimeMillis();
+
+            //5 sec anzeigen
+            if((end - start) >= 5000) {
+                flag= true;
+                dispose();
+                screenManager.setScreen(new MainMenuScreen(screenManager));
+
+            }
         }
 
         // Draw stage for touchpad
