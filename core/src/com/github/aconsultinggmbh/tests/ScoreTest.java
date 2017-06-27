@@ -1,6 +1,8 @@
 package com.github.aconsultinggmbh.tests;
 
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.github.aconsultinggmbh.gameobject.Bullet;
 import com.github.aconsultinggmbh.gameobject.GameObject;
 import com.github.aconsultinggmbh.gameobject.Player;
@@ -15,7 +17,7 @@ import static org.junit.Assert.assertEquals;
 public class ScoreTest extends GameTest {
 
     private ArrayList<GameObject> players;
-    private String path = "core/src/com/github/aconsultinggmbh/tests/resources/item.png";
+    private String path;
     private Player player;
     private ArrayList<GameObject> bullets;
     private Bullet bullet;
@@ -23,6 +25,9 @@ public class ScoreTest extends GameTest {
 
     @Before
     public void setup() {
+
+        FileHandle fh = Gdx.files.internal("android/assets/item.png");
+        this.path = fh.file().getAbsolutePath().replace("core/","");
 
         players = new ArrayList<GameObject>();
         player = new Player(path, 0, 0, "Player");
@@ -45,14 +50,10 @@ public class ScoreTest extends GameTest {
 
         bullet.setEnemyName(player.getName());
         assertEquals(10, bullet.checkScore(score));
-
-      assertEquals(1,1);
-
     }
 
     @Test
     public void initBulletTest() {
-
         String name ="TestBullet";
         Bullet b= new Bullet(path,0,0,name);
         assertEquals(0f,b.getDirectionX(),0);
@@ -60,16 +61,16 @@ public class ScoreTest extends GameTest {
         assertEquals(name,b.getName());
         assertEquals("",b.getEnemyName());
     }
-    @Test
 
+    @Test
     public void bulletEnemyNameTest() {
         Bullet b= new Bullet(path,0,0,"Bullet");
         String te="TestEnemy";
         b.setEnemyName(te);
         assertEquals(te,b.getEnemyName());
     }
-    @Test
 
+    @Test
     public void bulletDirectionTest() {
         Bullet b= new Bullet(path,0,0,"Bullet");
         bullet.setDirectionX(20);

@@ -16,19 +16,17 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 public class Healthbar {
     final int height=75;            //Höhe des Balkens
     final int width=700;            //Breite des Balkens
-    final int maxHP=100;            //Maximale Anzahl an Leben
     SpriteBatch batch;
     ProgressBar health;
-    int currentHp=maxHP;            //Aktuelle Leben
-
+    Player mainPlayer;
 
    // Texture background = new Texture("HealthBarBackground.png");
     //Texture hpTexture = new Texture("HealthBar.png");
     ProgressBar.ProgressBarStyle barStyle;
     Skin skin;
 
-    public Healthbar(){                                                                 //Erstellt den Lebensbalken
-
+    public Healthbar(Player player){                                                                 //Erstellt den Lebensbalken
+        mainPlayer=player;
        barStyle = new ProgressBar.ProgressBarStyle();
         skin = new Skin();
         Pixmap pixmap = new Pixmap(10, 10, Pixmap.Format.RGBA8888);
@@ -38,28 +36,38 @@ public class Healthbar {
 
        // TextureRegionDrawable textureBar = new TextureRegionDrawable(new TextureRegion(hpTexture));
        //Balken erzeugen
-        barStyle = new ProgressBarStyle(skin.newDrawable("white", Color.DARK_GRAY), skin.newDrawable("white",Color.RED));//erste farbe: "verlorene" HP, zweite Farbe: aktuelle Hp
-        barStyle.knob.setMinHeight(height);
-        barStyle.background.setMinHeight(height);
-        barStyle.knobBefore = barStyle.knob;
-        barStyle.knob.setMinWidth(0);
-        health = new ProgressBar(0f, maxHP, 1f, false, barStyle);
+       // health = new ProgressBar(0f, maxHP, 1f, false, barStyle);
+        health = new ProgressBar(0f, player.getHealthPoints(), 1f, false, barStyle);
+        setStyle(Color.RED);
         health.setWidth(width);
 
         //Balken oben mittig platzieren
         health.setPosition(Gdx.graphics.getWidth()/2-width/2, Gdx.graphics.getHeight()-35-height);
-        health.setValue(currentHp);             //Aktuelle Leben Anzeigen
+      //  health.setValue(currentHp);             //Aktuelle Leben Anzeigen
+        health.setValue(player.getHealthPoints());
         health.validate();
 
     }
+    public void update(int hp){
+        health.setValue(hp);
+    }
 
-    public void changeHP(int delta){            //Veringert aktuelle Hitpoints um den Wert delta, negatives delta "heilt" den Spieler
-        currentHp-=delta;
-        if(currentHp>maxHP)currentHp=maxHP;     //Maximale HP-Anzahl kann nicht überschritten werden
-        if(currentHp>0){
-            health.setValue(currentHp);
+    public void setStyle(Color color) {
+        barStyle = new ProgressBarStyle(skin.newDrawable("white", Color.DARK_GRAY), skin.newDrawable("white",color));//erste farbe: "verlorene" HP, zweite Farbe: aktuelle Hp
+        barStyle.knob.setMinHeight(height);
+        barStyle.background.setMinHeight(height);
+        barStyle.knobBefore = barStyle.knob;
+        barStyle.knob.setMinWidth(0);
+        health.setStyle(barStyle);
+    }
+
+   /* public void changeHP(int delta){            //Veringert aktuelle Hitpoints um den Wert delta, negatives delta "heilt" den Spieler
+        currentHp=delta;
+        if(currentHp>maxHP){
+            currentHp=maxHP;     //Maximale HP-Anzahl kann nicht Ã¼berschritten werden
+
         }else{
-            health.setValue(0);
+            health.setValue(currentHp);
 
             //DO KILL THINGY HERE
             //Wird erst Implementiert
@@ -67,15 +75,19 @@ public class Healthbar {
         }
 
 
-    }
+    }*/
     public ProgressBar getBar(){
         return health;
     }
-    public int getCurrentHp(){
+    /*public int getCurrentHp(){
         return currentHp;
     }
     public int getMaxHP(){
         return maxHP;
+    }*/
+    public void setPlayer(Player player){
+        mainPlayer=player;
+        health.setValue(mainPlayer.getHealthPoints());
     }
 
 

@@ -1,6 +1,5 @@
 package com.github.aconsultinggmbh.point;
 
-
 public class FloorPoint {
 
     private float x;

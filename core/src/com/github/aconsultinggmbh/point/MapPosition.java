@@ -1,12 +1,13 @@
 package com.github.aconsultinggmbh.point;
 
+import java.io.Serializable;
 
-public class SpawnPoint {
+public class MapPosition implements Serializable {
 
     private float x;
     private float y;
 
-    public SpawnPoint(float x, float y) {
+    public MapPosition(float x, float y) {
         this.x = x;
         this.y = y;
     }
