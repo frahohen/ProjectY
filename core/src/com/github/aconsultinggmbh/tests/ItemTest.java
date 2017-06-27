@@ -1,5 +1,7 @@
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
+package com.github.aconsultinggmbh.tests;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.github.aconsultinggmbh.gameobject.GameObject;
 import com.github.aconsultinggmbh.gameobject.Item;
 import com.github.aconsultinggmbh.gameobject.ItemInvulnerability;
@@ -11,20 +13,21 @@ import org.junit.Test;
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
-public class ItemTest extends GameTest{
+public class ItemTest extends GameTest {
     private Item item;
     private ItemInvulnerability itemInvulnerability;
     private ArrayList<GameObject> items;
     private ArrayList<GameObject> players;
-    private String path = "core/src/com/github/aconsultinggmbh/test/resources/item.png";
+    private String path;
     private Player player;
 
     @Before
     public void setup() {
+
+        FileHandle fh = Gdx.files.internal("android/assets/item.png");
+        this.path = fh.file().getAbsolutePath().replace("core/","");
+
         item = new Item(path, 0,0, "Item");
         itemInvulnerability = new ItemInvulnerability(path, 0,0, "Item");
 
@@ -38,10 +41,9 @@ public class ItemTest extends GameTest{
         players.add(player);
     }
 
-    @Test
+   @Test
     public void testCollideWithItem(){ //item with item
         Item newItem = new Item(path, 0,0, "NewItem");
-
         assertEquals(
                 item.getName(),
                 newItem.collideWithObject(items)
@@ -54,8 +56,7 @@ public class ItemTest extends GameTest{
 
     @Test
     public void testCollideWithPlayer (){ //player mit item
-        Item newItem = new Item(path, 0,0, "NewItem");
-
+       Item newItem = new Item(path, 0,0, "NewItem");
         assertEquals(
                 player.getName(),
                 newItem.collideWithObject(players)

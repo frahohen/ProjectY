@@ -78,8 +78,25 @@ project(":android") {
 
 project(":core") {
     apply plugin: "java"
+    apply plugin: "jacoco"
 
-	sourceSets.test.java.srcDirs = ["src/com/github/aconsultinggmbh/test"]
+    test {
+        finalizedBy jacocoTestReport
+    }
+
+
+    jacoco {
+        toolVersion = "0.7.7.201606060606"
+    }
+
+    jacocoTestReport {
+        reports {
+            xml.enabled false
+            csv.enabled false
+            html.destination "${buildDir}/jacocoHtml"
+        }
+    }
+	sourceSets.test.java.srcDirs = ["src"]
 
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"

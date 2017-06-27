@@ -3,16 +3,16 @@ package com.github.aconsultinggmbh.screen;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.github.aconsultinggmbh.utils.CustomButton;
+import com.github.aconsultinggmbh.utils.StyleHandler;
 
 
 public class MainMenuScreen implements Screen {
@@ -23,10 +23,12 @@ public class MainMenuScreen implements Screen {
     private TextureAtlas atlas;
     private Skin skin;
     private Table table;
-    private TextButton buttonExit, buttonCreateGame, buttonJoinGame, buttonSettings;
-    private BitmapFont font;
+    private CustomButton buttonExit, buttonCreateGame, buttonJoinGame, buttonSettings;
+    //private BitmapFont font;
+    private Sound menuSound;
 
     public MainMenuScreen(ProjectY screenManager) {
+       menuSound=Gdx.audio.newSound(Gdx.files.internal("heartbeat.wav"));
         this.screenManager = screenManager;
         create();
     }
@@ -37,23 +39,14 @@ public class MainMenuScreen implements Screen {
 
         stage = new Stage();
 
-        atlas = new TextureAtlas("button/button.pack");
+       atlas = new TextureAtlas("button/button.pack");
         skin = new Skin(atlas);
 
         table = new Table(skin);
         table.setBounds(0,0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        font = new BitmapFont();
-        font.getData().setScale(5.0f);
 
-        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
-        textButtonStyle.up = skin.getDrawable("buttonOff");
-        textButtonStyle.down = skin.getDrawable("buttonOn");
-        textButtonStyle.font = font;
-        textButtonStyle.fontColor = Color.WHITE;
-
-        buttonCreateGame = new TextButton("Spiel Erstellen", textButtonStyle);
-        buttonCreateGame.pad(20);
+        buttonCreateGame = new CustomButton("Singleplayer");
         buttonCreateGame.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -63,31 +56,27 @@ public class MainMenuScreen implements Screen {
             }
         });
 
-        buttonJoinGame = new TextButton("Spiel Beitreten", textButtonStyle);
-        buttonJoinGame.pad(20);
+        buttonJoinGame = new CustomButton("Multiplayer");
         buttonJoinGame.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 Gdx.app.log("DEBUG", "Pressed");
-
+                screenManager.setScreen(new MultiplayerMenuScreen(screenManager));
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
 
-        buttonSettings = new TextButton("Einstellungen", textButtonStyle);
-        buttonSettings.pad(20);
+        buttonSettings = new CustomButton("Einstellungen");
         buttonSettings.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 Gdx.app.log("DEBUG", "Pressed");
-
                 screenManager.setScreen(new SettingsScreen(screenManager)); // öffnen den Einstellungs View
                 return super.touchDown(event, x, y, pointer, button); //Button irgendwas
             }
         });
 
-        buttonExit = new TextButton("Spiel Beenden", textButtonStyle);
-        buttonExit.pad(20);
+        buttonExit = new CustomButton("Spiel Beenden");
         buttonExit.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -97,17 +86,17 @@ public class MainMenuScreen implements Screen {
             }
         });
 
-        table.add(buttonCreateGame).width(600).pad(10);
+        table.add(buttonCreateGame).width(StyleHandler.getButtonWidth()).pad(10);
         table.row();
-        table.add(buttonJoinGame).width(600).pad(10);
+        table.add(buttonJoinGame).width(StyleHandler.getButtonWidth()).pad(10);
         table.row();
-        table.add(buttonSettings).width(600).pad(10);
+        table.add(buttonSettings).width(StyleHandler.getButtonWidth()).pad(10);
         table.row();
-        table.add(buttonExit).width(600).pad(10);
+        table.add(buttonExit).width(StyleHandler.getButtonWidth()).pad(10);
         //table.debug();
         stage.addActor(table);
         Gdx.input.setInputProcessor(stage);
-
+      //  menuSound.loop(1f);
     }
 
     @Override

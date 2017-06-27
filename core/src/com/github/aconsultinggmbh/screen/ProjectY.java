@@ -1,7 +1,6 @@
 package com.github.aconsultinggmbh.screen;
 
 import com.badlogic.gdx.Game;
-import com.github.aconsultinggmbh.screen.GameScreen;
 
 public class ProjectY extends Game {
 
@@ -10,8 +9,7 @@ public class ProjectY extends Game {
 
 	@Override
 	public void create() {
-
-		this.setScreen(new MainMenuScreen(this));
+		this.setScreen(new SplashScreen(this));
 	}
 
 	@Override

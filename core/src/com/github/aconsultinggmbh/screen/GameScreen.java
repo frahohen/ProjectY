@@ -1,10 +1,12 @@
 package com.github.aconsultinggmbh.screen;
 
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -15,7 +17,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Timer;
@@ -28,10 +29,22 @@ import com.github.aconsultinggmbh.gameobject.Player;
 import com.github.aconsultinggmbh.multiplayer.client.ClientProgram;
 import com.github.aconsultinggmbh.multiplayer.server.ServerProgram;
 import com.github.aconsultinggmbh.map.GameMap;
+import com.github.aconsultinggmbh.networking.Client;
+import com.github.aconsultinggmbh.networking.Server;
+import com.github.aconsultinggmbh.utils.CustomButton;
+import com.github.aconsultinggmbh.utils.CustomLabel;
 import com.github.aconsultinggmbh.utils.GameTouchpad;
 
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.List;
 import java.util.Random;
+
 
 public class GameScreen implements Screen {
 
@@ -41,6 +54,10 @@ public class GameScreen implements Screen {
     private OrthographicCamera camera;
     private SpriteBatch batch;
     private Stage stage;
+
+    private boolean menuIsActive=false;
+
+    private boolean scoreboardIsActive=false;
 
     private GameTouchpad touchpad;
 
@@ -55,18 +72,26 @@ public class GameScreen implements Screen {
     private float playerSpeed = 5.0f;
     private float scale = 6.0f;
 
-    private TextureAtlas atlas;
-    private Skin skin;
-    private TextButton buttonFire;
-    private BitmapFont font;
+   // private TextureAtlas atlas;
+   // private Skin skin;
+    private CustomButton buttonFire, buttonScore,buttonMenue;
+   // private BitmapFont font;
 
-    private Label labelScore;
-    private Label labelRound;
+    ScoreBoard sb;
+    final GameScreen gameScreen=this;
+
+    private CustomLabel labelScore;
+    private CustomLabel labelRound;
     private int score;
     private int round;
 
+    private Sound fireSound,announcer;
+
     private String collidedItemName;
     private String collidedEnemyName;
+
+    private long start, end;
+    private boolean flag = true;
 
     public GameScreen(ProjectY screenManager) {
         this.screenManager = screenManager;
@@ -82,8 +107,19 @@ public class GameScreen implements Screen {
         calib.set(x,y,z);
         accelero=settings.getBoolean("accelero",false);
     }
+
+
+    private void soundsInit(){
+        fireSound= Gdx.audio.newSound(Gdx.files.internal("Bulletshot.wav"));
+        announcer= Gdx.audio.newSound(Gdx.files.internal("roundstart_announcer.wav"));
+    }
+
+
     private void create(){
 
+        Gdx.app.setLogLevel(Application.LOG_DEBUG);
+
+        soundsInit();
 
         calib=new Vector3();
         batch = new SpriteBatch();
@@ -106,7 +142,7 @@ public class GameScreen implements Screen {
         );
 
         player.setRender(true);
-        hp= new Healthbar();
+        hp= new Healthbar(player);
         enemies = new ArrayList<GameObject>();
         for(int i = 1; i < map.getSpawnMap().getSize(); i++){
             enemies.add(
@@ -144,7 +180,7 @@ public class GameScreen implements Screen {
         touchpad.setPosition(Gdx.graphics.getWidth()- touchpad.getTouchpad().getWidth() -20, 20);
 
         stage = new Stage(new ScreenViewport(), batch);
-
+/*
         // Button for shooting and Score
         atlas = new TextureAtlas("button/button.pack");
         skin = new Skin(atlas);
@@ -157,28 +193,77 @@ public class GameScreen implements Screen {
         textButtonStyle.down = skin.getDrawable("buttonOn");
         textButtonStyle.font = font;
         textButtonStyle.fontColor = Color.WHITE;
-
+*/
         score = 0;
-        Label.LabelStyle labelStyle = new Label.LabelStyle( font, Color.WHITE);
-        labelScore = new Label("Score: "+score, labelStyle);
-        labelScore.setWidth(400);
-        labelScore.setPosition(Gdx.graphics.getWidth()- labelScore.getWidth()-40, Gdx.graphics.getHeight() - labelScore.getHeight()-20);
+        //Label.LabelStyle labelStyle = new Label.LabelStyle( font, Color.WHITE);
+      //  labelScore = new Label("Score: "+score, labelStyle);
+      //  labelScore.setWidth(400);
+        labelScore=new CustomLabel("Score: "+score);
+        labelScore.setPosition(Gdx.graphics.getWidth()- labelScore.getWidth() +60, Gdx.graphics.getHeight() -200);
 
         round = 0;
-        labelRound = new Label("Round: "+round, labelStyle);
-        labelRound.setWidth(400);
-        labelRound.setPosition(40, Gdx.graphics.getHeight() - labelScore.getHeight()-20);
+       // labelRound = new Label("Round: "+round, labelStyle);
+       // labelRound.setWidth(400);
+        labelRound=new CustomLabel("Round: "+round);
+        labelRound.setPosition(40, Gdx.graphics.getHeight() -200);
 
-        buttonFire = new TextButton("Fire", textButtonStyle);
+        final GameScreen gameScreen=this;
+        buttonMenue = new CustomButton("Menü");
+        buttonMenue.setWidth(300);
+        buttonMenue.setHeight(120);
+        buttonMenue.setPosition(40, Gdx.graphics.getHeight()-110);
+        buttonMenue.addListener(new InputListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                //menü öffnen
+                if(!menuIsActive){
+                    menuIsActive=!menuIsActive;
+                    SettingsInGame set =new SettingsInGame(stage,screenManager,gameScreen);
+                }
+
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
+
+        //ScoreboardButton
+
+        buttonScore = new CustomButton("Score");
+        buttonScore.setWidth(300);
+        buttonScore.setHeight(120);
+        buttonScore.setPosition(Gdx.graphics.getWidth()- buttonScore.getWidth()-40, Gdx.graphics.getHeight()-110);
+        buttonScore.addListener(new InputListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+
+                //Scoreboard anzeigen
+                if(scoreboardIsActive == false){
+                    scoreboardIsActive=!scoreboardIsActive;
+                    sb =new ScoreBoard(stage,screenManager,gameScreen, score, player);
+                }
+                //Scoreboard ausblenden
+                else if (scoreboardIsActive){
+                    scoreboardIsActive=!scoreboardIsActive;
+                    Gdx.app.log("DEBUG", "Kappa");
+
+                    CustomLabel[] arr = sb.getLabelPlayerLabelScore();
+                    for(CustomLabel l: arr){
+                        l.remove();
+                    }
+
+                }
+
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
+
+        buttonFire = new CustomButton("Fire");
         buttonFire.setWidth(300);
         buttonFire.setHeight(120);
         buttonFire.setPosition(20, 20);
-        buttonFire.pad(20);
         buttonFire.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 Gdx.app.log("DEBUG", "Fire");
-
                 bullets.add(
                         new Bullet(
                                 "data/bullet.png",
@@ -187,6 +272,7 @@ public class GameScreen implements Screen {
                                 "Bullet"
                         )
                 );
+                fireSound.play();
                 bullets.get(bullets.size()-1).setDirectionX(touchpad.getWasPrecentX());
                 bullets.get(bullets.size()-1).setDirectionY(touchpad.getWasPrecentY());
 
@@ -197,11 +283,16 @@ public class GameScreen implements Screen {
         stage.addActor(labelRound);
         stage.addActor(labelScore);
         stage.addActor(buttonFire);
+        stage.addActor(buttonScore);
+        stage.addActor(buttonMenue);
         stage.addActor(touchpad.getTouchpad());
         stage.addActor(hp.getBar());
         Gdx.input.setInputProcessor(stage);
         //** GUI ** - END
+
+        //Server-Code verhindert, dass zurück zum Hauptmenü mit nachfolgendenden erneuten Spielstart funktioniert
         getPreferences();
+
 
         // Network - Start
         new Thread(new ServerProgram());
@@ -212,6 +303,7 @@ public class GameScreen implements Screen {
             }
         }, 10);
         // Network - End
+        announcer.play();
     }
 
     @Override
@@ -221,7 +313,6 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
 
-
         Gdx.gl.glClearColor(0.100f, 0.314f, 0.314f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         camera.update();
@@ -229,8 +320,17 @@ public class GameScreen implements Screen {
 
         // Ist Accelero aktiv und aktiviert
         if(Gdx.input.isPeripheralAvailable(Input.Peripheral.Accelerometer)&&accelero) {
-            float accelZ = Gdx.input.getAccelerometerZ() - calib.z; // aktuelle Position - der Ruhelage
-            float accelY = Gdx.input.getAccelerometerY() - calib.y;
+            float accelZ = Gdx.input.getAccelerometerZ(); // aktuelle Position - der Ruhelage
+            if(calib.z>0){
+                accelZ -=calib.z;
+                if(accelZ<(calib.z-10))accelZ=calib.z-10;
+                accelZ*=10/(10-calib.z);
+            } else if (calib.z < 0) {
+                accelZ -=calib.z;
+                if(accelZ>(10+calib.z))accelZ=10+calib.z;
+                accelZ*=10/(10+calib.z);
+            }
+            float accelY = Gdx.input.getAccelerometerY();
             player.move(accelY, accelZ); // Bewegung des Spielers
 
 
@@ -269,9 +369,29 @@ public class GameScreen implements Screen {
         }
 
         if(enemies.size() == 0){
-            respawn();
-            collidedEnemyName = "";
-            collidedItemName = "";
+            //Scoreboard anzeigen
+            if(flag){
+                flag = false;
+                start = System.currentTimeMillis();
+                scoreboardIsActive=true;
+                sb = new ScoreBoard(stage,screenManager,gameScreen, score, player);
+            }
+            end = System.currentTimeMillis();
+
+            //5 sec delay fuer respawn
+            if((end - start) >= 5000) {
+                //Scoreboard ausblenden
+                scoreboardIsActive = false;
+                flag= true;
+                CustomLabel[] arr = sb.getLabelPlayerLabelScore();
+                for(CustomLabel l: arr){
+                    l.remove();
+                }
+
+                respawn();
+                collidedEnemyName = "";
+                collidedItemName = "";
+            }
         }
 
         // Bullets
@@ -305,9 +425,13 @@ public class GameScreen implements Screen {
             player.showBounds(false, camera);
         }
 
+        map.showFloorMapBounds(false,camera,scale);
+
         // Draw stage for touchpad
         stage.act(delta);
         stage.draw();
+
+
     }
 
     @Override
@@ -333,9 +457,18 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
 
+        fireSound.dispose();
+        stage.dispose();
     }
 
+    public void showScoreBoard(){
+        sb =new ScoreBoard(stage,screenManager,gameScreen, score, player);
+        long i = System.currentTimeMillis();
+    }
     private void respawn(){
+
+        announcer.play();
+
         round++;
         for(int i = 1; i < map.getSpawnMap().getSize(); i++){
             enemies.add(
@@ -357,5 +490,16 @@ public class GameScreen implements Screen {
         player.setRender(true);
     }
 
+    public void setMenuIsActive(boolean x){
+        menuIsActive=x;
+    }
+    public void setAccelero(boolean x){
+        accelero=x;
+    }
+    public void setCalib(float x, float y, float z){
+        calib.x=x;
+        calib.y=y;
+        calib.z=z;
+    }
 
 }
