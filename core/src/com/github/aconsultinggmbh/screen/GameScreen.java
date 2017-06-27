@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.github.aconsultinggmbh.gameobject.Bullet;
@@ -25,6 +26,8 @@ import com.github.aconsultinggmbh.gameobject.GameObject;
 import com.github.aconsultinggmbh.gameobject.Healthbar;
 import com.github.aconsultinggmbh.gameobject.ItemInvulnerability;
 import com.github.aconsultinggmbh.gameobject.Player;
+import com.github.aconsultinggmbh.multiplayer.client.ClientProgram;
+import com.github.aconsultinggmbh.multiplayer.server.ServerProgram;
 import com.github.aconsultinggmbh.map.GameMap;
 import com.github.aconsultinggmbh.networking.Client;
 import com.github.aconsultinggmbh.networking.Server;
@@ -289,8 +292,18 @@ public class GameScreen implements Screen {
 
         //Server-Code verhindert, dass zurück zum Hauptmenü mit nachfolgendenden erneuten Spielstart funktioniert
         getPreferences();
-        announcer.play();
 
+
+        // Network - Start
+        new Thread(new ServerProgram());
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                new Thread(new ClientProgram());
+            }
+        }, 10);
+        // Network - End
+        announcer.play();
     }
 
     @Override
