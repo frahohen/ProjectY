@@ -66,6 +66,16 @@ public class Server implements Runnable {
         }
     }
 
+
+    public synchronized ArrayList<String> updateClients(int id){
+
+        ArrayList<String> list = new ArrayList<String>();
+
+        for(int i = 0; i < serverThreads.size(); i++){
+            if(id != serverThreads.get(i).getId()){
+                // Update everyone else but not the client that occured a change
+                list.add(serverThreads.get(i).getId() + "");
+            }
     public synchronized void updateClients(String labelMessage){
         for(int i = 0; i < serverThreads.size(); i++){
             // Update everyone else but not the client that occured a change
@@ -118,6 +128,12 @@ public class Server implements Runnable {
         		serverThreads.get(i).setTriggerMessage(labelMessage);
         	}
         }
+
+        return list;
+    }
+
+    public synchronized int getSize(){
+        return serverThreads.size();
     }
 
     public int getThreadSize() {

@@ -92,6 +92,8 @@ public class GameScreen implements Screen {
 
     private long start, end;
     private boolean flag = true;
+    private boolean isServer = true;
+    private boolean isMultiplayer = true;
 
     public GameScreen(ProjectY screenManager) {
         this.screenManager = screenManager;
@@ -133,6 +135,7 @@ public class GameScreen implements Screen {
 
         //** GAME ** -START
         map = new GameMap("map.tmx",scale);
+
 
         player = new Player(
                 "data/playerExample.png",
@@ -290,6 +293,50 @@ public class GameScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
         //** GUI ** - END
 
+        //** SERVER ** - START
+        if(isMultiplayer) {
+            List<String> addresses = new ArrayList<String>();
+
+            try {
+                Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+                for (NetworkInterface ni : Collections.list(interfaces)) {
+                    for (InetAddress address : Collections.list(ni.getInetAddresses())) {
+                        if (address instanceof Inet4Address) {
+                            addresses.add(address.getHostAddress());
+                        }
+                    }
+                }
+            } catch (SocketException e) {
+                e.printStackTrace();
+            }
+
+            for (int i = 0; i < addresses.size(); i++) {
+                Gdx.app.log("DEBUG", "Address: " + addresses.get(i));
+            }
+
+            if(isServer) {
+                final Server server = new Server("localhost", 9999);
+                new Thread(server).start();
+
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        new Thread(new Client(server.getIp(), server.getPort())).start();
+                    }
+                }, 2);
+            } else {
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        new Thread(new Client("192.168.0.1", 9999)).start();
+                    }
+                }, 2);
+            }
+
+
+        }
+        //** SERVER ** - END
+        getPreferences();
         //Server-Code verhindert, dass zurück zum Hauptmenü mit nachfolgendenden erneuten Spielstart funktioniert
         getPreferences();
 

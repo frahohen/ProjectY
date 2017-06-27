@@ -14,6 +14,7 @@ import com.github.aconsultinggmbh.point.MapPosition;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Client implements Runnable {
@@ -66,6 +67,26 @@ public class Client implements Runnable {
         try {
             objectOutputStream = new ObjectOutputStream(client.getOutputStream());
             objectInputStream = new ObjectInputStream(client.getInputStream());
+
+            String message = (String) objectInputStream.readObject();
+            Gdx.app.log("CLIENT",message);
+            // erstelle den Spieler mit dem String in message
+            //....
+
+            ArrayList<String> list = (ArrayList<String>) objectInputStream.readObject();
+            // erstelle die Gameobjekte mit den Namen in der Arraylist
+            //....
+            //while (true) {
+
+                list = (ArrayList<String>) objectInputStream.readObject();
+                // erstelle die neuen Gameobjekte (Gegner) falls vorhanden
+                //....
+            //}
+        } catch (IOException e) {
+            Gdx.app.log("CLIENT", "An error occured", e);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
             
             // Connected
             message = new Message(MessageTag.CONNECTED);
